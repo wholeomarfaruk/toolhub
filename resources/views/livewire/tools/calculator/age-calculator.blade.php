@@ -34,13 +34,15 @@
                 <div class="space-y-5">
 
                     {{-- Date of Birth Input with Flatpickr --}}
-                    <div>
+                    <div x-data="{ localDob: @entangle('dob').defer }">
                         <label class="block text-sm font-medium text-gray-700 mb-1.5">
                             Date of Birth
                         </label>
                         <div class="relative">
                             <input
-                                wire:model="dob"
+                                x-ref="dobInput"
+                                x-model="localDob"
+                                @blur="if(localDob) @this.set('dob', localDob)"
                                 id="dobPicker"
                                 type="text"
                                 placeholder="Click to select date"
@@ -195,44 +197,51 @@
 
                     <script>
                         function initDatePicker() {
-                            const dobPicker = document.getElementById('dobPicker');
-                            if (!dobPicker) return;
+                            const dobInput = document.getElementById('dobPicker');
+                            if (!dobInput) return;
 
                             // Destroy existing instance if any
-                            if (dobPicker._flatpickr) {
-                                dobPicker._flatpickr.destroy();
+                            if (dobInput._flatpickr) {
+                                dobInput._flatpickr.destroy();
                             }
 
-                            flatpickr(dobPicker, {
+                            // Initialize flatpickr
+                            const instance = flatpickr(dobInput, {
                                 mode: 'single',
                                 maxDate: new Date(),
                                 dateFormat: 'Y-m-d',
                                 yearRange: [1900, new Date().getFullYear()],
                                 monthSelectorType: 'dropdown',
                                 showMonths: 1,
-                                altInput: true,
-                                altFormat: 'F j, Y',
                                 animateOnInit: true,
                                 onClose: function(selectedDates, dateStr) {
                                     if (dateStr) {
-                                        @this.set('dob', dateStr);
+                                        // Update the input value directly
+                                        dobInput.value = dateStr;
+                                        // Dispatch input event for Alpine
+                                        dobInput.dispatchEvent(new Event('input', { bubbles: true }));
+                                        // Update Livewire after a small delay
+                                        setTimeout(() => {
+                                            @this.set('dob', dateStr);
+                                        }, 100);
                                     }
                                 }
                             });
+
+                            // Set initial value if exists
+                            const currentValue = dobInput.value || @json($dob);
+                            if (currentValue) {
+                                instance.setDate(currentValue, false);
+                            }
                         }
 
                         // Initialize on page load
                         document.addEventListener('DOMContentLoaded', initDatePicker);
 
-                        // Reinitialize after Livewire morphs (when result shows)
-                        document.addEventListener('livewire:updated', function() {
-                            setTimeout(initDatePicker, 100);
-                        });
-
-                        // Alternative: Use Livewire hook
+                        // Reinitialize after Livewire morphs
                         if (typeof Livewire !== 'undefined') {
                             Livewire.hook('morph.updated', () => {
-                                setTimeout(initDatePicker, 50);
+                                setTimeout(initDatePicker, 100);
                             });
                         }
                     </script>
