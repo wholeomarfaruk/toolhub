@@ -8,6 +8,7 @@ use App\Models\Plan;
 use App\Models\PaymentGateway;
 use App\Models\Subscription;
 use Livewire\Component;
+use Illuminate\Support\Facades\Redirect;
 
 class Show extends Component
 {
@@ -36,6 +37,12 @@ class Show extends Component
 
     public function processCheckout()
     {
+        // Verify active payment gateway exists
+        if (!$this->activeGateway) {
+            $this->addError('checkout', 'No payment gateway is currently active. Please contact support.');
+            return;
+        }
+
         $user = auth()->user();
         $amount = $this->billingPeriod === 'yearly'
             ? $this->plan->price_yearly
@@ -90,13 +97,14 @@ class Show extends Component
             ]);
 
             // Redirect to payment page
-            return redirect()->route('checkout.payment', ['payment' => $payment->id]);
+            return $this->redirect(route('checkout.payment', ['payment' => $payment->id]));
         } catch (\Exception $e) {
             // Delete failed payment record
             $payment->delete();
             $subscription->delete();
 
-            $this->dispatch('notify', message: 'Payment gateway error: ' . $e->getMessage());
+            \Log::error('Checkout Error: ' . $e->getMessage(), ['exception' => $e]);
+            $this->addError('checkout', 'Payment gateway error: ' . $e->getMessage());
             return;
         }
     }

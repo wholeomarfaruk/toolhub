@@ -21,6 +21,18 @@
             <div class="lg:col-span-2">
                 <div class="bg-white rounded-2xl border border-gray-200 p-8">
 
+                    {{-- Display Errors --}}
+                    @if($errors->any())
+                        <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+                            <h4 class="font-semibold text-red-900 mb-2">Checkout Error</h4>
+                            <ul class="text-red-700 text-sm space-y-1">
+                                @foreach($errors->all() as $error)
+                                    <li>• {{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
                     <form wire:submit="processCheckout" class="space-y-8">
 
                         {{-- Billing Period Selection --}}
@@ -120,8 +132,11 @@
                                 Cancel
                             </a>
                             <button type="submit"
-                                    class="flex-1 px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg transition-colors flex items-center justify-center gap-2">
-                                <i class="bx bx-lock"></i> Continue to Payment
+                                    wire:loading.attr="disabled"
+                                    class="flex-1 px-6 py-3 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition-colors flex items-center justify-center gap-2">
+                                <i class="bx" :class="$wire.loading ? 'bx-loader-alt animate-spin' : 'bx-lock'"></i>
+                                <span wire:loading.remove>Continue to Payment</span>
+                                <span wire:loading>Processing...</span>
                             </button>
                         </div>
                     </form>
