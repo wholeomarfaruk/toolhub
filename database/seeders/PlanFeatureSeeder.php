@@ -50,7 +50,7 @@ class PlanFeatureSeeder extends Seeder
             Feature::DailySlugLimit->value => '20',
             // Age Calculator features
             Feature::AgeCalculatorExport->value => 'false',
-            Feature::DailyAgeCalculatorLimit->value => '20',
+            Feature::DailyAgeCalculatorLimit->value => '5',
         ]);
 
         // ── PRO PLAN ─────────────────────────────────────────────────────

@@ -64,10 +64,8 @@ class SubscriptionService
     /**
      * Returns the integer daily limit for a specific tool, or null for unlimited.
      *
-     * Lookup order:
-     *   1. Tool-specific feature key: 'daily_{toolSlug}_limit' (e.g. 'daily_invoice_limit')
-     *   2. Generic feature: Feature::DailyInvoiceLimit (fallback)
-     *   3. null → unlimited
+     * Lookup: Tool-specific feature key 'daily_{toolSlug}_limit' (e.g. 'daily_invoice_limit')
+     * If not found, returns null (unlimited).
      */
     public function dailyLimitFor(User $user, string $toolSlug): ?int
     {
@@ -76,8 +74,7 @@ class SubscriptionService
         // Normalize slug to feature key: 'invoice-generator' → 'daily_invoice_generator_limit'
         $toolKey = 'daily_' . str_replace('-', '_', $toolSlug) . '_limit';
 
-        $value = $plan->featureValue($toolKey)
-              ?? $plan->featureValue(Feature::DailyInvoiceLimit);
+        $value = $plan->featureValue($toolKey);
 
         if ($value === null || $value === 'unlimited') {
             return null;
