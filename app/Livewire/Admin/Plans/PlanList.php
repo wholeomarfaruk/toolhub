@@ -3,10 +3,8 @@
 namespace App\Livewire\Admin\Plans;
 
 use App\Models\Plan;
-use Livewire\Attributes\Layout;
 use Livewire\Component;
 
-#[Layout('layouts.app')]
 class PlanList extends Component
 {
     public $plans = [];

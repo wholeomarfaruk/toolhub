@@ -6,10 +6,8 @@ use App\Enums\Feature;
 use App\Models\Plan;
 use App\Models\PlanFeature;
 use Illuminate\Support\Str;
-use Livewire\Attributes\Layout;
 use Livewire\Component;
 
-#[Layout('layouts.app')]
 class PlanEdit extends Component
 {
     public ?Plan $plan = null;
@@ -109,6 +107,6 @@ class PlanEdit extends Component
         return view('livewire.admin.plans.plan-edit', [
             'booleanFeatures' => collect(Feature::cases())->filter(fn($f) => $f->isBoolean()),
             'quotaFeatures' => collect(Feature::cases())->filter(fn($f) => $f->isQuota()),
-        ]);
+        ])->layout('layouts.admin.admin');
     }
 }
