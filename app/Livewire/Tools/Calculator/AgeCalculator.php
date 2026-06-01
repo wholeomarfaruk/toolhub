@@ -85,6 +85,12 @@ class AgeCalculator extends Component
 
     public function exportPdf()
     {
+        // Check authentication first
+        if (!$this->canAccessTool($this->toolSlug)) {
+            $this->requireAuth($this->toolSlug);
+            return;
+        }
+
         if (!$this->result || !$this->dob) {
             $this->addError('export', 'Please calculate your age first before exporting.');
             return;
@@ -121,11 +127,17 @@ class AgeCalculator extends Component
 
     public function render()
     {
-        $user = auth()->user();
-        $hasExportFeature = app(\App\Services\SubscriptionService::class)->hasFeature(
-            $user,
-            \App\Enums\Feature::AgeCalculatorExport
-        );
+        // Get export feature only if user is authenticated
+        if (auth()->check()) {
+            $user = auth()->user();
+            $hasExportFeature = app(\App\Services\SubscriptionService::class)->hasFeature(
+                $user,
+                \App\Enums\Feature::AgeCalculatorExport
+            );
+        } else {
+            // Default: unauthenticated users can't export
+            $hasExportFeature = false;
+        }
 
         return view('livewire.tools.calculator.age-calculator', [
             'hasExportFeature' => $hasExportFeature,

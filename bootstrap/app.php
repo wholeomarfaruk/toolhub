@@ -23,8 +23,8 @@ return Application::configure(basePath: dirname(__DIR__))
                 ->name('admin.')
                 ->group(base_path('routes/admin.php'));
 
-            // 3. Tools — index is public; individual tools require auth
-            Route::middleware(['web', 'auth', 'verified'])
+            // 3. Tools — all routes are public (auth check deferred to component actions via modal)
+            Route::middleware(['web'])
                 ->prefix('tools')
                 ->name('tools.')
                 ->group(base_path('routes/tools.php'));

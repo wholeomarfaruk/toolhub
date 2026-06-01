@@ -1,5 +1,5 @@
 <div>
-    {{-- Auth Modal --}}
+    {{-- Auth Modal Component --}}
     <livewire:components.auth-modal :is-open="$showAuthModal" :tool-name="$authModalToolName" />
 
     {{-- Hero --}}

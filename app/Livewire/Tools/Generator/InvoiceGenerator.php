@@ -116,7 +116,12 @@ class InvoiceGenerator extends Component
             return;
         }
 
-        $quota = app(PdfExportService::class)->checkQuota(auth()->user());
+        $user = auth()->user();
+        if (!$user) {
+            return;
+        }
+
+        $quota = app(PdfExportService::class)->checkQuota($user);
 
         if ($quota['limit'] !== null) {
             $this->pdfExportsLimit     = $quota['limit'];
@@ -228,12 +233,23 @@ class InvoiceGenerator extends Component
      */
     public function downloadPdf()
     {
+        // Check authentication first
+        if (!$this->canAccessTool($this->toolSlug)) {
+            $this->requireAuth($this->toolSlug);
+            return;
+        }
+
         if (!$this->result) {
             $this->addError('general', 'Generate an invoice first before exporting.');
             return;
         }
 
         $user = auth()->user();
+        if (!$user) {
+            $this->addError('general', 'Authentication required to export.');
+            return;
+        }
+
         $subscriptionService = app(SubscriptionService::class);
         $selectedTemplate = InvoiceTemplate::tryFrom($this->template) ?? InvoiceTemplate::Basic;
 
@@ -273,15 +289,18 @@ class InvoiceGenerator extends Component
      */
     public function getAvailableTemplates(): array
     {
-        $user = auth()->user();
-        $plan = app(SubscriptionService::class)->planFor($user);
-
         // All users can preview Basic and Modern
         $available = [InvoiceTemplate::Basic, InvoiceTemplate::Modern];
 
         // Pro and Enterprise can export Corporate
-        if ($plan->includes(\App\Enums\PlanTier::Pro)) {
-            $available[] = InvoiceTemplate::Corporate;
+        if (auth()->check()) {
+            $user = auth()->user();
+            if ($user) {
+                $plan = app(SubscriptionService::class)->planFor($user);
+                if ($plan->includes(\App\Enums\PlanTier::Pro)) {
+                    $available[] = InvoiceTemplate::Corporate;
+                }
+            }
         }
 
         return $available;
@@ -292,7 +311,16 @@ class InvoiceGenerator extends Component
      */
     public function canExportTemplate(InvoiceTemplate $template): bool
     {
-        $plan = app(SubscriptionService::class)->planFor(auth()->user());
+        if (!auth()->check()) {
+            return false;
+        }
+
+        $user = auth()->user();
+        if (!$user) {
+            return false;
+        }
+
+        $plan = app(SubscriptionService::class)->planFor($user);
         return $plan->includes($template->requiredPlanForExport());
     }
 

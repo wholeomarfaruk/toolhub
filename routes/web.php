@@ -7,8 +7,8 @@ Route::get('/', \App\Livewire\Website\Home\Home::class)->name('home');
 // Public tools index — no auth required
 Route::get('/tools', \App\Livewire\Website\Tools\ToolIndex::class)->name('tools.index');
 
-// Tool routes (protected by authentication)
-Route::prefix('/tools')->middleware('auth')->group(function () {
+// Tool routes (public pages, auth check deferred to component actions via modal)
+Route::prefix('/tools')->group(function () {
     require __DIR__ . '/tools.php';
 });
 

@@ -65,6 +65,12 @@ class SlugGenerator extends Component
 
     public function generateBulk(): void
     {
+        // Check authentication first
+        if (!$this->canAccessTool($this->toolSlug)) {
+            $this->requireAuth($this->toolSlug);
+            return;
+        }
+
         // Check if user has bulk mode feature
         $user = auth()->user();
         $hasBulkMode = app(SubscriptionService::class)->hasFeature($user, Feature::SlugBulkMode);
@@ -114,14 +120,28 @@ class SlugGenerator extends Component
 
     public function render()
     {
-        $user = auth()->user();
         $svc = app(SubscriptionService::class);
 
-        return view('livewire.tools.generator.slug-generator', [
-            'hasCustomSeparator' => $svc->hasFeature($user, Feature::SlugCustomSeparator),
-            'hasStopWords' => $svc->hasFeature($user, Feature::SlugStopWords),
-            'hasBulkMode' => $svc->hasFeature($user, Feature::SlugBulkMode),
-            'hasUnicode' => $svc->hasFeature($user, Feature::SlugUnicode),
-        ])->layout('layouts.website.website', ['title' => 'Slug Generator']);
+        // Get features only if user is authenticated
+        if (auth()->check()) {
+            $user = auth()->user();
+            $features = [
+                'hasCustomSeparator' => $svc->hasFeature($user, Feature::SlugCustomSeparator),
+                'hasStopWords' => $svc->hasFeature($user, Feature::SlugStopWords),
+                'hasBulkMode' => $svc->hasFeature($user, Feature::SlugBulkMode),
+                'hasUnicode' => $svc->hasFeature($user, Feature::SlugUnicode),
+            ];
+        } else {
+            // Default: unauthenticated users have no special features
+            $features = [
+                'hasCustomSeparator' => false,
+                'hasStopWords' => false,
+                'hasBulkMode' => false,
+                'hasUnicode' => false,
+            ];
+        }
+
+        return view('livewire.tools.generator.slug-generator', $features)
+            ->layout('layouts.website.website', ['title' => 'Slug Generator']);
     }
 }

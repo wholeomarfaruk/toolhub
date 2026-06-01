@@ -60,6 +60,12 @@ class WordCounter extends Component
 
     public function exportPdf()
     {
+        // Check authentication first
+        if (!$this->canAccessTool($this->toolSlug)) {
+            $this->requireAuth($this->toolSlug);
+            return;
+        }
+
         if (!$this->result || !$this->text) {
             $this->addError('export', 'Please analyze text first before exporting.');
             return;
@@ -91,11 +97,17 @@ class WordCounter extends Component
 
     public function render()
     {
-        $user = auth()->user();
-        $hasExportFeature = app(\App\Services\SubscriptionService::class)->hasFeature(
-            $user,
-            \App\Enums\Feature::ExportFeature
-        );
+        // Get export feature only if user is authenticated
+        if (auth()->check()) {
+            $user = auth()->user();
+            $hasExportFeature = app(\App\Services\SubscriptionService::class)->hasFeature(
+                $user,
+                \App\Enums\Feature::ExportFeature
+            );
+        } else {
+            // Default: unauthenticated users can't export
+            $hasExportFeature = false;
+        }
 
         return view('livewire.tools.analyzer.word-counter', [
             'hasExportFeature' => $hasExportFeature,
