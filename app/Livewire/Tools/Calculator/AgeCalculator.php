@@ -71,16 +71,21 @@ class AgeCalculator extends Component
             return;
         }
 
-        // Store report data in session
-        session([
-            'age_calculator_report' => [
-                'dob' => $this->dob,
-                'result' => $this->result,
-            ],
-        ]);
+        try {
+            // Store report data in session
+            session([
+                'age_calculator_report' => [
+                    'dob' => $this->dob,
+                    'result' => $this->result,
+                ],
+            ]);
 
-        // Redirect to PDF download
-        return redirect(route('age-calculator.pdf'));
+            // Flash and redirect
+            return redirect()->route('age-calculator.pdf');
+        } catch (\Exception $e) {
+            $this->addError('export', 'Failed to generate PDF: ' . $e->getMessage());
+            return;
+        }
     }
 
     public function render()

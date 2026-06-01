@@ -27,6 +27,3 @@ Route::get('/invoice-generator',
 
 Route::get('/invoice/pdf', [\App\Http\Controllers\InvoicePdfController::class, 'download'])
     ->name('invoice.pdf');
-
-Route::get('/age-calculator/pdf', [\App\Http\Controllers\AgeCalculatorPdfController::class, 'download'])
-    ->name('age-calculator.pdf');
