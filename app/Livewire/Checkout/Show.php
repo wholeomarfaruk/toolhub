@@ -50,12 +50,12 @@ class Show extends Component
             ? $this->plan->price_yearly
             : $this->plan->price_monthly;
 
-        // Create subscription (inactive until payment confirmed)
+        // Create subscription in Trialing status (waits for payment confirmation)
         $subscription = Subscription::updateOrCreate(
             ['user_id' => $user->id],
             [
                 'plan_id' => $this->plan->id,
-                'status' => SubscriptionStatus::Active->value,
+                'status' => SubscriptionStatus::Trialing->value,
             ]
         );
 
