@@ -251,12 +251,9 @@
                             const button = event.target.closest('button');
 
                             if (!card) {
-                                alert('Error: Card element not found');
+                                console.error('Card element not found');
                                 return;
                             }
-
-                            // Show card temporarily
-                            card.classList.remove('hidden');
 
                             // Show loading state
                             const originalText = button.innerHTML;
@@ -264,47 +261,63 @@
                             button.disabled = true;
 
                             try {
-                                // Get the inner card div
-                                const cardContent = card.querySelector('div');
+                                // Get the outer background wrapper
+                                const cardWrapper = card.querySelector('div');
 
-                                // Convert to PNG using html-to-image
-                                const dataUrl = await window.htmlToImage.toPng(cardContent, {
+                                if (!cardWrapper) {
+                                    throw new Error('Card wrapper not found');
+                                }
+
+                                // Convert to PNG using html-to-image with optimized settings
+                                const dataUrl = await window.htmlToImage.toPng(cardWrapper, {
                                     cacheBust: true,
                                     pixelRatio: 2,
-                                    quality: 0.95
+                                    backgroundColor: '#ffffff',
+                                    style: {
+                                        margin: '0',
+                                        padding: '0'
+                                    }
                                 });
 
-                                // Create download link
+                                // Create download link and trigger download
                                 const link = document.createElement('a');
                                 link.href = dataUrl;
                                 link.download = 'age-card-' + new Date().getTime() + '.png';
+                                link.style.display = 'none';
                                 document.body.appendChild(link);
                                 link.click();
-                                document.body.removeChild(link);
 
-                                // Hide card and restore button
+                                // Clean up
                                 setTimeout(() => {
-                                    card.classList.add('hidden');
-                                    button.innerHTML = originalText;
-                                    button.disabled = false;
-                                }, 500);
+                                    document.body.removeChild(link);
+                                }, 100);
 
-                                // Show success message (optional - use Toast if available)
-                                if (typeof Toast !== 'undefined') {
-                                    Toast.fire({
-                                        icon: 'success',
-                                        title: 'Age card saved successfully!'
-                                    });
-                                } else {
-                                    console.log('Age card saved successfully!');
-                                }
-                            } catch (error) {
-                                console.error('Error creating image:', error);
-                                card.classList.add('hidden');
+                                // Restore button
                                 button.innerHTML = originalText;
                                 button.disabled = false;
 
-                                alert('Error creating image. Please try again.\n\n' + error.message);
+                                // Show success message using Toast
+                                if (typeof Toast !== 'undefined') {
+                                    Toast.fire({
+                                        icon: 'success',
+                                        title: 'Age card downloaded successfully!'
+                                    });
+                                }
+                            } catch (error) {
+                                console.error('Error creating image:', error);
+                                button.innerHTML = originalText;
+                                button.disabled = false;
+
+                                // Show user-friendly error
+                                if (typeof Toast !== 'undefined') {
+                                    Toast.fire({
+                                        icon: 'error',
+                                        title: 'Failed to create image',
+                                        text: 'Please try again'
+                                    });
+                                } else {
+                                    alert('Error creating image. Please try again.');
+                                }
                             }
                         };
                     </script>
@@ -346,8 +359,8 @@
                         </button>
                     </div>
 
-                    {{-- Hidden Image Capture Card --}}
-                    <div id="ageImageCard" class="hidden fixed inset-0 pointer-events-none">
+                    {{-- Hidden Image Capture Card (Off-screen rendering) --}}
+                    <div id="ageImageCard" style="position: absolute; left: -10000px; top: -10000px; pointer-events: none;">
                         <div style="width: 1080px; height: 1350px; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #ec4899 0%, #f97316 100%);">
                             <div style="width: 1000px; height: 1270px; background: white; border-radius: 40px; padding: 60px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); display: flex; flex-direction: column; justify-content: center;">
                                 {{-- Header --}}
