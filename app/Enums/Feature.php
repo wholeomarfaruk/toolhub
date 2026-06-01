@@ -40,10 +40,14 @@ enum Feature: string
     case SlugBulkMode = 'slug_bulk_mode';                // bool
     case SlugUnicode = 'slug_unicode';                    // bool
 
+    // ── Age Calculator features ──────────────────────────────────────────
+    case AgeCalculatorExport = 'age_calculator_export'; // bool
+
     // ── Quota features (value = int string or 'unlimited') ────────────────
     case DailyInvoiceLimit   = 'daily_invoice_limit';   // '3' | '20' | 'unlimited'
     case DailyWordCounterLimit = 'daily_word_counter_limit'; // '20' | 'unlimited'
     case DailySlugLimit = 'daily_slug_generator_limit'; // '20' | 'unlimited'
+    case DailyAgeCalculatorLimit = 'daily_age_calculator_limit'; // '20' | '100' | 'unlimited'
     case MonthlyPdfLimit     = 'monthly_pdf_limit';     // '0' | '25' | 'unlimited'
     case MaxSavedInvoices    = 'max_saved_invoices';    // '0' | '100' | 'unlimited'
 
@@ -68,6 +72,7 @@ enum Feature: string
             self::SlugStopWords,
             self::SlugBulkMode,
             self::SlugUnicode,
+            self::AgeCalculatorExport,
         ]);
     }
 

@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Services\ToolRegistry;
 use App\Tools\Analyzer\WordCounter\WordCounterTool;
+use App\Tools\Calculator\AgeCalculator\AgeCalculatorTool;
 use App\Tools\Calculator\EmiCalculator\EmiCalculatorTool;
 use App\Tools\Generator\InvoiceGenerator\InvoiceGeneratorTool;
 use App\Tools\Generator\SlugGenerator\SlugGeneratorTool;
@@ -20,6 +21,7 @@ class ToolServiceProvider extends ServiceProvider
             $registry->register(new WordCounterTool());
 
             // ── Calculators ──────────────────────────────────────
+            $registry->register(new AgeCalculatorTool());
             $registry->register(new EmiCalculatorTool());
 
             // ── Generators ───────────────────────────────────────

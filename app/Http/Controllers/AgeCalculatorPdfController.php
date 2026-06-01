@@ -1,0 +1,48 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Dompdf\Dompdf;
+use Dompdf\Options;
+use Illuminate\Support\Facades\View;
+
+class AgeCalculatorPdfController extends Controller
+{
+    public function download()
+    {
+        $data = session('age_calculator_report');
+
+        if (!$data) {
+            abort(404, 'Age Calculator report data not found');
+        }
+
+        $dob = $data['dob'] ?? '';
+        $result = $data['result'] ?? [];
+
+        // Render the blade template to HTML
+        $html = View::make('pdf.age-calculator-report', [
+            'dob' => $dob,
+            'result' => $result,
+        ])->render();
+
+        // Use DomPDF for PDF generation
+        try {
+            $options = new Options();
+            $options->set('isRemoteEnabled', false);
+            $options->set('isHtml5ParserEnabled', true);
+
+            $dompdf = new Dompdf($options);
+            $dompdf->loadHtml($html);
+            $dompdf->setPaper('A4', 'portrait');
+            $dompdf->render();
+
+            return response()->streamDownload(
+                fn () => print($dompdf->output()),
+                'age-calculator-report-' . now()->format('Y-m-d-His') . '.pdf',
+                ['Content-Type' => 'application/pdf']
+            );
+        } catch (\Exception $e) {
+            abort(500, 'PDF generation failed: ' . $e->getMessage());
+        }
+    }
+}

@@ -48,6 +48,9 @@ class PlanFeatureSeeder extends Seeder
             Feature::SlugBulkMode->value => 'false',
             Feature::SlugUnicode->value => 'false',
             Feature::DailySlugLimit->value => '20',
+            // Age Calculator features
+            Feature::AgeCalculatorExport->value => 'false',
+            Feature::DailyAgeCalculatorLimit->value => '20',
         ]);
 
         // ── PRO PLAN ─────────────────────────────────────────────────────
@@ -79,6 +82,9 @@ class PlanFeatureSeeder extends Seeder
             Feature::SlugBulkMode->value => 'true',
             Feature::SlugUnicode->value => 'false',
             Feature::DailySlugLimit->value => 'unlimited',
+            // Age Calculator features
+            Feature::AgeCalculatorExport->value => 'true',
+            Feature::DailyAgeCalculatorLimit->value => '100',
         ]);
 
         // ── ENTERPRISE PLAN ──────────────────────────────────────────────
@@ -110,6 +116,9 @@ class PlanFeatureSeeder extends Seeder
             Feature::SlugBulkMode->value => 'true',
             Feature::SlugUnicode->value => 'true',
             Feature::DailySlugLimit->value => 'unlimited',
+            // Age Calculator features
+            Feature::AgeCalculatorExport->value => 'true',
+            Feature::DailyAgeCalculatorLimit->value => 'unlimited',
         ]);
     }
 
