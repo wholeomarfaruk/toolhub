@@ -244,6 +244,66 @@
                                 setTimeout(initDatePicker, 100);
                             });
                         }
+
+                        // Function to capture age as image
+                        window.captureAgeAsImage = async function() {
+                            const card = document.getElementById('ageImageCard');
+                            const button = event.target.closest('button');
+
+                            if (!card) {
+                                alert('Error: Card element not found');
+                                return;
+                            }
+
+                            // Show card temporarily
+                            card.classList.remove('hidden');
+
+                            // Show loading state
+                            const originalText = button.innerHTML;
+                            button.innerHTML = '<i class="bx bx-loader-circle animate-spin text-lg"></i> Creating Image...';
+                            button.disabled = true;
+
+                            try {
+                                // Capture the card
+                                const canvas = await html2canvas(card.querySelector('div'), {
+                                    scale: 2,
+                                    useCORS: true,
+                                    logging: false,
+                                    backgroundColor: null,
+                                    allowTaint: true
+                                });
+
+                                // Create download link
+                                canvas.toBlob(function(blob) {
+                                    const url = URL.createObjectURL(blob);
+                                    const link = document.createElement('a');
+                                    link.href = url;
+                                    link.download = 'age-card-' + new Date().getTime() + '.png';
+                                    document.body.appendChild(link);
+                                    link.click();
+                                    document.body.removeChild(link);
+                                    URL.revokeObjectURL(url);
+
+                                    // Hide card and restore button
+                                    card.classList.add('hidden');
+                                    button.innerHTML = originalText;
+                                    button.disabled = false;
+
+                                    // Show success message
+                                    Livewire.dispatch('notify-toast', {
+                                        type: 'success',
+                                        message: 'Age card saved successfully!'
+                                    });
+                                });
+                            } catch (error) {
+                                console.error('Error capturing image:', error);
+                                card.classList.add('hidden');
+                                button.innerHTML = originalText;
+                                button.disabled = false;
+
+                                alert('Error creating image: ' + error.message);
+                            }
+                        };
                     </script>
 
                     {{-- Buttons --}}
@@ -275,6 +335,69 @@
                         <p class="text-base text-gray-700 mt-2">
                             {{ $result['months'] }} months, {{ $result['days'] }} days
                         </p>
+                        <button
+                            @click="captureAgeAsImage()"
+                            class="mt-4 w-full px-4 py-2 bg-gradient-to-r from-rose-500 to-orange-500 hover:from-rose-600 hover:to-orange-600 text-white font-medium text-sm rounded-lg transition-all active:scale-95 flex items-center justify-center gap-2">
+                            <i class="bx bx-image-add text-lg"></i>
+                            Save as Image
+                        </button>
+                    </div>
+
+                    {{-- Hidden Image Capture Card --}}
+                    <div id="ageImageCard" class="hidden fixed inset-0 pointer-events-none">
+                        <div style="width: 1080px; height: 1350px; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #ec4899 0%, #f97316 100%);">
+                            <div style="width: 1000px; height: 1270px; background: white; border-radius: 40px; padding: 60px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); display: flex; flex-direction: column; justify-content: center;">
+                                {{-- Header --}}
+                                <div style="text-align: center; margin-bottom: 40px;">
+                                    <p style="font-size: 28px; color: #ec4899; font-weight: 600; margin: 0; text-transform: uppercase; letter-spacing: 2px;">My Age</p>
+                                    <p style="font-size: 16px; color: #9ca3af; margin: 8px 0 0 0;">Calculated on {{ now()->format('F j, Y') }}</p>
+                                </div>
+
+                                {{-- Age Display --}}
+                                <div style="background: linear-gradient(135deg, #fdf2f8 0%, #fed7aa 100%); border-radius: 20px; padding: 40px; margin-bottom: 40px; text-align: center; border-left: 8px solid #ec4899;">
+                                    <p style="font-size: 80px; font-weight: bold; color: #1f2937; margin: 0;">{{ $result['years'] }}</p>
+                                    <p style="font-size: 32px; color: #6b7280; margin: 0;">Years</p>
+                                    <p style="font-size: 24px; color: #374151; margin-top: 20px;">{{ $result['months'] }} Months, {{ $result['days'] }} Days</p>
+                                </div>
+
+                                {{-- Stats --}}
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 40px;">
+                                    <div style="background: #f9fafb; padding: 24px; border-radius: 16px; border-left: 4px solid #ec4899; text-align: center;">
+                                        <p style="font-size: 12px; color: #6b7280; font-weight: 600; margin: 0; text-transform: uppercase;">Total Days</p>
+                                        <p style="font-size: 36px; font-weight: bold; color: #1f2937; margin: 10px 0 0 0;">{{ number_format($result['total_days']) }}</p>
+                                    </div>
+                                    <div style="background: #f9fafb; padding: 24px; border-radius: 16px; border-left: 4px solid #f97316; text-align: center;">
+                                        <p style="font-size: 12px; color: #6b7280; font-weight: 600; margin: 0; text-transform: uppercase;">Next Birthday</p>
+                                        <p style="font-size: 20px; font-weight: bold; color: #1f2937; margin: 10px 0 0 0;">{{ $result['next_birthday_fmt'] }}</p>
+                                    </div>
+                                </div>
+
+                                {{-- Progress Bar --}}
+                                @if (!$result['is_birthday_today'])
+                                    <div style="margin-bottom: 40px;">
+                                        <p style="font-size: 14px; color: #374151; font-weight: 600; margin-bottom: 12px;">Days Until Next Birthday</p>
+                                        <div style="width: 100%; height: 16px; background: #e5e7eb; border-radius: 10px; overflow: hidden;">
+                                            <div style="height: 100%; background: linear-gradient(90deg, #ec4899 0%, #f97316 100%); width: {{ min(100, (365 - $result['days_until_next']) / 365 * 100) }}%; border-radius: 10px;"></div>
+                                        </div>
+                                        <p style="font-size: 18px; color: #1f2937; font-weight: bold; margin-top: 12px;">{{ $result['days_until_next'] }} days left</p>
+                                    </div>
+                                @else
+                                    <div style="text-align: center; background: #d1fae5; border-left: 8px solid #10b981; padding: 24px; border-radius: 12px; margin-bottom: 40px;">
+                                        <p style="font-size: 32px; margin: 0;">🎉</p>
+                                        <p style="font-size: 24px; font-weight: 600; color: #047857; margin: 10px 0 0 0;">Happy Birthday Today!</p>
+                                    </div>
+                                @endif
+
+                                {{-- Zodiac --}}
+                                <div style="text-align: center; background: linear-gradient(135deg, #fef3c7 0%, #fecaca 100%); padding: 24px; border-radius: 16px;">
+                                    <p style="font-size: 48px; margin: 0;">{{ $result['zodiac_emoji'] }}</p>
+                                    <p style="font-size: 24px; font-weight: 600; color: #1f2937; margin: 12px 0 0 0;">{{ $result['zodiac_sign'] }}</p>
+                                </div>
+
+                                {{-- Footer --}}
+                                <p style="text-align: center; font-size: 12px; color: #9ca3af; margin-top: 40px; margin-bottom: 0;">ToolsHub Age Calculator • {{ config('app.url') }}</p>
+                            </div>
+                        </div>
                     </div>
 
                     {{-- Stats Grid --}}

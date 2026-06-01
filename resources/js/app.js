@@ -133,6 +133,13 @@ import "flatpickr/dist/flatpickr.min.css";
 window.flatpickr = flatpickr;
 
 //FlatPickr==================================================END
+//-------------------------------------------------------------
+//Html2Canvas==================================================START
+import html2canvas from "html2canvas";
+
+window.html2canvas = html2canvas;
+
+//Html2Canvas==================================================END
 //--    ====================================================
 //Sortable==================================================START
 import Sortable from 'sortablejs';
