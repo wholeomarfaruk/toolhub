@@ -34,7 +34,7 @@
             </h1>
 
             <p class="text-xl text-gray-500 max-w-2xl mx-auto mb-10 leading-relaxed">
-                ToolHub gives you instant access to calculators, generators, converters and more —
+                ToolsHub gives you instant access to calculators, generators, converters and more —
                 free, fast, and designed for professionals.
             </p>
 
@@ -172,7 +172,7 @@
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
 
             <div class="text-center mb-14">
-                <p class="text-xs font-semibold text-indigo-500 uppercase tracking-widest mb-3">Why ToolHub</p>
+                <p class="text-xs font-semibold text-indigo-500 uppercase tracking-widest mb-3">Why ToolsHub</p>
                 <h2 class="text-3xl sm:text-4xl font-bold text-gray-900">Built different</h2>
             </div>
 
@@ -194,7 +194,7 @@
                         'icon'  => 'bx bx-devices',
                         'color' => 'bg-indigo-50 text-indigo-600',
                         'title' => 'Works Everywhere',
-                        'desc'  => 'Fully responsive on any screen. Use ToolHub from your phone, tablet, or desktop.',
+                        'desc'  => 'Fully responsive on any screen. Use ToolsHub from your phone, tablet, or desktop.',
                     ],
                     [
                         'icon'  => 'bx bx-history',
