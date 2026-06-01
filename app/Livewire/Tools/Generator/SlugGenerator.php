@@ -98,6 +98,14 @@ class SlugGenerator extends Component
         $this->bulkMode = false;
     }
 
+    public function copyToClipboard(string $text): void
+    {
+        $this->dispatch('toast', [
+            'type' => 'success',
+            'message' => 'Slug copied to clipboard!',
+        ]);
+    }
+
     public function render()
     {
         $user = auth()->user();

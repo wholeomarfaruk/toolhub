@@ -172,11 +172,17 @@
                                 <div class="flex items-center gap-3">
                                     <code class="flex-1 text-2xl font-bold text-emerald-600 break-all">{{ $result['slug'] }}</code>
                                     <button
-                                        x-data
-                                        @click="navigator.clipboard.writeText('{{ $result['slug'] }}'); $dispatch('toast', {type: 'success', message: 'Slug copied!'})"
-                                        class="px-3 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold rounded-lg transition-colors flex items-center gap-1 whitespace-nowrap">
-                                        <i class="bx bx-copy"></i>
-                                        Copy
+                                        x-data="{ copying: false }"
+                                        @click="async () => {
+                                            await navigator.clipboard.writeText('{{ $result['slug'] }}');
+                                            copying = true;
+                                            $wire.copyToClipboard('{{ $result['slug'] }}');
+                                            setTimeout(() => copying = false, 2000);
+                                        }"
+                                        :class="copying ? 'bg-emerald-500' : 'bg-emerald-600 hover:bg-emerald-700'"
+                                        class="px-3 py-2 text-white text-sm font-semibold rounded-lg transition-colors flex items-center gap-1 whitespace-nowrap">
+                                        <i :class="copying ? 'bx bx-check' : 'bx bx-copy'"></i>
+                                        <span x-text="copying ? 'Copied!' : 'Copy'"></span>
                                     </button>
                                 </div>
                             </div>
@@ -210,10 +216,16 @@
                                         <div class="flex items-center gap-2">
                                             <code class="flex-1 text-sm font-bold text-emerald-600 break-all">{{ $item['slug'] }}</code>
                                             <button
-                                                x-data
-                                                @click="navigator.clipboard.writeText('{{ $item['slug'] }}'); $dispatch('toast', {type: 'success', message: 'Slug copied!'})"
-                                                class="px-2 py-1 bg-emerald-100 hover:bg-emerald-200 text-emerald-700 text-xs font-semibold rounded transition-colors">
-                                                <i class="bx bx-copy"></i>
+                                                x-data="{ copying: false }"
+                                                @click="async () => {
+                                                    await navigator.clipboard.writeText('{{ $item['slug'] }}');
+                                                    copying = true;
+                                                    $wire.copyToClipboard('{{ $item['slug'] }}');
+                                                    setTimeout(() => copying = false, 2000);
+                                                }"
+                                                :class="copying ? 'bg-emerald-300' : 'bg-emerald-100 hover:bg-emerald-200'"
+                                                class="px-2 py-1 text-emerald-700 text-xs font-semibold rounded transition-colors">
+                                                <i :class="copying ? 'bx bx-check' : 'bx bx-copy'"></i>
                                             </button>
                                         </div>
                                     </div>
