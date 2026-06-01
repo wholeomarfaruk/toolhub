@@ -19,6 +19,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/checkout/success', [\App\Http\Controllers\CheckoutController::class, 'completeCheckout'])->name('checkout.success');
 });
 
+// Word Counter PDF export (protected by authentication)
+Route::middleware('auth')->group(function () {
+    Route::get('/word-counter/pdf', [\App\Http\Controllers\WordCounterPdfController::class, 'download'])->name('word-counter.pdf');
+});
+
 // Webhooks (public, CSRF exempt)
 Route::post('/webhook/nowpayments', [\App\Http\Controllers\WebhookController::class, 'handleNOWPayments'])
     ->name('webhook.nowpayments')

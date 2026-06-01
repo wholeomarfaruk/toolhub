@@ -52,9 +52,47 @@ class WordCounter extends Component
         $this->result = null;
     }
 
+    public function exportPdf()
+    {
+        if (!$this->result || !$this->text) {
+            $this->addError('export', 'Please analyze text first before exporting.');
+            return;
+        }
+
+        // Check if user has export feature
+        $user = auth()->user();
+        $hasExportFeature = app(\App\Services\SubscriptionService::class)->hasFeature(
+            $user,
+            \App\Enums\Feature::ExportFeature
+        );
+
+        if (!$hasExportFeature) {
+            $this->addError('export', 'PDF export is only available on Pro and Enterprise plans.');
+            return;
+        }
+
+        // Store report data in session
+        session([
+            'word_counter_report' => [
+                'text' => $this->text,
+                'result' => $this->result,
+            ],
+        ]);
+
+        // Redirect to PDF download
+        return redirect(route('word-counter.pdf'));
+    }
+
     public function render()
     {
-        return view('livewire.tools.analyzer.word-counter')
-            ->layout('layouts.website.website', ['title' => 'Word Counter']);
+        $user = auth()->user();
+        $hasExportFeature = app(\App\Services\SubscriptionService::class)->hasFeature(
+            $user,
+            \App\Enums\Feature::ExportFeature
+        );
+
+        return view('livewire.tools.analyzer.word-counter', [
+            'hasExportFeature' => $hasExportFeature,
+        ])->layout('layouts.website.website', ['title' => 'Word Counter']);
     }
 }

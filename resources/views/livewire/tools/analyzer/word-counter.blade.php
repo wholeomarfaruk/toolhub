@@ -45,19 +45,38 @@
                             {{ strlen($text) }} / 100,000 characters
                         </div>
 
-                        <div class="flex gap-2">
-                            <button
-                                wire:click="analyze"
-                                wire:loading.attr="disabled"
-                                class="flex-1 py-3 bg-blue-600 hover:bg-blue-700 disabled:opacity-60 text-white text-sm font-semibold rounded-xl transition-colors flex items-center justify-center gap-2">
-                                <i class="bx bx-analyse"></i>
-                                Analyze
-                            </button>
-                            <button
-                                wire:click="clear"
-                                class="flex-1 py-2 border border-gray-200 text-gray-700 hover:bg-gray-50 text-sm font-semibold rounded-xl transition-colors">
-                                Clear
-                            </button>
+                        <div class="space-y-2">
+                            <div class="flex gap-2">
+                                <button
+                                    wire:click="analyze"
+                                    wire:loading.attr="disabled"
+                                    class="flex-1 py-3 bg-blue-600 hover:bg-blue-700 disabled:opacity-60 text-white text-sm font-semibold rounded-xl transition-colors flex items-center justify-center gap-2">
+                                    <i class="bx bx-analyse"></i>
+                                    Analyze
+                                </button>
+                                <button
+                                    wire:click="clear"
+                                    class="flex-1 py-2 border border-gray-200 text-gray-700 hover:bg-gray-50 text-sm font-semibold rounded-xl transition-colors">
+                                    Clear
+                                </button>
+                            </div>
+                            @if ($hasExportFeature && $result)
+                                <button
+                                    wire:click="exportPdf"
+                                    wire:loading.attr="disabled"
+                                    class="w-full py-2 bg-green-600 hover:bg-green-700 disabled:opacity-60 text-white text-sm font-semibold rounded-xl transition-colors flex items-center justify-center gap-2">
+                                    <i class="bx bx-download"></i>
+                                    Export as PDF
+                                </button>
+                            @elseif (!$hasExportFeature && $result)
+                                <button
+                                    disabled
+                                    title="PDF export requires Pro plan"
+                                    class="w-full py-2 bg-gray-300 text-gray-600 text-sm font-semibold rounded-xl cursor-not-allowed flex items-center justify-center gap-2">
+                                    <i class="bx bx-lock"></i>
+                                    Export (Pro Plan Required)
+                                </button>
+                            @endif
                         </div>
                     </div>
                 </div>
