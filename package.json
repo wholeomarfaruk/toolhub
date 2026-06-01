@@ -36,6 +36,7 @@
     },
     "devDependencies": {
         "@tailwindcss/vite": "^4.2.0",
+        "puppeteer": "^25.1.0",
         "sass": "^1.97.3",
         "tailwindcss": "^4.2.0"
     }

@@ -276,7 +276,11 @@
                             {{ $result['months'] }} months, {{ $result['days'] }} days
                         </p>
                         <button
-                            wire:click="exportAgeImage"
+                            @click="
+                                @this.call('exportAgeImage').then(() => {
+                                    window.open('{{ route('age-card-image.download') }}', '_blank');
+                                });
+                            "
                             wire:loading.attr="disabled"
                             class="mt-4 w-full px-4 py-2 bg-gradient-to-r from-rose-500 to-orange-500 hover:from-rose-600 hover:to-orange-600 disabled:opacity-75 text-white font-medium text-sm rounded-lg transition-all active:scale-95 flex items-center justify-center gap-2">
                             <span wire:loading wire:target="exportAgeImage">
@@ -337,14 +341,6 @@
                                 <span class="font-medium text-gray-900">Next:</span> {{ $result['next_bday_weekday'] }}
                             </p>
                         </div>
-                    </div>
-
-                    {{-- Zodiac Sign --}}
-                    <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-4">
-                        <p class="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">Zodiac Sign</p>
-                        <p class="text-2xl font-bold text-gray-900">
-                            {{ $result['zodiac_emoji'] }} {{ $result['zodiac_sign'] }}
-                        </p>
                     </div>
 
                     {{-- PDF Export Button --}}

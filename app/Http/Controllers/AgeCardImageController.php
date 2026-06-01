@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Spatie\Browsershot\Browsershot;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Log;
 
 class AgeCardImageController extends Controller
 {
@@ -23,13 +24,15 @@ class AgeCardImageController extends Controller
                 'result' => $result,
             ])->render();
 
+            // Log the HTML for debugging
+            Log::info('Age card HTML rendered', ['length' => strlen($html)]);
+
             // Generate image using Browsershot
             $image = Browsershot::html($html)
-                ->width(1000)
-                ->height(1210)
-                ->devicePixelRatio(2)
                 ->windowSize(1000, 1210)
                 ->screenshot();
+
+            Log::info('Age card image generated', ['size' => strlen($image)]);
 
             // Generate filename
             $filename = 'age-card-' . now()->format('Y-m-d-His') . '.png';
@@ -43,6 +46,12 @@ class AgeCardImageController extends Controller
                 'Expires' => '0',
             ]);
         } catch (\Exception $e) {
+            Log::error('Age card image generation failed', [
+                'error' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'trace' => $e->getTraceAsString(),
+            ]);
             abort(500, 'Failed to generate image: ' . $e->getMessage());
         }
     }
