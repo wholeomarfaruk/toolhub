@@ -14,6 +14,10 @@ class NOWPaymentsService
     public function __construct()
     {
         $this->apiKey = config('services.nowpayments.api_key') ?? env('NOWPAYMENTS_API_KEY');
+
+        if (!$this->apiKey) {
+            throw new \Exception('NOWPayments API key is not configured. Please set NOWPAYMENTS_API_KEY in .env');
+        }
     }
 
     /**
