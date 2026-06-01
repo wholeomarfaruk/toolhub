@@ -7,6 +7,9 @@ use App\Livewire\Traits\WithToolRateLimit;
 use App\Livewire\Traits\WithUsageTracking;
 use App\Tools\Calculator\AgeCalculator\AgeCalculatorTool;
 use Livewire\Component;
+use Spatie\Browsershot\Browsershot;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\View;
 
 class AgeCalculator extends Component
 {
@@ -50,6 +53,42 @@ class AgeCalculator extends Component
     {
         $this->dob = '';
         $this->result = null;
+    }
+
+    public function exportAgeImage()
+    {
+        if (!$this->result || !$this->dob) {
+            $this->addError('export', 'Please calculate your age first before exporting.');
+            return;
+        }
+
+        try {
+            // Render the HTML template with result data
+            $html = View::make('exports.age-card-export', [
+                'result' => $this->result,
+            ])->render();
+
+            // Generate image in memory using Browsershot
+            $image = Browsershot::html($html)
+                ->width(1000)
+                ->height(1210)
+                ->devicePixelRatio(2)
+                ->windowSize(1000, 1210)
+                ->screenshot();
+
+            // Stream directly without storing to disk
+            $filename = 'age-card-' . now()->format('Y-m-d-His') . '.png';
+
+            return response($image, 200, [
+                'Content-Type' => 'image/png',
+                'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+                'Cache-Control' => 'no-cache, must-revalidate',
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('Age card export failed: ' . $e->getMessage());
+            $this->addError('export', 'Failed to generate image. Please try again.');
+            return;
+        }
     }
 
     public function exportPdf()
