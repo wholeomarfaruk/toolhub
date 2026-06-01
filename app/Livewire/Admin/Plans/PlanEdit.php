@@ -34,8 +34,8 @@ class PlanEdit extends Component
             $this->name = $plan->name;
             $this->slug = $plan->slug;
             $this->description = $plan->description;
-            $this->priceMonthly = $plan->price_monthly;
-            $this->priceYearly = $plan->price_yearly;
+            $this->priceMonthly = $plan->price_monthly / 100; // Convert cents to dollars
+            $this->priceYearly = $plan->price_yearly ? $plan->price_yearly / 100 : null; // Convert cents to dollars
             $this->isActive = $plan->is_active;
             $this->sortOrder = $plan->sort_order;
 
