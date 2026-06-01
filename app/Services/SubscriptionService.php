@@ -64,8 +64,10 @@ class SubscriptionService
     /**
      * Returns the integer daily limit for a specific tool, or null for unlimited.
      *
-     * Lookup: Tool-specific feature key 'daily_{toolSlug}_limit' (e.g. 'daily_invoice_limit')
-     * If not found, returns null (unlimited).
+     * Lookup order:
+     *   1. Database (plan_features): 'daily_{toolSlug}_limit' (admin can override per plan)
+     *   2. Tool instance: tool's dailyLimit() method (tool's default)
+     *   3. null → unlimited
      */
     public function dailyLimitFor(User $user, string $toolSlug): ?int
     {
@@ -74,13 +76,29 @@ class SubscriptionService
         // Normalize slug to feature key: 'invoice-generator' → 'daily_invoice_generator_limit'
         $toolKey = 'daily_' . str_replace('-', '_', $toolSlug) . '_limit';
 
+        // 1. Check database first (admin override per plan)
         $value = $plan->featureValue($toolKey);
 
-        if ($value === null || $value === 'unlimited') {
+        if ($value !== null && $value !== 'unlimited') {
+            return (int) $value;
+        }
+
+        if ($value === 'unlimited') {
             return null;
         }
 
-        return (int) $value;
+        // 2. Fall back to tool's default (from BaseTool::dailyLimit())
+        try {
+            $tool = app(ToolRegistry::class)->tryFind($toolSlug);
+            if ($tool && $tool->dailyLimit() !== null) {
+                return $tool->dailyLimit();
+            }
+        } catch (\Exception $e) {
+            // Tool not found or registry error, continue to unlimited
+        }
+
+        // 3. No limit found, return null (unlimited)
+        return null;
     }
 
     // ── Subscription management ───────────────────────────────────────────
