@@ -278,7 +278,11 @@
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
 
             @php
+                use App\Models\Plan;
                 $userPlanSlug = auth()->check() ? auth()->user()->activePlan()->slug : null;
+                $freePlan = Plan::where('slug', 'free')->first();
+                $proPlan = Plan::where('slug', 'pro')->first();
+                $enterprisePlan = Plan::where('slug', 'enterprise')->first();
             @endphp
 
             <div class="text-center mb-14">
@@ -335,12 +339,12 @@
                     </div>
 
                     <div class="mb-6">
-                        <h3 class="text-2xl font-bold text-gray-900 mb-2">Pro</h3>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-2">{{ $proPlan->name ?? 'Pro' }}</h3>
                         <div class="flex items-baseline gap-1">
-                            <span class="text-4xl font-extrabold text-gray-900">$2.99</span>
+                            <span class="text-4xl font-extrabold text-gray-900">{{ $proPlan->priceMonthlyFormatted() ?? '$2.99' }}</span>
                             <span class="text-gray-500">/month</span>
                         </div>
-                        <p class="text-sm text-gray-500 mt-2">Best for professionals</p>
+                        <p class="text-sm text-gray-500 mt-2">{{ $proPlan->description ?? 'Best for professionals' }}</p>
                     </div>
 
                     @auth
@@ -392,12 +396,12 @@
                 {{-- ENTERPRISE PLAN --}}
                 <div class="relative bg-white rounded-2xl border border-gray-200 p-8 hover:border-gray-300 hover:shadow-lg transition-all">
                     <div class="mb-6">
-                        <h3 class="text-2xl font-bold text-gray-900 mb-2">Enterprise</h3>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-2">{{ $enterprisePlan->name ?? 'Enterprise' }}</h3>
                         <div class="flex items-baseline gap-1">
-                            <span class="text-4xl font-extrabold text-gray-900">$7.99</span>
+                            <span class="text-4xl font-extrabold text-gray-900">{{ $enterprisePlan->priceMonthlyFormatted() ?? '$7.99' }}</span>
                             <span class="text-gray-500">/month</span>
                         </div>
-                        <p class="text-sm text-gray-500 mt-2">For power users & teams</p>
+                        <p class="text-sm text-gray-500 mt-2">{{ $enterprisePlan->description ?? 'For power users & teams' }}</p>
                     </div>
 
                     @auth

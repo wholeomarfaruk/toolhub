@@ -18,8 +18,8 @@ class PlanEdit extends Component
     public string $name = '';
     public string $slug = '';
     public ?string $description = '';
-    public int $priceMonthly = 0;
-    public ?int $priceYearly = null;
+    public float $priceMonthly = 0;
+    public ?float $priceYearly = null;
     public bool $isActive = true;
     public int $sortOrder = 0;
 
@@ -80,8 +80,8 @@ class PlanEdit extends Component
                 'name' => $this->name,
                 'slug' => $this->slug,
                 'description' => $this->description ?: null,
-                'price_monthly' => (int)($this->priceMonthly * 100),
-                'price_yearly' => $this->priceYearly ? (int)($this->priceYearly * 100) : null,
+                'price_monthly' => (int)round($this->priceMonthly * 100),
+                'price_yearly' => $this->priceYearly ? (int)round($this->priceYearly * 100) : null,
                 'is_active' => $this->isActive,
                 'sort_order' => $this->sortOrder,
             ]
@@ -97,7 +97,7 @@ class PlanEdit extends Component
             );
         }
 
-        // Bust cache
+        // Bust cache for this plan's tier
         Plan::bustTierCache($plan->tier());
 
         $this->dispatch('toast', message: 'Plan saved successfully!');
