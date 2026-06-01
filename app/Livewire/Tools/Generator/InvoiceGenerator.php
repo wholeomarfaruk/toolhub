@@ -99,9 +99,12 @@ class InvoiceGenerator extends Component
 
     public function mount(): void
     {
-        $this->authorizeToolAccess($this->toolSlug);
+        // Page loads without auth check (SEO friendly)
         $this->setDefaults();
-        $this->loadPdfQuota();
+        // Only load PDF quota if authenticated
+        if (auth()->check()) {
+            $this->loadPdfQuota();
+        }
     }
 
     /**
@@ -109,6 +112,10 @@ class InvoiceGenerator extends Component
      */
     private function loadPdfQuota(): void
     {
+        if (!auth()->check()) {
+            return;
+        }
+
         $quota = app(PdfExportService::class)->checkQuota(auth()->user());
 
         if ($quota['limit'] !== null) {
@@ -167,6 +174,12 @@ class InvoiceGenerator extends Component
      */
     public function generate(): void
     {
+        // Check authentication before allowing tool use
+        if (!$this->canAccessTool($this->toolSlug)) {
+            $this->requireAuth($this->toolSlug);
+            return;
+        }
+
         $this->resetErrorBag();
         $this->result       = null;
         $this->limitReached = false;

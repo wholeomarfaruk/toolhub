@@ -1,5 +1,8 @@
 <div>
 
+    {{-- Auth Modal --}}
+    <livewire:components.auth-modal :is-open="$showAuthModal" :tool-name="$authModalToolName" />
+
     {{-- ── Hero ──────────────────────────────────────────────────────────── --}}
     <div class="bg-linear-to-br from-indigo-600 to-purple-700 text-white py-10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

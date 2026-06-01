@@ -24,11 +24,18 @@ class AgeCalculator extends Component
 
     public function mount(): void
     {
-        $this->authorizeToolAccess($this->toolSlug);
+        // Page loads without auth check (SEO friendly)
+        // Auth check will happen when user clicks Calculate
     }
 
     public function calculate(): void
     {
+        // Check authentication before allowing tool use
+        if (!$this->canAccessTool($this->toolSlug)) {
+            $this->requireAuth($this->toolSlug);
+            return;
+        }
+
         $this->resetErrorBag();
         $this->result = null;
         $this->limitReached = false;
