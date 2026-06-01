@@ -194,8 +194,15 @@
                     </style>
 
                     <script>
-                        document.addEventListener('DOMContentLoaded', function() {
+                        function initDatePicker() {
                             const dobPicker = document.getElementById('dobPicker');
+                            if (!dobPicker) return;
+
+                            // Destroy existing instance if any
+                            if (dobPicker._flatpickr) {
+                                dobPicker._flatpickr.destroy();
+                            }
+
                             flatpickr(dobPicker, {
                                 mode: 'single',
                                 maxDate: new Date(),
@@ -208,11 +215,26 @@
                                 animateOnInit: true,
                                 onClose: function(selectedDates, dateStr) {
                                     if (dateStr) {
-                                        Livewire.dispatch('set', { property: 'dob', value: dateStr });
+                                        @this.set('dob', dateStr);
                                     }
                                 }
                             });
+                        }
+
+                        // Initialize on page load
+                        document.addEventListener('DOMContentLoaded', initDatePicker);
+
+                        // Reinitialize after Livewire morphs (when result shows)
+                        document.addEventListener('livewire:updated', function() {
+                            setTimeout(initDatePicker, 100);
                         });
+
+                        // Alternative: Use Livewire hook
+                        if (typeof Livewire !== 'undefined') {
+                            Livewire.hook('morph.updated', () => {
+                                setTimeout(initDatePicker, 50);
+                            });
+                        }
                     </script>
 
                     {{-- Buttons --}}
