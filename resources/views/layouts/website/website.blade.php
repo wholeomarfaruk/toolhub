@@ -55,6 +55,7 @@
                             Pricing
                         </a>
                     </div>
+                    
                 </div>
                 {{-- Right Side (Auth & CTA) --}}
                 <div class="flex items-center gap-3">
