@@ -3,6 +3,7 @@
 namespace App\Livewire\Traits;
 
 use App\Services\SubscriptionService;
+use App\Services\ToolRegistry;
 use App\Services\UsageService;
 
 trait WithToolRateLimit
@@ -18,6 +19,7 @@ trait WithToolRateLimit
      * On breach:
      *   - sets $this->limitReached = true (caller checks this and returns early)
      *   - adds 'limit' error to Livewire $errors bag (blade displays it)
+     *   - error message includes tool name and specific daily limit
      */
     protected function enforceLimit(string $toolSlug): void
     {
@@ -40,9 +42,20 @@ trait WithToolRateLimit
             $this->limitReached = true;
             $plan = app(SubscriptionService::class)->planFor($user);
 
+            // Get tool name for better error messaging
+            $toolName = 'Tool';
+            try {
+                $tool = app(ToolRegistry::class)->tryFind($toolSlug);
+                if ($tool) {
+                    $toolName = $tool->name();
+                }
+            } catch (\Exception $e) {
+                // Use default tool name if lookup fails
+            }
+
             $this->addError(
                 'limit',
-                "Daily limit of {$limit} reached on the {$plan->label()} plan. "
+                "{$toolName} daily limit of {$limit} reached on the {$plan->label()} plan. "
                 . "Upgrade for a higher limit or try again tomorrow."
             );
         }
