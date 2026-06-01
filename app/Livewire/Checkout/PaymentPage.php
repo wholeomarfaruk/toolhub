@@ -14,24 +14,14 @@ class PaymentPage extends Component
     public int $pollingAttempts = 0;
     public int $maxPollingAttempts = 120; // Check for 10 minutes
 
-    public function mount()
+    public function mount(Payment $payment)
     {
-        $paymentId = request()->route('payment');
-        $this->loadPayment($paymentId);
-    }
-
-    public function loadPayment(int $paymentId)
-    {
-        $paymentModel = Payment::findOrFail($paymentId);
-
-        // Only owner can view their payment
-        if ($paymentModel->user_id !== auth()->id()) {
+        // Verify user owns this payment
+        if ($payment->user_id !== auth()->id()) {
             abort(403);
         }
 
-        // Refresh payment data from database
-        $paymentModel->refresh();
-        $this->payment = $paymentModel;
+        $this->payment = $payment;
     }
 
     public function checkPaymentStatus()
