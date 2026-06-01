@@ -34,9 +34,16 @@ enum Feature: string
     case ExportFeature = 'export_feature';          // bool
     case MaxCharLimit = 'max_char_limit';           // '5000' | '100000' | 'unlimited'
 
+    // ── Slug Generator features ──────────────────────────────────────────
+    case SlugCustomSeparator = 'slug_custom_separator'; // bool
+    case SlugStopWords = 'slug_stop_words';              // bool
+    case SlugBulkMode = 'slug_bulk_mode';                // bool
+    case SlugUnicode = 'slug_unicode';                    // bool
+
     // ── Quota features (value = int string or 'unlimited') ────────────────
     case DailyInvoiceLimit   = 'daily_invoice_limit';   // '3' | '20' | 'unlimited'
     case DailyWordCounterLimit = 'daily_word_counter_limit'; // '20' | 'unlimited'
+    case DailySlugLimit = 'daily_slug_generator_limit'; // '20' | 'unlimited'
     case MonthlyPdfLimit     = 'monthly_pdf_limit';     // '0' | '25' | 'unlimited'
     case MaxSavedInvoices    = 'max_saved_invoices';    // '0' | '100' | 'unlimited'
 
@@ -57,6 +64,10 @@ enum Feature: string
             self::ReadabilityScore,
             self::TopKeywords,
             self::ExportFeature,
+            self::SlugCustomSeparator,
+            self::SlugStopWords,
+            self::SlugBulkMode,
+            self::SlugUnicode,
         ]);
     }
 

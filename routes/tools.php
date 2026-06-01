@@ -13,6 +13,10 @@ Route::get('/emi-calculator',
 )->name('emi-calculator');
 
 // ── Generators ───────────────────────────────────────────────────
+Route::get('/slug-generator',
+    \App\Livewire\Tools\Generator\SlugGenerator::class
+)->name('slug-generator');
+
 Route::get('/invoice-generator',
     \App\Livewire\Tools\Generator\InvoiceGenerator::class
 )->name('invoice-generator');

@@ -6,6 +6,7 @@ use App\Services\ToolRegistry;
 use App\Tools\Analyzer\WordCounter\WordCounterTool;
 use App\Tools\Calculator\EmiCalculator\EmiCalculatorTool;
 use App\Tools\Generator\InvoiceGenerator\InvoiceGeneratorTool;
+use App\Tools\Generator\SlugGenerator\SlugGeneratorTool;
 use Illuminate\Support\ServiceProvider;
 
 class ToolServiceProvider extends ServiceProvider
@@ -22,6 +23,7 @@ class ToolServiceProvider extends ServiceProvider
             $registry->register(new EmiCalculatorTool());
 
             // ── Generators ───────────────────────────────────────
+            $registry->register(new SlugGeneratorTool());
             $registry->register(new InvoiceGeneratorTool());
 
             // ── Converters ───────────────────────────────────────

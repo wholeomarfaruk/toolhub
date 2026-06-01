@@ -42,6 +42,12 @@ class PlanFeatureSeeder extends Seeder
             Feature::ExportFeature->value => 'false',
             Feature::MaxCharLimit->value => '5000',
             Feature::DailyWordCounterLimit->value => '20',
+            // Slug Generator features
+            Feature::SlugCustomSeparator->value => 'false',
+            Feature::SlugStopWords->value => 'false',
+            Feature::SlugBulkMode->value => 'false',
+            Feature::SlugUnicode->value => 'false',
+            Feature::DailySlugLimit->value => '20',
         ]);
 
         // ── PRO PLAN ─────────────────────────────────────────────────────
@@ -67,6 +73,12 @@ class PlanFeatureSeeder extends Seeder
             Feature::ExportFeature->value => 'true',
             Feature::MaxCharLimit->value => '100000',
             Feature::DailyWordCounterLimit->value => 'unlimited',
+            // Slug Generator features
+            Feature::SlugCustomSeparator->value => 'true',
+            Feature::SlugStopWords->value => 'true',
+            Feature::SlugBulkMode->value => 'true',
+            Feature::SlugUnicode->value => 'false',
+            Feature::DailySlugLimit->value => 'unlimited',
         ]);
 
         // ── ENTERPRISE PLAN ──────────────────────────────────────────────
@@ -92,6 +104,12 @@ class PlanFeatureSeeder extends Seeder
             Feature::ExportFeature->value => 'true',
             Feature::MaxCharLimit->value => 'unlimited',
             Feature::DailyWordCounterLimit->value => 'unlimited',
+            // Slug Generator features
+            Feature::SlugCustomSeparator->value => 'true',
+            Feature::SlugStopWords->value => 'true',
+            Feature::SlugBulkMode->value => 'true',
+            Feature::SlugUnicode->value => 'true',
+            Feature::DailySlugLimit->value => 'unlimited',
         ]);
     }
 
