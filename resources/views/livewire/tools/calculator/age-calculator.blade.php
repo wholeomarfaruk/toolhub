@@ -245,7 +245,7 @@
                             });
                         }
 
-                        // Function to capture age as image
+                        // Function to capture age as image using html-to-image
                         window.captureAgeAsImage = async function() {
                             const card = document.getElementById('ageImageCard');
                             const button = event.target.closest('button');
@@ -264,44 +264,47 @@
                             button.disabled = true;
 
                             try {
-                                // Capture the card
-                                const canvas = await html2canvas(card.querySelector('div'), {
-                                    scale: 2,
-                                    useCORS: true,
-                                    logging: false,
-                                    backgroundColor: null,
-                                    allowTaint: true
+                                // Get the inner card div
+                                const cardContent = card.querySelector('div');
+
+                                // Convert to PNG using html-to-image
+                                const dataUrl = await window.htmlToImage.toPng(cardContent, {
+                                    cacheBust: true,
+                                    pixelRatio: 2,
+                                    quality: 0.95
                                 });
 
                                 // Create download link
-                                canvas.toBlob(function(blob) {
-                                    const url = URL.createObjectURL(blob);
-                                    const link = document.createElement('a');
-                                    link.href = url;
-                                    link.download = 'age-card-' + new Date().getTime() + '.png';
-                                    document.body.appendChild(link);
-                                    link.click();
-                                    document.body.removeChild(link);
-                                    URL.revokeObjectURL(url);
+                                const link = document.createElement('a');
+                                link.href = dataUrl;
+                                link.download = 'age-card-' + new Date().getTime() + '.png';
+                                document.body.appendChild(link);
+                                link.click();
+                                document.body.removeChild(link);
 
-                                    // Hide card and restore button
+                                // Hide card and restore button
+                                setTimeout(() => {
                                     card.classList.add('hidden');
                                     button.innerHTML = originalText;
                                     button.disabled = false;
+                                }, 500);
 
-                                    // Show success message
-                                    Livewire.dispatch('notify-toast', {
-                                        type: 'success',
-                                        message: 'Age card saved successfully!'
+                                // Show success message (optional - use Toast if available)
+                                if (typeof Toast !== 'undefined') {
+                                    Toast.fire({
+                                        icon: 'success',
+                                        title: 'Age card saved successfully!'
                                     });
-                                });
+                                } else {
+                                    console.log('Age card saved successfully!');
+                                }
                             } catch (error) {
-                                console.error('Error capturing image:', error);
+                                console.error('Error creating image:', error);
                                 card.classList.add('hidden');
                                 button.innerHTML = originalText;
                                 button.disabled = false;
 
-                                alert('Error creating image: ' + error.message);
+                                alert('Error creating image. Please try again.\n\n' + error.message);
                             }
                         };
                     </script>

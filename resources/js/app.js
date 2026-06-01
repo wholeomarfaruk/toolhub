@@ -134,12 +134,12 @@ window.flatpickr = flatpickr;
 
 //FlatPickr==================================================END
 //-------------------------------------------------------------
-//Html2Canvas==================================================START
-import html2canvas from "html2canvas";
+//Html-to-Image==================================================START
+import { toPng } from 'html-to-image';
 
-window.html2canvas = html2canvas;
+window.htmlToImage = { toPng };
 
-//Html2Canvas==================================================END
+//Html-to-Image==================================================END
 //--    ====================================================
 //Sortable==================================================START
 import Sortable from 'sortablejs';
