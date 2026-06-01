@@ -4,16 +4,19 @@ namespace App\Livewire\Checkout;
 
 use App\Models\Payment;
 use App\Services\NOWPaymentsService;
+use Livewire\Attributes\Layout;
 use Livewire\Component;
 
+#[Layout('layouts.app')]
 class PaymentPage extends Component
 {
     public Payment $payment;
     public int $pollingAttempts = 0;
     public int $maxPollingAttempts = 120; // Check for 10 minutes
 
-    public function mount(int $paymentId)
+    public function mount()
     {
+        $paymentId = request()->route('payment');
         $this->loadPayment($paymentId);
     }
 
@@ -77,6 +80,6 @@ class PaymentPage extends Component
 
     public function render()
     {
-        return view('livewire.checkout.payment')->layout('layouts.app', ['title' => 'Complete Payment']);
+        return view('livewire.checkout.payment');
     }
 }

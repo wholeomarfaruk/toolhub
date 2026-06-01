@@ -7,9 +7,11 @@ use App\Models\Payment;
 use App\Models\Plan;
 use App\Models\PaymentGateway;
 use App\Models\Subscription;
+use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Illuminate\Support\Facades\Redirect;
 
+#[Layout('layouts.app')]
 class Show extends Component
 {
     public $plan;
@@ -111,6 +113,6 @@ class Show extends Component
 
     public function render()
     {
-        return view('livewire.checkout.show')->layout('layouts.app', ['title' => 'Checkout']);
+        return view('livewire.checkout.show');
     }
 }
