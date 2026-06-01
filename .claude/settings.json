@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(composer remove *)",
+      "Bash(Read \"C:\\\\Users\\\\SARK\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\f--projects-toolhub\\\\754405af-4979-43bd-b9a4-b09d99fab126\\\\tasks\\\\bnzzh0ff2.output\")",
+      "Bash(php /f/projects/toolhub/artisan route:clear)",
+      "Bash(php /f/projects/toolhub/artisan config:clear)",
+      "Bash(php /f/projects/toolhub/artisan make:migration create_tool_usages_table --path=database/migrations)",
+      "Bash(php /f/projects/toolhub/artisan migrate)",
+      "Bash(php /f/projects/toolhub/artisan optimize)",
+      "Bash(php /f/projects/toolhub/artisan tinker '--execute= *)",
+      "Bash(php /f/projects/toolhub/artisan view:clear)",
+      "Bash(php /f/projects/toolhub/artisan route:list --path=tools)",
+      "Bash(php /f/projects/toolhub/artisan route:list --path=dashboard)",
+      "Bash(php /f/projects/toolhub/artisan route:list)",
+      "Bash(php /f/projects/toolhub/artisan db:seed --class=PanelSeeder)"
+    ]
+  }
+}
