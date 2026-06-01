@@ -3,7 +3,9 @@
 namespace App\Livewire\Admin\Users;
 
 use App\Models\Panel;
+use App\Models\Plan;
 use App\Models\User;
+use App\Services\SubscriptionService;
 use Livewire\Component;
 use Spatie\Permission\Models\Role;
 
@@ -20,13 +22,17 @@ public $users;
     public $search = '';
     public $panels;
     public $panelId;
+
+    // User plan management
+    public $plans = [];
+    public $selectedPlanId;
+    public $showPlanModal = false;
     public function mount()
     {
         $this->users = User::all();
         $this->roles = Role::all();
-        //    dd($this->users->first()->roles());
         $this->panels = Panel::all();
-
+        $this->plans = Plan::where('is_active', true)->orderBy('sort_order')->get();
     }
     public function updatedRoleName($value)
     {
@@ -115,6 +121,58 @@ public $users;
         ]);
         $this->users = User::all();
         $this->UserModal = false;
+    }
+
+    // User Plan Management
+    public function openPlanModal()
+    {
+        $this->selectedPlanId = $this->user->activePlan()?->id;
+        $this->showPlanModal = true;
+    }
+
+    public function assignUserPlan()
+    {
+        if (!$this->selectedPlanId) {
+            $this->dispatch('toast', [
+                'type' => 'error',
+                'message' => 'Please select a plan',
+            ]);
+            return;
+        }
+
+        $plan = Plan::find($this->selectedPlanId);
+        if (!$plan) {
+            $this->dispatch('toast', [
+                'type' => 'error',
+                'message' => 'Plan not found',
+            ]);
+            return;
+        }
+
+        app(SubscriptionService::class)->assignPlan($this->user, $plan);
+
+        $this->dispatch('toast', [
+            'type' => 'success',
+            'message' => "User plan changed to {$plan->name}",
+        ]);
+
+        // Refresh user data
+        $this->user = User::find($this->user->id);
+        $this->showPlanModal = false;
+    }
+
+    public function cancelUserPlan()
+    {
+        app(SubscriptionService::class)->cancel($this->user);
+
+        $this->dispatch('toast', [
+            'type' => 'success',
+            'message' => 'User subscription cancelled',
+        ]);
+
+        // Refresh user data
+        $this->user = User::find($this->user->id);
+        $this->showPlanModal = false;
     }
 
 }

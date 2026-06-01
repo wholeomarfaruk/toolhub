@@ -8,6 +8,7 @@ enum ToolCategory: string
     case Generator  = 'generator';
     case Converter  = 'converter';
     case Formatter  = 'formatter';
+    case Analyzer   = 'analyzer';
 
     public function label(): string
     {
@@ -16,6 +17,7 @@ enum ToolCategory: string
             self::Generator  => 'Generators',
             self::Converter  => 'Converters',
             self::Formatter  => 'Formatters',
+            self::Analyzer   => 'Analyzers',
         };
     }
 
@@ -26,6 +28,7 @@ enum ToolCategory: string
             self::Generator  => 'bx bx-rocket',
             self::Converter  => 'bx bx-transfer',
             self::Formatter  => 'bx bx-code-alt',
+            self::Analyzer   => 'bx bx-bar-chart',
         };
     }
 }

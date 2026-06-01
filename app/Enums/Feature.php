@@ -27,8 +27,16 @@ enum Feature: string
     case ApiAccess   = 'api_access';   // bool
     case TeamAccess  = 'team_access';  // bool
 
+    // ── Word Counter features ──────────────────────────────────────────────
+    case KeywordDensity = 'keyword_density';        // bool
+    case ReadabilityScore = 'readability_score';    // bool
+    case TopKeywords = 'top_keywords';              // bool
+    case ExportFeature = 'export_feature';          // bool
+    case MaxCharLimit = 'max_char_limit';           // '5000' | '100000' | 'unlimited'
+
     // ── Quota features (value = int string or 'unlimited') ────────────────
     case DailyInvoiceLimit   = 'daily_invoice_limit';   // '3' | '20' | 'unlimited'
+    case DailyWordCounterLimit = 'daily_word_counter_limit'; // '20' | 'unlimited'
     case MonthlyPdfLimit     = 'monthly_pdf_limit';     // '0' | '25' | 'unlimited'
     case MaxSavedInvoices    = 'max_saved_invoices';    // '0' | '100' | 'unlimited'
 
@@ -45,6 +53,10 @@ enum Feature: string
             self::ReceiptGenerator,
             self::ApiAccess,
             self::TeamAccess,
+            self::KeywordDensity,
+            self::ReadabilityScore,
+            self::TopKeywords,
+            self::ExportFeature,
         ]);
     }
 

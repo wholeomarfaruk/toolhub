@@ -35,6 +35,13 @@ class PlanFeatureSeeder extends Seeder
             Feature::DailyInvoiceLimit->value => '3',
             Feature::MonthlyPdfLimit->value => '5',              // 5 PDFs per month
             Feature::MaxSavedInvoices->value => '0',
+            // Word Counter features
+            Feature::KeywordDensity->value => 'false',
+            Feature::ReadabilityScore->value => 'false',
+            Feature::TopKeywords->value => 'false',
+            Feature::ExportFeature->value => 'false',
+            Feature::MaxCharLimit->value => '5000',
+            Feature::DailyWordCounterLimit->value => '20',
         ]);
 
         // ── PRO PLAN ─────────────────────────────────────────────────────
@@ -53,6 +60,13 @@ class PlanFeatureSeeder extends Seeder
             Feature::DailyInvoiceLimit->value => '20',
             Feature::MonthlyPdfLimit->value => '250',
             Feature::MaxSavedInvoices->value => '100',
+            // Word Counter features
+            Feature::KeywordDensity->value => 'true',
+            Feature::ReadabilityScore->value => 'true',
+            Feature::TopKeywords->value => 'true',
+            Feature::ExportFeature->value => 'true',
+            Feature::MaxCharLimit->value => '100000',
+            Feature::DailyWordCounterLimit->value => 'unlimited',
         ]);
 
         // ── ENTERPRISE PLAN ──────────────────────────────────────────────
@@ -71,6 +85,13 @@ class PlanFeatureSeeder extends Seeder
             Feature::DailyInvoiceLimit->value => 'unlimited',
             Feature::MonthlyPdfLimit->value => 'unlimited',
             Feature::MaxSavedInvoices->value => 'unlimited',
+            // Word Counter features
+            Feature::KeywordDensity->value => 'true',
+            Feature::ReadabilityScore->value => 'true',
+            Feature::TopKeywords->value => 'true',
+            Feature::ExportFeature->value => 'true',
+            Feature::MaxCharLimit->value => 'unlimited',
+            Feature::DailyWordCounterLimit->value => 'unlimited',
         ]);
     }
 

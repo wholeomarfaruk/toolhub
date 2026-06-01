@@ -282,6 +282,20 @@
                                <dd class="text-gray-700 sm:col-span-2">{{ $user?->created_at?->format('d-m-Y') ?? '' }}</dd>
                            </div>
 
+                           <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
+                               <dt class="font-medium text-gray-900">Subscription Plan</dt>
+                               <dd class="text-gray-700 sm:col-span-2">
+                                   <div class="flex items-center gap-2">
+                                       <span class="inline-block px-3 py-1 text-xs font-semibold rounded-full {{ $user?->activePlan()?->tier()?->badgeClass() ?? 'bg-gray-100 text-gray-700' }}">
+                                           {{ $user?->activePlan()?->name ?? 'No Plan' }}
+                                       </span>
+                                       <button wire:click="openPlanModal" type="button"
+                                           class="text-xs font-medium text-indigo-600 hover:text-indigo-700 underline">
+                                           Change Plan
+                                       </button>
+                                   </div>
+                               </dd>
+                           </div>
 
 
                            {{-- <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4">
@@ -348,6 +362,49 @@
                        </button>
                    </form>
 
+               </div>
+           </div>
+       </div>
+
+       {{-- Change User Plan Modal --}}
+       <div x-cloak x-data="{ planModalOpen: @entangle('showPlanModal') }" x-show="planModalOpen" x-transition
+           class="fixed inset-0 z-50 grid place-content-center bg-black/50 p-4" role="dialog" aria-modal="true"
+           aria-labelledby="planModalTitle">
+           <div class="w-full max-w-md rounded-lg bg-white p-6 shadow-lg">
+               <div class="flex items-start justify-between mb-4">
+                   <h2 id="planModalTitle" class="text-xl font-bold text-gray-900">Change User Plan</h2>
+                   <button @click="planModalOpen = false" type="button"
+                       class="cursor-pointer rounded-full p-2 text-gray-400 hover:bg-gray-50 hover:text-gray-600">
+                       <svg xmlns="http://www.w3.org/2000/svg" class="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                       </svg>
+                   </button>
+               </div>
+
+               <div class="mb-4">
+                   <p class="text-sm text-gray-600 mb-3">Current Plan: <strong>{{ $user?->activePlan()?->name ?? 'None' }}</strong></p>
+                   <label class="block text-sm font-medium text-gray-900 mb-2">Select New Plan</label>
+                   <select wire:model="selectedPlanId" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                       <option value="">-- Choose a plan --</option>
+                       @foreach($plans as $plan)
+                           <option value="{{ $plan->id }}">{{ $plan->name }} - {{ $plan->priceMonthlyFormatted() }}</option>
+                       @endforeach
+                   </select>
+               </div>
+
+               <div class="flex gap-2">
+                   <button @click="planModalOpen = false" type="button"
+                       class="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50">
+                       Cancel
+                   </button>
+                   <button wire:click="assignUserPlan" type="button"
+                       class="flex-1 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">
+                       Assign Plan
+                   </button>
+                   <button wire:click="cancelUserPlan" type="button"
+                       class="flex-1 px-4 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200">
+                       Cancel Plan
+                   </button>
                </div>
            </div>
        </div>

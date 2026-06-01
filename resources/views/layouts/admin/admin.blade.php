@@ -279,10 +279,10 @@
                     </div>
                 </div>
 
-                <!-- Plans -->
+                <!-- Plans & Payments -->
                 <div class="mt-4 mb-1">
                     <h2 class="text-gray-500 text-md font-semibold" :class="{ 'hidden': !$store.sidebar.full }"
-                        x-transition>Plans</h2>
+                        x-transition>Billing</h2>
                 </div>
 
                 <a href="{{ route('admin.plans.list') }}" x-data="tooltip" x-on:mouseover="show = true"
@@ -301,6 +301,25 @@
                         x-bind:class="!$store.sidebar.full && show ? visibleClass : '' || !$store.sidebar.full ?
                             'sm:hidden' : ''">
                         Subscription Plans</h1>
+
+                </a>
+
+                <a href="{{ route('admin.payments.list') }}" x-data="tooltip" x-on:mouseover="show = true"
+                    x-on:mouseleave="show = false"
+                    class="relative flex items-center hover:text-gray-200 hover:bg-gray-800 space-x-2 rounded-md p-2 cursor-pointer justify-start text-gray-400
+                    {{ Route::currentRouteName() === 'admin.payments.list' ? 'text-gray-200 bg-gray-800' : '' }}
+                    ">
+
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                        stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5H4.5A2.25 2.25 0 0 0 2.25 6.75v10.5A2.25 2.25 0 0 0 4.5 19.5Z" />
+                    </svg>
+
+                    <h1 x-cloak
+                        x-bind:class="!$store.sidebar.full && show ? visibleClass : '' || !$store.sidebar.full ?
+                            'sm:hidden' : ''">
+                        Payments</h1>
 
                 </a>
 
