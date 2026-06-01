@@ -96,6 +96,6 @@ class PlanList extends Component
 
     public function render()
     {
-        return view('livewire.admin.plans.plan-list');
+        return view('livewire.admin.plans.plan-list')->layout('layouts.admin.admin');
     }
 }

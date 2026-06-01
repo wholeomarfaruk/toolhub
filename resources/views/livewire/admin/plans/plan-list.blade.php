@@ -25,119 +25,122 @@
     </div>
     {{-- ======================== Page Header End Here ======================== --}}
 
-    <div class="flex-1 w-full bg-white rounded-lg min-h-[80vh] p-6">
+    <div class="flex-1 w-full bg-white rounded-lg min-h-[80vh]">
         {{-- ======================== Content Start From Here ======================== --}}
 
-        {{-- Header with Title and Create Button --}}
-        <div class="flex justify-between items-center mb-8">
+        {{-- Top Controls: Title and Create Button --}}
+        <div class="grid grid-cols-2 gap-4 px-4 py-4">
             <div>
-                <h2 class="text-2xl font-bold text-gray-900">Manage Plans</h2>
-                <p class="text-gray-500 mt-1">Create, edit, and customize your subscription plans</p>
+                <h2 class="text-lg font-bold text-gray-900">Manage Plans</h2>
             </div>
-            <a href="{{ route('admin.plans.create') }}"
-               class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg transition-colors inline-flex items-center gap-2">
-                <i class="bx bx-plus"></i> Create Plan
-            </a>
+            <div class="flex justify-end items-end">
+                <a href="{{ route('admin.plans.create') }}"
+                   class="flex items-center gap-2 pb-1 text-gray-700 transition-colors hover:border-gray-400 hover:text-gray-900 cursor-pointer rounded border border-gray-300 px-4 py-2">
+                    <i class="bx bx-plus"></i>
+                    <span class="text-sm font-medium">Create Plan</span>
+                </a>
+            </div>
         </div>
 
         {{-- Plans Grid --}}
-        <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            @forelse($plans as $plan)
-                <div class="bg-gray-50 rounded-lg border border-gray-200 p-6 hover:shadow-lg transition-shadow">
-                    {{-- Header with Badge --}}
-                    <div class="flex items-start justify-between mb-4">
-                        <div>
-                            <h3 class="text-lg font-bold text-gray-900">{{ $plan->name }}</h3>
-                            <span class="inline-block mt-2 px-3 py-1 text-xs font-semibold rounded-full {{ $plan->tier()->badgeClass() }}">
-                                {{ $plan->tier()->label() }}
-                            </span>
+        <div class="px-4 pb-4">
+            <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                @forelse($plans as $plan)
+                    <div class="bg-gray-50 rounded-lg border border-gray-200 p-4 hover:shadow-lg transition-shadow">
+                        {{-- Plan Name and Badge --}}
+                        <div class="flex items-start justify-between mb-3">
+                            <div>
+                                <h3 class="text-base font-bold text-gray-900">{{ $plan->name }}</h3>
+                                <span class="inline-block mt-1 px-2 py-0.5 text-xs font-semibold rounded-full {{ $plan->tier()->badgeClass() }}">
+                                    {{ $plan->tier()->label() }}
+                                </span>
+                            </div>
+                            <button wire:click="toggleActive({{ $plan->id }})"
+                                    class="px-2 py-1 text-xs font-semibold rounded transition-colors {{ $plan->is_active ? 'bg-emerald-100 text-emerald-700 hover:bg-emerald-200' : 'bg-gray-200 text-gray-700 hover:bg-gray-300' }}">
+                                {{ $plan->is_active ? 'Active' : 'Inactive' }}
+                            </button>
                         </div>
-                        <button wire:click="toggleActive({{ $plan->id }})"
-                                class="px-3 py-1 text-xs font-semibold rounded transition-colors {{ $plan->is_active ? 'bg-emerald-100 text-emerald-700 hover:bg-emerald-200' : 'bg-gray-200 text-gray-700 hover:bg-gray-300' }}">
-                            {{ $plan->is_active ? 'Active' : 'Inactive' }}
-                        </button>
-                    </div>
 
-                    {{-- Pricing --}}
-                    <div class="mb-4 pb-4 border-b border-gray-200">
-                        <div class="flex items-baseline gap-2 mb-1">
-                            <span class="text-2xl font-bold text-gray-900">{{ $plan->priceMonthlyFormatted() }}</span>
-                            <span class="text-sm text-gray-500">/month</span>
+                        {{-- Pricing --}}
+                        <div class="mb-3 pb-3 border-b border-gray-200">
+                            <div class="flex items-baseline gap-1">
+                                <span class="text-xl font-bold text-gray-900">{{ $plan->priceMonthlyFormatted() }}</span>
+                                <span class="text-xs text-gray-500">/month</span>
+                            </div>
+                            @if($plan->price_yearly)
+                                <div class="text-xs text-gray-600 mt-0.5">
+                                    <span class="font-semibold">${{ number_format($plan->price_yearly / 100, 2) }}</span> /year
+                                </div>
+                            @endif
                         </div>
-                        @if($plan->price_yearly)
-                            <div class="text-sm text-gray-600">
-                                <span class="font-semibold">${{ number_format($plan->price_yearly / 100, 2) }}</span> /year
+
+                        {{-- Stats --}}
+                        <div class="mb-4 space-y-1 text-xs">
+                            <div class="flex justify-between text-gray-600">
+                                <span>Subscribers:</span>
+                                <span class="font-semibold text-gray-900">{{ $plan->subscriptions_count }}</span>
+                            </div>
+                            <div class="flex justify-between text-gray-600">
+                                <span>Features:</span>
+                                <span class="font-semibold text-gray-900">{{ $plan->features_count ?? $plan->features()->count() }}</span>
+                            </div>
+                        </div>
+
+                        {{-- Actions --}}
+                        <div class="flex gap-1 mb-2">
+                            <a href="{{ route('admin.plans.edit', $plan) }}"
+                               class="flex-1 px-2 py-1 text-xs font-semibold bg-indigo-100 hover:bg-indigo-200 text-indigo-700 rounded transition-colors text-center">
+                                Edit
+                            </a>
+                            @if($confirmDeleteId === $plan->id)
+                                <button wire:click="delete({{ $plan->id }})"
+                                        class="flex-1 px-2 py-1 text-xs font-semibold bg-red-600 hover:bg-red-700 text-white rounded transition-colors">
+                                    Confirm
+                                </button>
+                                <button wire:click="$set('confirmDeleteId', null)"
+                                        class="flex-1 px-2 py-1 text-xs font-semibold bg-gray-300 hover:bg-gray-400 text-gray-800 rounded transition-colors">
+                                    Cancel
+                                </button>
+                            @else
+                                <button wire:click="confirmDelete({{ $plan->id }})"
+                                        :disabled="$plan->subscriptions_count > 0"
+                                        class="flex-1 px-2 py-1 text-xs font-semibold rounded transition-colors"
+                                        :class="$plan->subscriptions_count > 0 ? 'bg-red-100 text-red-700 opacity-50 cursor-not-allowed' : 'bg-red-100 text-red-700 hover:bg-red-200'"
+                                        :title="$plan->subscriptions_count > 0 ? 'Cannot delete plan with subscribers' : ''">
+                                    Delete
+                                </button>
+                            @endif
+                        </div>
+
+                        {{-- Reorder Buttons --}}
+                        @if(count($plans) > 1)
+                            <div class="flex gap-1 pt-2 border-t border-gray-200">
+                                @if($plan->sort_order > 1)
+                                    <button wire:click="moveUp({{ $plan->id }})"
+                                            class="flex-1 px-2 py-1 text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 rounded transition-colors">
+                                        <i class="bx bx-up-arrow text-xs"></i> Up
+                                    </button>
+                                @endif
+                                @if($plan->sort_order < count($plans) - 1)
+                                    <button wire:click="moveDown({{ $plan->id }})"
+                                            class="flex-1 px-2 py-1 text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 rounded transition-colors">
+                                        <i class="bx bx-down-arrow text-xs"></i> Down
+                                    </button>
+                                @endif
                             </div>
                         @endif
                     </div>
-
-                    {{-- Stats --}}
-                    <div class="mb-6 space-y-2 text-sm">
-                        <div class="flex justify-between text-gray-600">
-                            <span>Active Subscribers:</span>
-                            <span class="font-semibold text-gray-900">{{ $plan->subscriptions_count }}</span>
-                        </div>
-                        <div class="flex justify-between text-gray-600">
-                            <span>Features:</span>
-                            <span class="font-semibold text-gray-900">{{ $plan->features_count ?? $plan->features()->count() }}</span>
-                        </div>
-                    </div>
-
-                    {{-- Actions --}}
-                    <div class="flex gap-2 mb-3">
-                        <a href="{{ route('admin.plans.edit', $plan) }}"
-                           class="flex-1 px-3 py-2 bg-indigo-100 hover:bg-indigo-200 text-indigo-700 font-semibold text-sm rounded transition-colors text-center">
-                            <i class="bx bx-edit-alt"></i> Edit
+                @empty
+                    <div class="col-span-full bg-gray-50 rounded-lg border-2 border-dashed border-gray-300 p-8 text-center">
+                        <i class="bx bx-inbox text-3xl text-gray-400 mb-2 block"></i>
+                        <p class="text-gray-600 font-semibold mb-2">No subscription plans found</p>
+                        <a href="{{ route('admin.plans.create') }}"
+                           class="inline-block px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded transition-colors">
+                            Create First Plan
                         </a>
-                        @if($confirmDeleteId === $plan->id)
-                            <button wire:click="delete({{ $plan->id }})"
-                                    class="flex-1 px-3 py-2 bg-red-600 hover:bg-red-700 text-white font-semibold text-sm rounded transition-colors">
-                                <i class="bx bx-check"></i> Confirm
-                            </button>
-                            <button wire:click="$set('confirmDeleteId', null)"
-                                    class="flex-1 px-3 py-2 bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold text-sm rounded transition-colors">
-                                Cancel
-                            </button>
-                        @else
-                            <button wire:click="confirmDelete({{ $plan->id }})"
-                                    :disabled="$plan->subscriptions_count > 0"
-                                    class="flex-1 px-3 py-2 rounded transition-colors font-semibold text-sm"
-                                    :class="$plan->subscriptions_count > 0 ? 'bg-red-100 text-red-700 opacity-50 cursor-not-allowed' : 'bg-red-100 text-red-700 hover:bg-red-200'"
-                                    :title="$plan->subscriptions_count > 0 ? 'Cannot delete plan with subscribers' : ''">
-                                <i class="bx bx-trash"></i>
-                            </button>
-                        @endif
                     </div>
-
-                    {{-- Reorder Buttons --}}
-                    @if(count($plans) > 1)
-                        <div class="flex gap-2 justify-center pt-3 border-t border-gray-200">
-                            @if($plan->sort_order > 1)
-                                <button wire:click="moveUp({{ $plan->id }})"
-                                        class="flex-1 px-2 py-1 text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 rounded transition-colors">
-                                    <i class="bx bx-up-arrow"></i> Up
-                                </button>
-                            @endif
-                            @if($plan->sort_order < count($plans) - 1)
-                                <button wire:click="moveDown({{ $plan->id }})"
-                                        class="flex-1 px-2 py-1 text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 rounded transition-colors">
-                                    <i class="bx bx-down-arrow"></i> Down
-                                </button>
-                            @endif
-                        </div>
-                    @endif
-                </div>
-            @empty
-                <div class="col-span-full bg-gray-50 rounded-lg border-2 border-dashed border-gray-300 p-12 text-center">
-                    <i class="bx bx-inbox text-5xl text-gray-400 mb-4 block"></i>
-                    <p class="text-gray-600 text-lg mb-4 font-semibold">No subscription plans found</p>
-                    <p class="text-gray-500 mb-6">Start by creating your first subscription plan</p>
-                    <a href="{{ route('admin.plans.create') }}"
-                       class="inline-block px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg transition-colors">
-                        Create First Plan
-                    </a>
-                </div>
-            @endforelse
+                @endforelse
+            </div>
         </div>
 
         {{-- ======================== Content End Here ======================== --}}
