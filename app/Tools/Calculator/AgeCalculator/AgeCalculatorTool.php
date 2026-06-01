@@ -35,21 +35,21 @@ class AgeCalculatorTool extends BaseTool
         $now = Carbon::now();
 
         // Calculate precise age
-        $years = $dob->diffInYears($now);
-        $months = $dob->copy()->addYears($years)->diffInMonths($now);
-        $days = $dob->copy()->addYears($years)->addMonths($months)->diffInDays($now);
+        $years = (int)$dob->diffInYears($now);
+        $months = (int)$dob->copy()->addYears($years)->diffInMonths($now);
+        $days = (int)$dob->copy()->addYears($years)->addMonths($months)->diffInDays($now);
 
         // Calculate totals
-        $totalDays = $dob->diffInDays($now);
+        $totalDays = (int)$dob->diffInDays($now);
         $totalWeeks = (int)floor($totalDays / 7);
-        $totalMonths = $dob->diffInMonths($now);
-        $totalHours = $dob->diffInHours($now);
-        $totalSeconds = $dob->diffInSeconds($now);
+        $totalMonths = (int)$dob->diffInMonths($now);
+        $totalHours = (int)$dob->diffInHours($now);
+        $totalSeconds = (int)$dob->diffInSeconds($now);
 
         // Calculate next birthday
         $isBirthdayToday = $now->format('m-d') === $dob->format('m-d');
         $nextBirthday = $dob->copy()->addYears($isBirthdayToday ? $years : $years + 1);
-        $daysUntilNext = $isBirthdayToday ? 0 : $now->diffInDays($nextBirthday);
+        $daysUntilNext = $isBirthdayToday ? 0 : (int)$now->diffInDays($nextBirthday);
 
         // Get zodiac
         $zodiac = $this->getZodiac($dob->month, $dob->day);
