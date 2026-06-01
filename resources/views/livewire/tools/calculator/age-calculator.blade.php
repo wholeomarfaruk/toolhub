@@ -404,12 +404,6 @@
                                     </div>
                                 @endif
 
-                                {{-- Zodiac --}}
-                                <div style="text-align: center; background: linear-gradient(135deg, #fef3c7 0%, #fecaca 100%); padding: 24px; border-radius: 16px;">
-                                    <p style="font-size: 48px; margin: 0;">{{ $result['zodiac_emoji'] }}</p>
-                                    <p style="font-size: 24px; font-weight: 600; color: #1f2937; margin: 12px 0 0 0;">{{ $result['zodiac_sign'] }}</p>
-                                </div>
-
                                 {{-- Footer --}}
                                 <p style="text-align: center; font-size: 12px; color: #9ca3af; margin-top: 40px; margin-bottom: 0;">ToolsHub Age Calculator • {{ config('app.url') }}</p>
                             </div>
