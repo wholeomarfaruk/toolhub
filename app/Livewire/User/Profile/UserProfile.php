@@ -2,6 +2,7 @@
 
 namespace App\Livewire\User\Profile;
 
+use App\Models\ConnectedAccount;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
@@ -16,11 +17,14 @@ class UserProfile extends Component
     public string $password            = '';
     public string $password_confirmation = '';
 
+    public bool $googleConnected = false;
+
     public function mount(): void
     {
         $user        = Auth::user();
         $this->name  = $user->name;
         $this->email = $user->email;
+        $this->googleConnected = $user->hasConnectedAccount('google');
     }
 
     public function updateProfile(): void
@@ -56,6 +60,20 @@ class UserProfile extends Component
 
         $this->reset(['current_password', 'password', 'password_confirmation']);
         $this->dispatch('toast', ['type' => 'success', 'message' => 'Password updated.']);
+    }
+
+    public function disconnectGoogle(): void
+    {
+        ConnectedAccount::where('user_id', Auth::id())
+            ->where('provider', 'google')
+            ->delete();
+
+        $this->googleConnected = false;
+
+        $this->dispatch('toast', [
+            'type' => 'success',
+            'message' => 'Google account disconnected successfully.',
+        ]);
     }
 
     public function render()
