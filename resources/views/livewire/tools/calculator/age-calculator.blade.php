@@ -33,20 +33,187 @@
 
                 <div class="space-y-5">
 
-                    {{-- Date of Birth Input --}}
+                    {{-- Date of Birth Input with Flatpickr --}}
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1.5">
                             Date of Birth
                         </label>
-                        <input
-                            wire:model="dob"
-                            type="date"
-                            max="{{ date('Y-m-d') }}"
-                            class="w-full px-4 py-2.5 border {{ $errors->has('dob') ? 'border-red-400 bg-red-50' : 'border-gray-200' }} rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent transition">
+                        <div class="relative">
+                            <input
+                                wire:model="dob"
+                                id="dobPicker"
+                                type="text"
+                                placeholder="Click to select date"
+                                class="w-full px-4 py-2.5 pl-10 border {{ $errors->has('dob') ? 'border-red-400 bg-red-50' : 'border-gray-200' }} rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent transition cursor-pointer"
+                                autocomplete="off"
+                                readonly>
+                            <i class="bx bx-calendar absolute left-3 top-1/2 -translate-y-1/2 text-rose-500 pointer-events-none text-lg"></i>
+                        </div>
+                        <p class="mt-2 text-xs text-gray-500">
+                            <i class="bx bx-info-circle align-middle"></i> Select a date between 1900 and today
+                        </p>
                         @error('dob')
                             <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
                         @enderror
                     </div>
+
+                    <style>
+                        /* Flatpickr Dark Theme with Rose Accents */
+                        .flatpickr-calendar {
+                            background: white;
+                            border: 1px solid #e5e7eb;
+                            border-radius: 12px;
+                            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+                            font-family: inherit;
+                        }
+
+                        .flatpickr-calendar.open {
+                            display: block;
+                        }
+
+                        .flatpickr-months {
+                            background: linear-gradient(135deg, #fdf2f8 0%, #fed7aa 100%);
+                            border-radius: 11px 11px 0 0;
+                            padding: 12px;
+                        }
+
+                        .flatpickr-prev-month,
+                        .flatpickr-next-month {
+                            color: #7c3aed;
+                            font-size: 16px;
+                            padding: 8px 12px;
+                        }
+
+                        .flatpickr-prev-month:hover,
+                        .flatpickr-next-month:hover {
+                            background: rgba(124, 58, 237, 0.1);
+                            border-radius: 8px;
+                        }
+
+                        .flatpickr-month {
+                            color: #1f2937;
+                            font-weight: 600;
+                        }
+
+                        .flatpickr-current-month {
+                            font-size: 14px;
+                            padding: 0;
+                        }
+
+                        .flatpickr-current-month select {
+                            background: white;
+                            border: 1px solid #d1d5db;
+                            border-radius: 6px;
+                            padding: 4px 8px;
+                            font-size: 13px;
+                            color: #374151;
+                            cursor: pointer;
+                        }
+
+                        .flatpickr-current-month select:hover {
+                            border-color: #9333ea;
+                        }
+
+                        .flatpickr-weekdays {
+                            background: white;
+                            padding: 8px;
+                        }
+
+                        .flatpickr-weekday {
+                            color: #6b7280;
+                            font-size: 12px;
+                            font-weight: 600;
+                            text-transform: uppercase;
+                            letter-spacing: 0.05em;
+                        }
+
+                        .flatpickr-days {
+                            padding: 8px;
+                        }
+
+                        .flatpickr-day {
+                            color: #374151;
+                            border-radius: 8px;
+                            font-size: 14px;
+                            padding: 8px;
+                            margin: 2px;
+                            transition: all 0.2s;
+                        }
+
+                        .flatpickr-day:hover {
+                            background: #f3e8ff;
+                            border-color: transparent;
+                            cursor: pointer;
+                        }
+
+                        .flatpickr-day.selected {
+                            background: linear-gradient(135deg, #ec4899 0%, #f97316 100%);
+                            border-color: transparent;
+                            color: white;
+                            font-weight: 600;
+                        }
+
+                        .flatpickr-day.selected:hover {
+                            background: linear-gradient(135deg, #db2777 0%, #ea580c 100%);
+                        }
+
+                        .flatpickr-day.today {
+                            border-color: #9333ea;
+                            font-weight: 600;
+                            color: #9333ea;
+                        }
+
+                        .flatpickr-day.inRange {
+                            background: #fce7f3;
+                            box-shadow: none;
+                        }
+
+                        .flatpickr-day.disabled,
+                        .flatpickr-day.prevMonthDay,
+                        .flatpickr-day.nextMonthDay {
+                            color: #d1d5db;
+                            background: white;
+                        }
+
+                        .flatpickr-day.disabled:hover {
+                            cursor: not-allowed;
+                            background: white;
+                        }
+
+                        .flatpickr-time {
+                            border-top: 1px solid #e5e7eb;
+                            padding: 10px;
+                        }
+
+                        .flatpickr-am-pm {
+                            background: white;
+                            border: 1px solid #d1d5db;
+                            border-radius: 6px;
+                            color: #374151;
+                        }
+                    </style>
+
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            const dobPicker = document.getElementById('dobPicker');
+                            flatpickr(dobPicker, {
+                                mode: 'single',
+                                maxDate: new Date(),
+                                dateFormat: 'Y-m-d',
+                                yearRange: [1900, new Date().getFullYear()],
+                                monthSelectorType: 'dropdown',
+                                showMonths: 1,
+                                altInput: true,
+                                altFormat: 'F j, Y',
+                                animateOnInit: true,
+                                onClose: function(selectedDates, dateStr) {
+                                    if (dateStr) {
+                                        Livewire.dispatch('set', { property: 'dob', value: dateStr });
+                                    }
+                                }
+                            });
+                        });
+                    </script>
 
                     {{-- Buttons --}}
                     <div class="flex gap-3 pt-2">
