@@ -2,6 +2,11 @@
 
 use Illuminate\Support\Facades\Route;
 
+// ── Analyzers ────────────────────────────────────────────────────
+Route::get('/word-counter',
+    \App\Livewire\Tools\Analyzer\WordCounter::class
+)->name('word-counter');
+
 // ── Calculators ──────────────────────────────────────────────────
 Route::get('/emi-calculator',
     \App\Livewire\Tools\Calculator\EmiCalculator::class
