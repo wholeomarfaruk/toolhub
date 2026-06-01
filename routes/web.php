@@ -24,6 +24,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/word-counter/pdf', [\App\Http\Controllers\WordCounterPdfController::class, 'download'])->name('word-counter.pdf');
 });
 
+// Google OAuth (public)
+Route::get('/auth/google', [\App\Http\Controllers\Auth\GoogleAuthController::class, 'redirect'])->name('google.redirect');
+Route::get('/auth/google/callback', [\App\Http\Controllers\Auth\GoogleAuthController::class, 'callback'])->name('google.callback');
+
 // Webhooks (public, CSRF exempt)
 Route::post('/webhook/nowpayments', [\App\Http\Controllers\WebhookController::class, 'handleNOWPayments'])
     ->name('webhook.nowpayments')
