@@ -8,6 +8,11 @@ Route::get('/dashboard', \App\Livewire\Admin\Dashboard\Dashboard::class)->name('
 //user managements
 Route::get('/users', App\Livewire\Admin\Users\Users::class)->name('users');
 
+// Plans
+Route::get('/plans', App\Livewire\Admin\Plans\PlanList::class)->name('plans.list');
+Route::get('/plans/create', App\Livewire\Admin\Plans\PlanEdit::class)->name('plans.create');
+Route::get('/plans/{plan}/edit', App\Livewire\Admin\Plans\PlanEdit::class)->name('plans.edit');
+
 // Profile and Settings
 Route::get('/profile', App\Livewire\Admin\Profile\Profile::class)->name('profile');
 Route::get('/settings', App\Livewire\Admin\Settings\Settings::class)->name('settings');

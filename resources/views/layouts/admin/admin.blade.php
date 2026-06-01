@@ -279,7 +279,30 @@
                     </div>
                 </div>
 
+                <!-- Plans -->
+                <div class="mt-4 mb-1">
+                    <h2 class="text-gray-500 text-md font-semibold" :class="{ 'hidden': !$store.sidebar.full }"
+                        x-transition>Plans</h2>
+                </div>
 
+                <a href="{{ route('admin.plans.list') }}" x-data="tooltip" x-on:mouseover="show = true"
+                    x-on:mouseleave="show = false"
+                    class="relative flex items-center hover:text-gray-200 hover:bg-gray-800 space-x-2 rounded-md p-2 cursor-pointer justify-start text-gray-400
+                    {{ str_starts_with(Route::currentRouteName(), 'admin.plans') ? 'text-gray-200 bg-gray-800' : '' }}
+                    ">
+
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                        stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5m-9-6h.008v.008H12v-.008ZM12 15h4.008v.008H16V15Zm0 2.25h4.008v.008H16v-.008ZM12 11.25h4.008V11.258H16v-.008Zm-4-1.5h.008v.008H8v-.008Zm0 2.25h.008v.008H8V11.25Zm0 2.25h.008v.008H8v-.008Z" />
+                    </svg>
+
+                    <h1 x-cloak
+                        x-bind:class="!$store.sidebar.full && show ? visibleClass : '' || !$store.sidebar.full ?
+                            'sm:hidden' : ''">
+                        Subscription Plans</h1>
+
+                </a>
 
                 <!-- Settings -->
                 <div class="mt-4 mb-1">
