@@ -108,7 +108,7 @@
                     ['value' => count($tools) . '+', 'label' => 'Free Tools'],
                     ['value' => count($grouped) . '+', 'label' => 'Categories'],
                     ['value' => '100%',   'label' => 'Free to Use'],
-                    ['value' => 'No Setup', 'label' => 'Required'],
+                    ['value' => 'No Card', 'label' => 'Required'],
                 ];
             @endphp
             @foreach ($stats as $i => $s)
