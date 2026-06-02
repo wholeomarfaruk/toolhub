@@ -1,4 +1,10 @@
 <x-guest-layout>
+    @php
+        // SEO Configuration for Login Page
+        $this->page_title = 'Sign In | ' . config('app.name');
+        $this->meta_description = 'Sign in to your account to access premium features and your tool history.';
+    @endphp
+
     <div class="min-h-screen flex flex-col items-center justify-center py-12 px-4">
         <div class="w-full max-w-md">
             <div class="text-center mb-8">

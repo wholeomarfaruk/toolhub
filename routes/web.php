@@ -4,6 +4,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', \App\Livewire\Website\Home\Home::class)->name('home');
 
+// SEO Routes (Sitemap & Robots)
+Route::get('/sitemap.xml', [\App\Http\Controllers\SitemapController::class, 'index'])->name('sitemap.index');
+Route::get('/sitemap-index.xml', [\App\Http\Controllers\SitemapController::class, 'sitemapIndex'])->name('sitemap.sitemap');
+Route::get('/robots.txt', [\App\Http\Controllers\RobotsController::class, 'index'])->name('robots.txt');
+
 // Public tools index — no auth required
 Route::get('/tools', \App\Livewire\Website\Tools\ToolIndex::class)->name('tools.index');
 

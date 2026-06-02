@@ -160,3 +160,7 @@ import "@fancyapps/ui/dist/fancybox/fancybox.css";
 
 window.Fancybox = Fancybox;
 // fancybox==================================================END
+
+// Scroll Animations ==================================================START
+import './scroll-animations.js';
+// Scroll Animations ==================================================END

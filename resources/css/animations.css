@@ -1,0 +1,240 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   Global Animation Styles
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Button animations */
+button:not(:disabled) {
+    @apply transition-all duration-200;
+}
+
+button:not(:disabled):hover {
+    @apply transform;
+}
+
+button:not(:disabled):active {
+    @apply scale-95;
+}
+
+/* Form input focus animations */
+input:focus,
+textarea:focus,
+select:focus {
+    @apply ring-2 ring-offset-0 transition-all duration-200;
+}
+
+/* Link hover animations */
+a {
+    @apply transition-colors duration-200;
+}
+
+/* Card hover lift effect */
+.card-lift {
+    @apply transition-all duration-300;
+}
+
+.card-lift:hover {
+    @apply -translate-y-1 shadow-lg;
+}
+
+/* Smooth transitions for all interactive elements */
+.interactive-element {
+    @apply transition-all duration-300;
+}
+
+.interactive-element:hover {
+    @apply transform;
+}
+
+/* Loading spinner animation */
+@keyframes spin-slow {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.animate-spin-slow {
+    animation: spin-slow 3s linear infinite;
+}
+
+/* Bounce small animation */
+@keyframes bounce-small {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-4px);
+    }
+}
+
+.animate-bounce-small {
+    animation: bounce-small 2s ease-in-out infinite;
+}
+
+/* Gradient shift animation */
+@keyframes gradient-shift {
+    0%, 100% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+}
+
+.animate-gradient-shift {
+    animation: gradient-shift 3s ease infinite;
+    background-size: 200% 200%;
+}
+
+/* Pulse with glow */
+@keyframes pulse-glow {
+    0%, 100% {
+        opacity: 1;
+        box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
+    }
+    50% {
+        opacity: 0.8;
+        box-shadow: 0 0 40px rgba(99, 102, 241, 0.6);
+    }
+}
+
+.animate-pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* Text entrance animation */
+.text-entrance {
+    animation: fade-in-up 0.6s ease-out;
+}
+
+/* Smooth page transitions */
+@keyframes page-fade-in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.page-transition {
+    animation: page-fade-in 0.4s ease-out;
+}
+
+/* Slide down animation for dropdowns */
+@keyframes slide-down {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-slide-down {
+    animation: slide-down 0.3s ease-out;
+}
+
+/* Slide up animation for modals */
+@keyframes slide-up {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-slide-up {
+    animation: slide-up 0.3s ease-out;
+}
+
+/* Color transition animations */
+.color-transition {
+    @apply transition-colors duration-300;
+}
+
+/* Icon rotation on hover */
+.icon-rotate:hover {
+    @apply rotate-180 transition-transform duration-500;
+}
+
+/* Smooth width transition */
+.width-transition {
+    @apply transition-all duration-300;
+}
+
+/* Input group animations */
+.input-group-focus:focus-within {
+    @apply ring-2 ring-indigo-500 ring-offset-2 transition-all duration-200;
+}
+
+/* Badge pulse animation */
+@keyframes badge-pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+.animate-badge-pulse {
+    animation: badge-pulse 2s ease-in-out infinite;
+}
+
+/* Success animation */
+@keyframes success-bounce {
+    0% {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.animate-success {
+    animation: success-bounce 0.6s ease-out;
+}
+
+/* Error shake animation */
+@keyframes shake {
+    0%, 100% {
+        transform: translateX(0);
+    }
+    25% {
+        transform: translateX(-5px);
+    }
+    75% {
+        transform: translateX(5px);
+    }
+}
+
+.animate-shake {
+    animation: shake 0.4s ease-in-out;
+}
+
+/* Smooth enter animations for list items */
+.list-item-enter {
+    animation: fade-in-up 0.4s ease-out forwards;
+    opacity: 0;
+}
+
+/* Stagger animation for lists */
+.list-item-enter:nth-child(1) { animation-delay: 0.05s; }
+.list-item-enter:nth-child(2) { animation-delay: 0.1s; }
+.list-item-enter:nth-child(3) { animation-delay: 0.15s; }
+.list-item-enter:nth-child(4) { animation-delay: 0.2s; }
+.list-item-enter:nth-child(5) { animation-delay: 0.25s; }
+.list-item-enter:nth-child(6) { animation-delay: 0.3s; }

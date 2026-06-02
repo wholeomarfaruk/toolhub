@@ -1,4 +1,17 @@
 <div>
+    @php
+        // SEO Configuration for Invoice Generator
+        if (empty($this->title)) {
+            $this->title = 'Invoice Generator | Create Professional Invoices Instantly';
+            $this->description = 'Free online invoice generator. Create professional invoices with multiple templates, customization options, and instant PDF export.';
+            $this->keywords = 'invoice generator, invoice creator, invoice template, invoice maker, professional invoice, free invoice generator';
+            $this->og_title = 'Invoice Generator | Free Professional Invoice Maker';
+            $this->og_description = 'Create professional invoices instantly with multiple templates and customization options.';
+            $this->og_url = route('tools.invoice-generator');
+            $this->og_image = asset('images/og-invoice-generator.jpg');
+            $this->canonical_url = route('tools.invoice-generator');
+        }
+    @endphp
 
     {{-- Auth Modal Component --}}
     <livewire:components.auth-modal :is-open="$showAuthModal" :tool-name="$authModalToolName" />
@@ -6,11 +19,12 @@
     {{-- ── Hero ──────────────────────────────────────────────────────────── --}}
     <div class="bg-linear-to-br from-indigo-600 to-purple-700 text-white py-10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center gap-2 text-indigo-200 text-sm mb-3">
-                <a href="{{ route('tools.index') }}" class="hover:text-white transition-colors">Tools</a>
-                <i class="bx bx-chevron-right"></i>
-                <span>Invoice Generator</span>
-            </div>
+            {{-- Breadcrumb with Schema --}}
+            <x-breadcrumb :items="[
+                ['name' => 'Home', 'url' => route('home'), 'icon' => 'bx bx-home-alt'],
+                ['name' => 'Tools', 'url' => route('tools.index')],
+                ['name' => 'Invoice Generator', 'url' => null],
+            ]" :schema="true" />
             <h1 class="text-3xl font-bold mb-1">Invoice Generator</h1>
             <p class="text-indigo-200 text-sm">Build professional invoices with tax and discount — download as PDF when ready.</p>
         </div>

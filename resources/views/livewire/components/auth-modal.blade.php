@@ -1,7 +1,7 @@
 <div>
     {{-- Backdrop --}}
     @if($isOpen)
-        <div class="fixed inset-0 bg-black/50 z-40 transition-opacity duration-300"
+        <div class="fixed inset-0 bg-black/50 z-40 animate-fade-in"
              wire:click="closeModal()"></div>
     @endif
 
@@ -9,7 +9,7 @@
     <div class="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none transition-all duration-300"
          style="display: {{ $isOpen ? 'flex' : 'none' }};">
 
-        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden pointer-events-auto transform transition-all duration-300"
+        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden pointer-events-auto transform transition-all duration-300 animate-scale-in"
              style="transform: {{ $isOpen ? 'scale(1)' : 'scale(0.95)' }}; opacity: {{ $isOpen ? '1' : '0' }};">
 
             {{-- Header with Gradient --}}
@@ -78,7 +78,7 @@
 
                         {{-- Sign In Button --}}
                         <button type="submit"
-                                class="w-full py-2.5 px-4 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold rounded-lg transition-all active:scale-95">
+                                class="w-full py-2.5 px-4 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold rounded-lg transition-all active:scale-95 hover:shadow-lg hover:shadow-indigo-200">
                             Sign In
                         </button>
                     </form>
@@ -147,7 +147,7 @@
 
                         {{-- Create Account Button --}}
                         <button type="submit"
-                                class="w-full py-2.5 px-4 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold rounded-lg transition-all active:scale-95">
+                                class="w-full py-2.5 px-4 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold rounded-lg transition-all active:scale-95 hover:shadow-lg hover:shadow-indigo-200">
                             Create Account
                         </button>
                     </form>
@@ -165,7 +165,7 @@
 
                 {{-- Google OAuth Button --}}
                 <a href="{{ route('google.redirect') }}"
-                   class="w-full py-2.5 px-4 border border-gray-300 hover:border-gray-400 rounded-lg font-medium text-gray-700 hover:bg-gray-50 transition-all flex items-center justify-center gap-2">
+                   class="w-full py-2.5 px-4 border border-gray-300 hover:border-indigo-300 rounded-lg font-medium text-gray-700 hover:bg-indigo-50 transition-all flex items-center justify-center gap-2 hover:shadow-md">
                     <svg class="w-5 h-5" viewBox="0 0 24 24">
                         <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
                         <path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>

@@ -1,15 +1,30 @@
 <div>
+    @php
+        // SEO Configuration for Word Counter
+        if (empty($this->title)) {
+            $this->title = 'Word Counter | Analyze Text & Content Metrics';
+            $this->description = 'Free online word counter and text analyzer. Count words, characters, sentences, paragraphs, reading time, and get detailed text statistics instantly.';
+            $this->keywords = 'word counter, character counter, text analyzer, word count tool, reading time calculator, text statistics, word density';
+            $this->og_title = 'Word Counter | Free Text Analysis Tool';
+            $this->og_description = 'Analyze your text instantly. Get word count, character count, reading time, and detailed metrics in seconds.';
+            $this->og_url = route('tools.word-counter');
+            $this->og_image = asset('images/og-word-counter.jpg');
+            $this->canonical_url = route('tools.word-counter');
+        }
+    @endphp
+
     {{-- Auth Modal Component --}}
     <livewire:components.auth-modal :is-open="$showAuthModal" :tool-name="$authModalToolName" />
 
     {{-- Hero --}}
     <div class="bg-gradient-to-br from-blue-600 to-cyan-700 text-white py-12">
         <div class="max-w-4xl mx-auto px-4">
-            <div class="flex items-center gap-2 text-blue-200 text-sm mb-3">
-                <a href="{{ route('tools.index') }}" class="hover:text-white transition-colors">Tools</a>
-                <i class="bx bx-chevron-right"></i>
-                <span>Word Counter</span>
-            </div>
+            {{-- Breadcrumb with Schema --}}
+            <x-breadcrumb :items="[
+                ['name' => 'Home', 'url' => route('home'), 'icon' => 'bx bx-home-alt'],
+                ['name' => 'Tools', 'url' => route('tools.index')],
+                ['name' => 'Word Counter', 'url' => null],
+            ]" :schema="true" />
             <h1 class="text-3xl font-bold mb-2">Word Counter</h1>
             <p class="text-blue-200">
                 Analyze your text instantly. Get word count, character count, reading time, and detailed metrics.

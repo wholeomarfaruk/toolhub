@@ -1,15 +1,30 @@
 <div>
+    @php
+        // SEO Configuration for Age Calculator
+        if (empty($this->title)) {
+            $this->title = 'Age Calculator | Calculate Your Age in Years, Months & Days';
+            $this->description = 'Free online age calculator. Calculate your exact age in years, months, days, hours, and seconds. Find your next birthday and discover your zodiac sign instantly.';
+            $this->keywords = 'age calculator, calculate age, age in days, birthday calculator, how old am I, age calculator online, zodiac sign calculator';
+            $this->og_title = 'Age Calculator | Instant Age Calculation';
+            $this->og_description = 'Calculate your exact age in years, months, and days. Discover days lived, next birthday countdown, and more.';
+            $this->og_url = route('tools.age-calculator');
+            $this->og_image = asset('images/og-age-calculator.jpg');
+            $this->canonical_url = route('tools.age-calculator');
+        }
+    @endphp
+
     {{-- Auth Modal Component --}}
     <livewire:components.auth-modal :is-open="$showAuthModal" :tool-name="$authModalToolName" />
 
     {{-- Hero --}}
     <div class="bg-gradient-to-br from-rose-600 to-orange-700 text-white py-12">
         <div class="max-w-4xl mx-auto px-4">
-            <div class="flex items-center gap-2 text-rose-200 text-sm mb-3">
-                <a href="{{ route('tools.index') }}" class="hover:text-white transition-colors">Tools</a>
-                <i class="bx bx-chevron-right"></i>
-                <span>Age Calculator</span>
-            </div>
+            {{-- Breadcrumb with Schema --}}
+            <x-breadcrumb :items="[
+                ['name' => 'Home', 'url' => route('home'), 'icon' => 'bx bx-home-alt'],
+                ['name' => 'Tools', 'url' => route('tools.index')],
+                ['name' => 'Age Calculator', 'url' => null],
+            ]" :schema="true" />
             <h1 class="text-3xl font-bold mb-2">Age Calculator</h1>
             <p class="text-rose-200">
                 Calculate your precise age, days lived, next birthday, and more with just your date of birth.
@@ -31,7 +46,7 @@
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
             {{-- ── Input Card ───────────────────────────────────── --}}
-            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 animate-fade-in-up" style="animation-delay: 0.1s;">
                 <h2 class="text-base font-semibold text-gray-900 mb-5">Your Date of Birth</h2>
 
                 <div class="space-y-5">
@@ -253,12 +268,12 @@
                     <div class="flex gap-3 pt-2">
                         <button
                             wire:click="calculate"
-                            class="flex-1 px-4 py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-medium text-sm rounded-xl transition-all active:scale-95">
+                            class="flex-1 px-4 py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-medium text-sm rounded-xl transition-all active:scale-95 hover:shadow-lg hover:shadow-rose-200">
                             Calculate Age
                         </button>
                         <button
                             wire:click="clear"
-                            class="flex-1 px-4 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-900 font-medium text-sm rounded-xl transition-all">
+                            class="flex-1 px-4 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-900 font-medium text-sm rounded-xl transition-all hover:shadow-md">
                             Clear
                         </button>
                     </div>
@@ -267,10 +282,10 @@
 
             {{-- ── Results Card ───────────────────────────────────── --}}
             @if ($result)
-                <div class="space-y-4">
+                <div class="space-y-4 animate-fade-in-up" style="animation-delay: 0.2s;">
 
                     {{-- Age Display --}}
-                    <div class="bg-gradient-to-br from-rose-50 to-orange-50 rounded-2xl border border-rose-200 shadow-sm p-6">
+                    <div class="bg-gradient-to-br from-rose-50 to-orange-50 rounded-2xl border border-rose-200 shadow-sm p-6 hover:-translate-y-1 transition-transform">
                         <p class="text-xs font-semibold text-rose-600 uppercase tracking-wide mb-2">Your Current Age</p>
                         <p class="text-3xl font-bold text-gray-900">
                             {{ $result['years'] }} <span class="text-lg text-gray-600">years</span>
@@ -297,26 +312,26 @@
 
                     {{-- Stats Grid --}}
                     <div class="grid grid-cols-2 gap-3">
-                        <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-4">
+                        <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-4 hover:-translate-y-1 transition-transform animate-fade-in-up" style="animation-delay: 0.25s;">
                             <p class="text-xs font-medium text-gray-500 uppercase tracking-wide mb-1.5">Total Days</p>
                             <p class="text-2xl font-bold text-gray-900">{{ number_format($result['total_days']) }}</p>
                         </div>
-                        <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-4">
+                        <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-4 hover:-translate-y-1 transition-transform animate-fade-in-up" style="animation-delay: 0.3s;">
                             <p class="text-xs font-medium text-gray-500 uppercase tracking-wide mb-1.5">Total Weeks</p>
                             <p class="text-2xl font-bold text-gray-900">{{ number_format($result['total_weeks']) }}</p>
                         </div>
-                        <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-4">
+                        <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-4 hover:-translate-y-1 transition-transform animate-fade-in-up" style="animation-delay: 0.35s;">
                             <p class="text-xs font-medium text-gray-500 uppercase tracking-wide mb-1.5">Total Hours</p>
                             <p class="text-2xl font-bold text-gray-900">{{ number_format($result['total_hours']) }}</p>
                         </div>
-                        <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-4">
+                        <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-4 hover:-translate-y-1 transition-transform animate-fade-in-up" style="animation-delay: 0.4s;">
                             <p class="text-xs font-medium text-gray-500 uppercase tracking-wide mb-1.5">Total Months</p>
                             <p class="text-2xl font-bold text-gray-900">{{ number_format($result['total_months']) }}</p>
                         </div>
                     </div>
 
                     {{-- Next Birthday --}}
-                    <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-4">
+                    <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-4 hover:-translate-y-1 transition-transform animate-fade-in-up" style="animation-delay: 0.45s;">
                         <p class="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">Next Birthday</p>
                         <p class="text-lg font-bold text-gray-900">{{ $result['next_birthday_fmt'] }}</p>
                         <p class="text-sm text-gray-600 mt-1">
@@ -334,7 +349,7 @@
                     </div>
 
                     {{-- Birthday Info --}}
-                    <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-4">
+                    <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-4 hover:-translate-y-1 transition-transform animate-fade-in-up" style="animation-delay: 0.5s;">
                         <p class="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">Birthday Information</p>
                         <div class="space-y-2 text-sm">
                             <p class="text-gray-700">
@@ -359,10 +374,11 @@
                             wire:click="exportPdf"
                             @disabled(!$hasExportFeature)
                             @class([
-                                'w-full px-4 py-2.5 rounded-xl font-medium text-sm transition-all flex items-center justify-center gap-2',
-                                'bg-rose-600 hover:bg-rose-700 text-white active:scale-95' => $hasExportFeature,
+                                'w-full px-4 py-2.5 rounded-xl font-medium text-sm transition-all flex items-center justify-center gap-2 animate-fade-in-up hover:shadow-lg',
+                                'bg-rose-600 hover:bg-rose-700 text-white active:scale-95 hover:shadow-rose-200' => $hasExportFeature,
                                 'bg-gray-100 text-gray-400 cursor-not-allowed' => !$hasExportFeature,
-                            ])>
+                            ])
+                            style="animation-delay: 0.55s;">
                             @if (!$hasExportFeature)
                                 <i class="bx bx-lock text-lg"></i>
                             @else

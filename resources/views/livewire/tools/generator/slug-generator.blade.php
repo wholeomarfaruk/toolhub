@@ -1,15 +1,30 @@
 <div>
+    @php
+        // SEO Configuration for Slug Generator
+        if (empty($this->title)) {
+            $this->title = 'Slug Generator | Create SEO-Friendly URL Slugs';
+            $this->description = 'Free online slug generator. Convert text to SEO-friendly URL slugs instantly. Support for separators, stop words removal, and Unicode characters.';
+            $this->keywords = 'slug generator, URL slug creator, SEO slug, slug maker, permalink generator, url generator, slug converter';
+            $this->og_title = 'Slug Generator | Free URL Slug Creator';
+            $this->og_description = 'Create SEO-friendly URL slugs instantly from text with customization options.';
+            $this->og_url = route('tools.slug-generator');
+            $this->og_image = asset('images/og-slug-generator.jpg');
+            $this->canonical_url = route('tools.slug-generator');
+        }
+    @endphp
+
     {{-- Auth Modal Component --}}
     <livewire:components.auth-modal :is-open="$showAuthModal" :tool-name="$authModalToolName" />
 
     {{-- Hero --}}
     <div class="bg-gradient-to-br from-emerald-600 to-teal-700 text-white py-12">
         <div class="max-w-4xl mx-auto px-4">
-            <div class="flex items-center gap-2 text-emerald-200 text-sm mb-3">
-                <a href="{{ route('tools.index') }}" class="hover:text-white transition-colors">Tools</a>
-                <i class="bx bx-chevron-right"></i>
-                <span>Slug Generator</span>
-            </div>
+            {{-- Breadcrumb with Schema --}}
+            <x-breadcrumb :items="[
+                ['name' => 'Home', 'url' => route('home'), 'icon' => 'bx bx-home-alt'],
+                ['name' => 'Tools', 'url' => route('tools.index')],
+                ['name' => 'Slug Generator', 'url' => null],
+            ]" :schema="true" />
             <h1 class="text-3xl font-bold mb-2">Slug Generator</h1>
             <p class="text-emerald-200">
                 Convert text into SEO-friendly URL slugs instantly. Perfect for blog posts, articles, and web content.

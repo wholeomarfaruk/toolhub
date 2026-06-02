@@ -1,23 +1,48 @@
 <div>
-    @php use App\Enums\ToolCategory; use App\Enums\PlanTier; @endphp
+    @php
+        use App\Enums\ToolCategory;
+        use App\Enums\PlanTier;
+
+        // SEO Configuration
+        if (empty($this->title)) {
+            $this->title = 'Free Online Tools | ' . config('app.name');
+            $this->description = 'Access 50+ free online tools including calculators, generators, converters and more. No signup required. No ads. Instant results.';
+            $this->keywords = 'free tools, online calculator, generator, converter, invoice generator, age calculator, word counter, slug generator';
+            $this->og_title = 'Free Online Tools | ' . config('app.name');
+            $this->og_description = 'Discover 50+ free online tools for instant calculations, document generation, and more. No signup needed.';
+            $this->og_url = route('home');
+            $this->og_image = asset('images/og-home.jpg');
+            $this->canonical_url = route('home');
+        }
+    @endphp
 
     {{-- ═══════════════════════════════════════════════════════════════ --}}
     {{-- HERO                                                            --}}
     {{-- ═══════════════════════════════════════════════════════════════ --}}
     <section class="relative overflow-hidden bg-white">
 
-        {{-- Background decoration --}}
-        <div class="absolute inset-0 pointer-events-none" aria-hidden="true">
-            <div class="absolute -top-32 -right-32 w-150 h-150 rounded-full bg-indigo-50 opacity-60"></div>
-            <div class="absolute top-10 left-1/3 w-3 h-3 rounded-full bg-indigo-400 opacity-40"></div>
-            <div class="absolute top-24 right-1/4 w-2 h-2 rounded-full bg-purple-400 opacity-40"></div>
-            <div class="absolute bottom-10 left-1/4 w-4 h-4 rounded-full bg-indigo-300 opacity-30"></div>
+        {{-- Background decoration with animations --}}
+        <div class="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
+            {{-- Floating blobs --}}
+            <div class="absolute -top-32 -right-32 w-150 h-150 rounded-full bg-indigo-50 opacity-60 animate-float-slow"></div>
+
+            {{-- Floating particles with orbit effect --}}
+            <div class="absolute top-1/4 left-1/4 w-20 h-20" style="perspective: 1000px;">
+                <div class="absolute top-10 left-1/3 w-3 h-3 rounded-full bg-indigo-400 opacity-40 animate-orbit" style="animation-delay: 0s;"></div>
+                <div class="absolute top-24 right-1/4 w-2 h-2 rounded-full bg-purple-400 opacity-40 animate-orbit-slow" style="animation-delay: 0.5s;"></div>
+                <div class="absolute bottom-10 left-1/4 w-4 h-4 rounded-full bg-indigo-300 opacity-30 animate-orbit-reverse" style="animation-delay: 1s;"></div>
+            </div>
+
+            {{-- Additional floating elements --}}
+            <div class="absolute top-1/3 right-10 w-2 h-2 rounded-full bg-purple-300 opacity-30 animate-float" style="animation-delay: 2s;"></div>
+            <div class="absolute bottom-1/4 right-1/3 w-3 h-3 rounded-full bg-indigo-300 opacity-20 animate-bounce-infinity"></div>
+            <div class="absolute top-2/3 left-10 w-2 h-2 rounded-full bg-purple-200 opacity-25 animate-sway"></div>
         </div>
 
         <div class="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-20 text-center">
 
             {{-- Badge --}}
-            <div class="inline-flex items-center gap-2 bg-indigo-50 border border-indigo-100 text-indigo-700 text-xs font-semibold px-4 py-1.5 rounded-full mb-6">
+            <div class="inline-flex items-center gap-2 bg-indigo-50 border border-indigo-100 text-indigo-700 text-xs font-semibold px-4 py-1.5 rounded-full mb-6 animate-fade-in-up" style="animation-delay: 0.1s;">
                 <span class="relative flex h-2 w-2">
                     <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
                     <span class="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
@@ -26,39 +51,39 @@
             </div>
 
             {{-- Headline --}}
-            <h1 class="text-5xl sm:text-6xl font-extrabold text-gray-900 leading-tight tracking-tight mb-6">
+            <h1 class="text-5xl sm:text-6xl font-extrabold text-gray-900 leading-tight tracking-tight mb-6 animate-fade-in-up" style="animation-delay: 0.2s;">
                 Every tool you need,<br>
                 <span class="bg-linear-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
                     all in one place
                 </span>
             </h1>
 
-            <p class="text-xl text-gray-500 max-w-2xl mx-auto mb-10 leading-relaxed">
+            <p class="text-xl text-gray-500 max-w-2xl mx-auto mb-10 leading-relaxed animate-fade-in-up" style="animation-delay: 0.3s;">
                 ToolsHub gives you instant access to calculators, generators, converters and more —
                 free, fast, and designed for professionals.
             </p>
 
             {{-- CTAs --}}
-            <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in-up" style="animation-delay: 0.4s;">
                 <a href="{{ route('tools.index') }}"
-                   class="w-full sm:w-auto px-8 py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl transition-colors shadow-sm shadow-indigo-200 text-sm">
+                   class="w-full sm:w-auto px-8 py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl transition-all shadow-sm shadow-indigo-200 text-sm hover:scale-105 hover:shadow-lg hover:shadow-indigo-300 active:scale-95">
                     Browse All Tools
                 </a>
                 @guest
                     <a href="{{ route('register') }}"
-                       class="w-full sm:w-auto px-8 py-3.5 bg-white border border-gray-200 hover:border-indigo-300 text-gray-700 hover:text-indigo-700 font-semibold rounded-xl transition-colors text-sm">
+                       class="w-full sm:w-auto px-8 py-3.5 bg-white border border-gray-200 hover:border-indigo-300 text-gray-700 hover:text-indigo-700 font-semibold rounded-xl transition-all text-sm hover:scale-105 hover:shadow-md active:scale-95">
                         Create Free Account
                     </a>
                 @else
                     <a href="{{ auth()->user()->hasRole(['admin','superadmin']) ? route('admin.dashboard') : route('checkout.show', ['plan' => 'pro']) }}"
-                       class="w-full sm:w-auto px-8 py-3.5 bg-white border border-gray-200 hover:border-indigo-300 text-gray-700 hover:text-indigo-700 font-semibold rounded-xl transition-colors text-sm">
+                       class="w-full sm:w-auto px-8 py-3.5 bg-white border border-gray-200 hover:border-indigo-300 text-gray-700 hover:text-indigo-700 font-semibold rounded-xl transition-all text-sm hover:scale-105 hover:shadow-md active:scale-95">
                         Go to Dashboard
                     </a>
                 @endguest
             </div>
 
             {{-- Trust badges --}}
-            <div class="mt-12 flex flex-wrap items-center justify-center gap-6 text-xs text-gray-400">
+            <div class="mt-12 flex flex-wrap items-center justify-center gap-6 text-xs text-gray-400 animate-fade-in-up" style="animation-delay: 0.5s;">
                 <span class="flex items-center gap-1.5"><i class="bx bx-check-circle text-emerald-500 text-base"></i> No credit card needed</span>
                 <span class="flex items-center gap-1.5"><i class="bx bx-check-circle text-emerald-500 text-base"></i> Free tools, always</span>
                 <span class="flex items-center gap-1.5"><i class="bx bx-check-circle text-emerald-500 text-base"></i> New tools added regularly</span>
@@ -70,20 +95,26 @@
     {{-- ═══════════════════════════════════════════════════════════════ --}}
     {{-- STATS BAR                                                       --}}
     {{-- ═══════════════════════════════════════════════════════════════ --}}
-    <section class="border-y border-gray-100 bg-gray-50">
-        <div class="max-w-6xl mx-auto px-4 py-8 grid grid-cols-2 sm:grid-cols-4 gap-6 text-center">
+    <section class="border-y border-gray-100 bg-gradient-to-r from-gray-50 via-white to-gray-50 relative overflow-hidden">
+        {{-- Animated background elements --}}
+        <div class="absolute inset-0 pointer-events-none opacity-30">
+            <div class="absolute top-0 left-1/4 w-72 h-72 bg-indigo-100 rounded-full filter blur-3xl animate-float-slow" style="animation-delay: 0s;"></div>
+            <div class="absolute bottom-0 right-1/4 w-72 h-72 bg-purple-100 rounded-full filter blur-3xl animate-float-slow" style="animation-delay: 2s;"></div>
+        </div>
+
+        <div class="relative max-w-6xl mx-auto px-4 py-8 grid grid-cols-2 sm:grid-cols-4 gap-6 text-center">
             @php
                 $stats = [
                     ['value' => count($tools) . '+', 'label' => 'Free Tools'],
                     ['value' => count($grouped) . '+', 'label' => 'Categories'],
                     ['value' => '100%',   'label' => 'Free to Use'],
-                    ['value' => '0',      'label' => 'Sign-ups Required'],
+                    ['value' => 'No Setup', 'label' => 'Required'],
                 ];
             @endphp
-            @foreach ($stats as $s)
-                <div>
-                    <p class="text-3xl font-extrabold text-indigo-700">{{ $s['value'] }}</p>
-                    <p class="text-sm text-gray-500 mt-1">{{ $s['label'] }}</p>
+            @foreach ($stats as $i => $s)
+                <div class="animate-fade-in-up group cursor-pointer" style="animation-delay: {{ 0.6 + ($i * 0.1) }}s;" data-scroll-animation="animate-zoom-in-out" data-scroll-delay="{{ 0.1 + ($i * 0.05) }}s">
+                    <p class="text-3xl font-extrabold text-indigo-700 group-hover:scale-110 group-hover:text-purple-600 transition-all duration-300">{{ $s['value'] }}</p>
+                    <p class="text-sm text-gray-500 mt-1 group-hover:text-gray-700 transition-colors">{{ $s['label'] }}</p>
                 </div>
             @endforeach
         </div>
@@ -95,9 +126,9 @@
     <section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
 
         <div class="text-center mb-12">
-            <p class="text-xs font-semibold text-indigo-500 uppercase tracking-widest mb-3">What's inside</p>
-            <h2 class="text-3xl sm:text-4xl font-bold text-gray-900">Tools built for productivity</h2>
-            <p class="text-gray-400 mt-3 max-w-lg mx-auto text-sm">
+            <p class="text-xs font-semibold text-indigo-500 uppercase tracking-widest mb-3 animate-fade-in-up" style="animation-delay: 0.7s;">What's inside</p>
+            <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 animate-fade-in-up" style="animation-delay: 0.8s;">Tools built for productivity</h2>
+            <p class="text-gray-400 mt-3 max-w-lg mx-auto text-sm animate-fade-in-up" style="animation-delay: 0.9s;">
                 Each tool is purpose-built — clean input, instant result, no clutter.
             </p>
         </div>
@@ -106,24 +137,26 @@
         @foreach ($grouped as $categorySlug => $categoryTools)
             @php $category = ToolCategory::from($categorySlug); @endphp
 
-            <div class="mb-12">
+            <div class="mb-12" data-scroll-animation="animate-fade-in-up">
                 {{-- Category heading --}}
-                <div class="flex items-center gap-3 mb-5">
-                    <div class="w-8 h-8 rounded-lg bg-indigo-100 flex items-center justify-center">
+                <div class="flex items-center gap-3 mb-5 group">
+                    <div class="w-8 h-8 rounded-lg bg-indigo-100 flex items-center justify-center group-hover:bg-indigo-200 transition-colors group-hover:rotate-circle group-hover:animate-spin-slow">
                         <i class="{{ $category->icon() }} text-indigo-600"></i>
                     </div>
-                    <h3 class="font-semibold text-gray-800">{{ $category->label() }}</h3>
-                    <span class="text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">
+                    <h3 class="font-semibold text-gray-800 group-hover:text-indigo-600 transition-colors">{{ $category->label() }}</h3>
+                    <span class="text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full group-hover:bg-indigo-100 group-hover:text-indigo-600 transition-all">
                         {{ count($categoryTools) }} {{ Str::plural('tool', count($categoryTools)) }}
                     </span>
                 </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" data-stagger="0.08">
                     @foreach ($categoryTools as $tool)
                         <a href="{{ route('tools.' . $tool->slug()) }}"
                            class="group relative bg-white border border-gray-100 rounded-2xl p-5
-                                  hover:border-indigo-200 hover:shadow-lg hover:shadow-indigo-50
-                                  transition-all duration-200">
+                                  hover:border-indigo-200 hover:shadow-lg hover:shadow-indigo-50 hover:-translate-y-1
+                                  transition-all duration-200 animate-fade-in-up"
+                           data-stagger-item
+                           style="animation-delay: {{ 1 + (array_search($tool, $categoryTools) * 0.05) }}s;">
 
                             {{-- Plan badge --}}
                             @if ($tool->requiredPlan() !== PlanTier::Free)
@@ -133,7 +166,7 @@
                             @endif
 
                             <div class="flex items-center gap-4 mb-3">
-                                <div class="w-11 h-11 rounded-xl bg-indigo-50 group-hover:bg-indigo-100 flex items-center justify-center transition-colors shrink-0">
+                                <div class="w-11 h-11 rounded-xl bg-indigo-50 group-hover:bg-indigo-100 flex items-center justify-center transition-all shrink-0 group-hover:scale-110 group-hover:rotate-6">
                                     <i class="{{ $tool->icon() }} text-xl text-indigo-600"></i>
                                 </div>
                                 <div>
@@ -172,8 +205,8 @@
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
 
             <div class="text-center mb-14">
-                <p class="text-xs font-semibold text-indigo-500 uppercase tracking-widest mb-3">Why ToolsHub</p>
-                <h2 class="text-3xl sm:text-4xl font-bold text-gray-900">Built different</h2>
+                <p class="text-xs font-semibold text-indigo-500 uppercase tracking-widest mb-3 animate-fade-in-up" style="animation-delay: 0.1s;" data-scroll-animation="animate-fade-in-up">Why ToolsHub</p>
+                <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 animate-fade-in-up" style="animation-delay: 0.2s;" data-scroll-animation="animate-fade-in-up">Built different</h2>
             </div>
 
             @php
@@ -217,14 +250,18 @@
                 ];
             @endphp
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                @foreach ($features as $f)
-                    <div class="bg-white rounded-2xl border border-gray-100 p-6">
-                        <div class="w-11 h-11 rounded-xl {{ $f['color'] }} flex items-center justify-center mb-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" data-stagger="0.1">
+                @foreach ($features as $i => $f)
+                    <div class="bg-white rounded-2xl border border-gray-100 p-6 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 group cursor-pointer animate-fade-in-up"
+                         data-stagger-item
+                         style="animation-delay: {{ 0.3 + ($i * 0.05) }}s;"
+                         data-scroll-animation="animate-fade-in-up"
+                         data-scroll-delay="{{ 0.3 + ($i * 0.05) }}s">
+                        <div class="w-11 h-11 rounded-xl {{ $f['color'] }} flex items-center justify-center mb-4 group-hover:scale-110 group-hover:rotate-12 group-hover:shadow-lg transition-all {{ str_contains($f['color'], 'text-amber') ? 'group-hover:animate-spin-slow' : 'group-hover:animate-bounce-subtle' }}">
                             <i class="{{ $f['icon'] }} text-xl"></i>
                         </div>
-                        <h3 class="font-semibold text-gray-900 mb-2">{{ $f['title'] }}</h3>
-                        <p class="text-sm text-gray-500 leading-relaxed">{{ $f['desc'] }}</p>
+                        <h3 class="font-semibold text-gray-900 mb-2 group-hover:text-indigo-600 transition-colors">{{ $f['title'] }}</h3>
+                        <p class="text-sm text-gray-500 leading-relaxed group-hover:text-gray-700 transition-colors">{{ $f['desc'] }}</p>
                     </div>
                 @endforeach
             </div>
@@ -238,14 +275,16 @@
     <section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
 
         <div class="text-center mb-14">
-            <p class="text-xs font-semibold text-indigo-500 uppercase tracking-widest mb-3">Simple as it gets</p>
-            <h2 class="text-3xl sm:text-4xl font-bold text-gray-900">How it works</h2>
+            <p class="text-xs font-semibold text-indigo-500 uppercase tracking-widest mb-3 animate-fade-in-up" style="animation-delay: 0.1s;" data-scroll-animation="animate-fade-in-up">Simple as it gets</p>
+            <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 animate-fade-in-up" style="animation-delay: 0.2s;" data-scroll-animation="animate-fade-in-up">How it works</h2>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-8 relative">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-8 relative" data-stagger="0.15">
 
-            {{-- connecting line (desktop only) --}}
-            <div class="hidden sm:block absolute top-8 left-1/6 right-1/6 h-px bg-indigo-100" aria-hidden="true"></div>
+            {{-- connecting line (desktop only) with animation --}}
+            <div class="hidden sm:block absolute top-8 left-1/6 right-1/6 h-px bg-gradient-to-r from-transparent via-indigo-300 to-transparent"
+                 style="animation: gradient-shift 3s ease infinite;"
+                 aria-hidden="true"></div>
 
             @php
                 $steps = [
@@ -255,16 +294,20 @@
                 ];
             @endphp
 
-            @foreach ($steps as $s)
-                <div class="relative flex flex-col items-center text-center">
-                    <div class="relative w-16 h-16 rounded-2xl bg-indigo-600 flex items-center justify-center mb-5 shadow-lg shadow-indigo-200">
-                        <i class="{{ $s['icon'] }} text-2xl text-white"></i>
-                        <span class="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-white border-2 border-indigo-600 text-indigo-700 text-xs font-extrabold flex items-center justify-center">
+            @foreach ($steps as $i => $s)
+                <div class="relative flex flex-col items-center text-center group hover:scale-105 transition-transform duration-300 animate-fade-in-up"
+                     data-stagger-item
+                     style="animation-delay: {{ 0.3 + ($i * 0.1) }}s;"
+                     data-scroll-animation="animate-fade-in-up"
+                     data-scroll-delay="{{ 0.3 + ($i * 0.1) }}s">
+                    <div class="relative w-16 h-16 rounded-2xl bg-linear-to-br from-indigo-600 to-purple-600 flex items-center justify-center mb-5 shadow-lg shadow-indigo-200 group-hover:shadow-2xl group-hover:shadow-indigo-400 group-hover:scale-110 transition-all {{ $i === 1 ? 'animate-pulse-ring' : 'animate-bounce-subtle' }}">
+                        <i class="{{ $s['icon'] }} text-2xl text-white group-hover:animate-bounce-infinity"></i>
+                        <span class="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-white border-2 border-indigo-600 text-indigo-700 text-xs font-extrabold flex items-center justify-center group-hover:scale-125 transition-transform">
                             {{ $s['step'] }}
                         </span>
                     </div>
-                    <h3 class="font-semibold text-gray-900 mb-2">{{ $s['title'] }}</h3>
-                    <p class="text-sm text-gray-500 leading-relaxed max-w-55">{{ $s['desc'] }}</p>
+                    <h3 class="font-semibold text-gray-900 mb-2 group-hover:text-indigo-600 transition-colors">{{ $s['title'] }}</h3>
+                    <p class="text-sm text-gray-500 leading-relaxed max-w-55 group-hover:text-gray-700 transition-colors">{{ $s['desc'] }}</p>
                 </div>
             @endforeach
         </div>
@@ -286,15 +329,19 @@
             @endphp
 
             <div class="text-center mb-14">
-                <p class="text-xs font-semibold text-indigo-500 uppercase tracking-widest mb-3">Pricing</p>
-                <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-3">Simple, transparent pricing</h2>
-                <p class="text-gray-500 max-w-lg mx-auto">Choose the plan that fits your needs. All plans include core features.</p>
+                <p class="text-xs font-semibold text-indigo-500 uppercase tracking-widest mb-3 animate-fade-in-up" style="animation-delay: 0.1s;" data-scroll-animation="animate-fade-in-up">Pricing</p>
+                <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-3 animate-fade-in-up" style="animation-delay: 0.2s;" data-scroll-animation="animate-fade-in-up">Simple, transparent pricing</h2>
+                <p class="text-gray-500 max-w-lg mx-auto animate-fade-in-up" style="animation-delay: 0.3s;" data-scroll-animation="animate-fade-in-up">Choose the plan that fits your needs. All plans include core features.</p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8" data-stagger="0.12">
 
                 {{-- FREE PLAN --}}
-                <div class="relative bg-white rounded-2xl border border-gray-200 p-8 hover:border-gray-300 hover:shadow-lg transition-all">
+                <div class="relative bg-white rounded-2xl border border-gray-200 p-8 hover:border-gray-300 hover:shadow-lg transition-all animate-fade-in-up group"
+                     data-stagger-item
+                     style="animation-delay: 0.4s;"
+                     data-scroll-animation="animate-fade-in-up"
+                     data-scroll-delay="0.4s">
                     <div class="mb-6">
                         <h3 class="text-2xl font-bold text-gray-900 mb-2">Free</h3>
                         <div class="flex items-baseline gap-1">

@@ -1,15 +1,30 @@
 <div>
+    @php
+        // SEO Configuration for EMI Calculator
+        if (empty($this->title)) {
+            $this->title = 'EMI Calculator | Loan Payment & Repayment Schedule';
+            $this->description = 'Free online EMI calculator. Calculate monthly loan payments, total interest, and get detailed amortization schedule instantly.';
+            $this->keywords = 'EMI calculator, loan calculator, monthly EMI, interest calculator, loan repayment, amortization schedule';
+            $this->og_title = 'EMI Calculator | Free Loan Payment Calculator';
+            $this->og_description = 'Calculate your monthly EMI, total interest, and repayment schedule instantly.';
+            $this->og_url = route('tools.emi-calculator');
+            $this->og_image = asset('images/og-emi-calculator.jpg');
+            $this->canonical_url = route('tools.emi-calculator');
+        }
+    @endphp
+
     {{-- Auth Modal Component --}}
     <livewire:components.auth-modal :is-open="$showAuthModal" :tool-name="$authModalToolName" />
 
     {{-- Hero --}}
     <div class="bg-gradient-to-br from-indigo-600 to-purple-700 text-white py-12">
         <div class="max-w-4xl mx-auto px-4">
-            <div class="flex items-center gap-2 text-indigo-200 text-sm mb-3">
-                <a href="{{ route('tools.index') }}" class="hover:text-white transition-colors">Tools</a>
-                <i class="bx bx-chevron-right"></i>
-                <span>EMI Calculator</span>
-            </div>
+            {{-- Breadcrumb with Schema --}}
+            <x-breadcrumb :items="[
+                ['name' => 'Home', 'url' => route('home'), 'icon' => 'bx bx-home-alt'],
+                ['name' => 'Tools', 'url' => route('tools.index')],
+                ['name' => 'EMI Calculator', 'url' => null],
+            ]" :schema="true" />
             <h1 class="text-3xl font-bold mb-2">EMI Calculator</h1>
             <p class="text-indigo-200">
                 Calculate your monthly loan installment, total interest, and full repayment breakdown instantly.

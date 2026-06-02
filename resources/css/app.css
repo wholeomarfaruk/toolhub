@@ -1,6 +1,7 @@
 @import "boxicons/css/boxicons.min.css";
 @import "tailwindcss";
 @plugin 'tailwind-scrollbar';
+@import "./animations.css";
 
 [x-cloak] {
     display: none;

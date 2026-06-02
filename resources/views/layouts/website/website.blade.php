@@ -1,10 +1,94 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
+    {{-- Essential Meta Tags --}}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ $title ?? config('app.name') }} — {{ config('app.name') }}</title>
+    <meta name="description" content="{{ $description ?? 'ToolsHub - Free online tools for calculators, generators, and converters. Instant results, no ads, no signup required.' }}">
+    <meta name="keywords" content="{{ $keywords ?? 'online tools, calculator, generator, converter, free tools' }}">
+    <meta name="author" content="{{ config('app.name') }}">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="English">
+    <meta name="theme-color" content="#4f46e5">
+
+    {{-- Open Graph / Social Media --}}
+    <meta property="og:type" content="{{ $og_type ?? 'website' }}">
+    <meta property="og:url" content="{{ $og_url ?? url()->current() }}">
+    <meta property="og:title" content="{{ $og_title ?? ($title ?? config('app.name')) }}">
+    <meta property="og:description" content="{{ $og_description ?? ($description ?? 'Free online tools for calculators, generators, and converters.') }}">
+    <meta property="og:image" content="{{ $og_image ?? asset('images/og-image.jpg') }}">
+    <meta property="og:site_name" content="{{ config('app.name') }}">
+    <meta property="og:locale" content="{{ str_replace('-', '_', app()->getLocale()) }}">
+
+    {{-- Twitter Card --}}
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ $twitter_title ?? ($title ?? config('app.name')) }}">
+    <meta name="twitter:description" content="{{ $twitter_description ?? ($description ?? 'Free online tools for instant results.') }}">
+    <meta name="twitter:image" content="{{ $twitter_image ?? asset('images/og-image.jpg') }}">
+    <meta name="twitter:creator" content="{{ config('app.twitter') ?? '@toolshub' }}">
+
+    {{-- Canonical URL --}}
+    <link rel="canonical" href="{{ $canonical_url ?? url()->current() }}">
+
+    {{-- Alternate Links --}}
+    @if(isset($alternate_links))
+        @foreach($alternate_links as $lang => $url)
+            <link rel="alternate" hreflang="{{ $lang }}" href="{{ $url }}">
+        @endforeach
+    @endif
+
+    {{-- Favicon --}}
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
+    <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
+    <link rel="apple-touch-icon" href="{{ asset('apple-touch-icon.png') }}">
+
+    {{-- Preconnect to Fonts --}}
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+
+    {{-- Structured Data (JSON-LD) --}}
+    @php
+        $websiteSchema = [
+            '@context' => 'https://schema.org',
+            '@type' => 'WebSite',
+            'name' => config('app.name'),
+            'url' => config('app.url'),
+            'description' => $description ?? 'Free online tools for calculators, generators, and converters.',
+            'potentialAction' => [
+                '@type' => 'SearchAction',
+                'target' => [
+                    '@type' => 'EntryPoint',
+                    'urlTemplate' => config('app.url') . '/tools?search={search_term_string}'
+                ],
+                'query-input' => 'required name=search_term_string'
+            ]
+        ];
+
+        $organizationSchema = [
+            '@context' => 'https://schema.org',
+            '@type' => 'Organization',
+            'name' => config('app.name'),
+            'url' => config('app.url'),
+            'logo' => asset('images/logo.png'),
+            'description' => $description ?? 'Free online tools',
+            'sameAs' => [
+                config('app.twitter') ?? '',
+                config('app.facebook') ?? ''
+            ]
+        ];
+    @endphp
+
+    <script type="application/ld+json">
+        {!! json_encode($websiteSchema) !!}
+    </script>
+
+    <script type="application/ld+json">
+        {!! json_encode($organizationSchema) !!}
+    </script>
+
+    <title>{{ $title ?? config('app.name') }} — Online Tools</title>
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
 </head>

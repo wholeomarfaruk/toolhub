@@ -1,4 +1,10 @@
 <x-guest-layout>
+    @php
+        // SEO Configuration for Register Page
+        $this->page_title = 'Create Account | ' . config('app.name');
+        $this->meta_description = 'Create a free account to unlock premium features, save your tool history, and get unlimited access.';
+    @endphp
+
     <div class="min-h-screen flex flex-col items-center justify-center py-12 px-4">
         <div class="w-full max-w-md">
             <div class="text-center mb-8">
