@@ -114,8 +114,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 {{-- Logo & Brand --}}
                 <div class="flex items-center gap-8">
                     <a href="{{ route('home') }}" class="flex items-center gap-3 font-bold text-2xl hover:opacity-80 transition-opacity">
-                        <div class="w-10 h-10 rounded-xl bg-linear-to-br from-indigo-600 to-purple-600 flex items-center justify-center text-white">
-                            <i class="bx bx-grid-alt text-lg"></i>
+                        <div class="w-10 h-10 rounded-xl flex items-center justify-center text-white">
+                           <img src="{{asset('apple-touch-icon.png')}}" alt="">
                         </div>
                         <span class="bg-linear-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
                             {{ config('app.name') }}
