@@ -5,7 +5,15 @@ use Illuminate\Support\Facades\Route;
 // ── Analyzers ────────────────────────────────────────────────────
 Route::get('/word-counter',
     \App\Livewire\Tools\Analyzer\WordCounter::class
-)->name('word-counter');
+)->name('tools.word-counter');
+
+Route::get('/character-counter',
+    \App\Livewire\Tools\Analyzer\CharacterCounter::class
+)->name('tools.character-counter');
+
+Route::get('/sentence-counter',
+    \App\Livewire\Tools\Analyzer\SentenceCounter::class
+)->name('tools.sentence-counter');
 
 // ── Calculators ──────────────────────────────────────────────────
 Route::get('/age-calculator',
@@ -27,3 +35,9 @@ Route::get('/invoice-generator',
 
 Route::get('/invoice/pdf', [\App\Http\Controllers\InvoicePdfController::class, 'download'])
     ->name('invoice.pdf');
+
+Route::get('/character-counter/pdf', [\App\Http\Controllers\CharacterCounterPdfController::class, 'download'])
+    ->name('character-counter.pdf');
+
+Route::get('/sentence-counter/pdf', [\App\Http\Controllers\SentenceCounterPdfController::class, 'download'])
+    ->name('sentence-counter.pdf');

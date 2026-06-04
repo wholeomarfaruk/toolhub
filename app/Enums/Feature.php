@@ -46,6 +46,8 @@ enum Feature: string
     // ── Quota features (value = int string or 'unlimited') ────────────────
     case DailyInvoiceLimit   = 'daily_invoice_limit';   // '3' | '20' | 'unlimited'
     case DailyWordCounterLimit = 'daily_word_counter_limit'; // '20' | 'unlimited'
+    case DailyCharacterCounterLimit = 'daily_character_counter_limit'; // '20' | 'unlimited'
+    case DailySentenceCounterLimit = 'daily_sentence_counter_limit'; // '20' | 'unlimited'
     case DailySlugLimit = 'daily_slug_generator_limit'; // '20' | 'unlimited'
     case DailyAgeCalculatorLimit = 'daily_age_calculator_limit'; // '20' | '100' | 'unlimited'
     case MonthlyPdfLimit     = 'monthly_pdf_limit';     // '0' | '25' | 'unlimited'

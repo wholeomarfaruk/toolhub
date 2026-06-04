@@ -42,6 +42,8 @@ class PlanFeatureSeeder extends Seeder
             Feature::ExportFeature->value => 'false',
             Feature::MaxCharLimit->value => '5000',
             Feature::DailyWordCounterLimit->value => '20',
+            Feature::DailyCharacterCounterLimit->value => '20',
+            Feature::DailySentenceCounterLimit->value => '20',
             // Slug Generator features
             Feature::SlugCustomSeparator->value => 'false',
             Feature::SlugStopWords->value => 'false',
@@ -76,6 +78,8 @@ class PlanFeatureSeeder extends Seeder
             Feature::ExportFeature->value => 'true',
             Feature::MaxCharLimit->value => '100000',
             Feature::DailyWordCounterLimit->value => 'unlimited',
+            Feature::DailyCharacterCounterLimit->value => 'unlimited',
+            Feature::DailySentenceCounterLimit->value => 'unlimited',
             // Slug Generator features
             Feature::SlugCustomSeparator->value => 'true',
             Feature::SlugStopWords->value => 'true',
@@ -110,6 +114,8 @@ class PlanFeatureSeeder extends Seeder
             Feature::ExportFeature->value => 'true',
             Feature::MaxCharLimit->value => 'unlimited',
             Feature::DailyWordCounterLimit->value => 'unlimited',
+            Feature::DailyCharacterCounterLimit->value => 'unlimited',
+            Feature::DailySentenceCounterLimit->value => 'unlimited',
             // Slug Generator features
             Feature::SlugCustomSeparator->value => 'true',
             Feature::SlugStopWords->value => 'true',

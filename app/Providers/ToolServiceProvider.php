@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use App\Services\ToolRegistry;
+use App\Tools\Analyzer\CharacterCounter\CharacterCounterTool;
+use App\Tools\Analyzer\SentenceCounter\SentenceCounterTool;
 use App\Tools\Analyzer\WordCounter\WordCounterTool;
 use App\Tools\Calculator\AgeCalculator\AgeCalculatorTool;
 use App\Tools\Calculator\EmiCalculator\EmiCalculatorTool;
@@ -19,6 +21,8 @@ class ToolServiceProvider extends ServiceProvider
 
             // ── Analyzers ────────────────────────────────────────
             $registry->register(new WordCounterTool());
+            $registry->register(new CharacterCounterTool());
+            $registry->register(new SentenceCounterTool());
 
             // ── Calculators ──────────────────────────────────────
             $registry->register(new AgeCalculatorTool());
