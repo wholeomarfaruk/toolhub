@@ -5,15 +5,15 @@ use Illuminate\Support\Facades\Route;
 // ── Analyzers ────────────────────────────────────────────────────
 Route::get('/word-counter',
     \App\Livewire\Tools\Analyzer\WordCounter::class
-)->name('tools.word-counter');
+)->name('word-counter');
 
 Route::get('/character-counter',
     \App\Livewire\Tools\Analyzer\CharacterCounter::class
-)->name('tools.character-counter');
+)->name('character-counter');
 
 Route::get('/sentence-counter',
     \App\Livewire\Tools\Analyzer\SentenceCounter::class
-)->name('tools.sentence-counter');
+)->name('sentence-counter');
 
 // ── Calculators ──────────────────────────────────────────────────
 Route::get('/age-calculator',
