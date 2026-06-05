@@ -26,7 +26,6 @@ Route::middleware('auth')->group(function () {
 
 // PDF & Image exports (protected by authentication)
 Route::middleware('auth')->group(function () {
-    Route::get('/word-counter/pdf', [\App\Http\Controllers\WordCounterPdfController::class, 'download'])->name('word-counter.pdf');
     Route::get('/age-calculator/pdf', [\App\Http\Controllers\AgeCalculatorPdfController::class, 'download'])->name('age-calculator.pdf');
     Route::get('/age-calculator/image', [\App\Http\Controllers\AgeCardImageController::class, 'download'])->name('age-card-image.download');
 });

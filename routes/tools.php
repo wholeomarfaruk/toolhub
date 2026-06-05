@@ -41,3 +41,9 @@ Route::get('/character-counter/pdf', [\App\Http\Controllers\CharacterCounterPdfC
 
 Route::get('/sentence-counter/pdf', [\App\Http\Controllers\SentenceCounterPdfController::class, 'download'])
     ->name('sentence-counter.pdf');
+
+// Protected PDF exports
+Route::middleware('auth')->group(function () {
+    Route::get('/word-counter/pdf', [\App\Http\Controllers\WordCounterPdfController::class, 'download'])
+        ->name('word-counter.pdf');
+});
