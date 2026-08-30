@@ -11,6 +11,15 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
         then: function (): void {
+            // 0. SEO routes — no `web` middleware group, so no session,
+            //    CSRF, or cookies are attached to these responses.
+            Route::get('/sitemap.xml', [\App\Http\Controllers\SitemapController::class, 'index'])
+                ->name('sitemap.index');
+            Route::get('/sitemap-index.xml', [\App\Http\Controllers\SitemapController::class, 'sitemapIndex'])
+                ->name('sitemap.sitemap');
+            Route::get('/robots.txt', [\App\Http\Controllers\RobotsController::class, 'index'])
+                ->name('robots.txt');
+
             // 1. User Dashboard — all authenticated verified users
             Route::middleware(['web', 'auth', 'verified'])
                 ->prefix('dashboard')
