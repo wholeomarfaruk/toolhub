@@ -17,12 +17,13 @@ trait WithToolAccess
      */
     protected function canAccessTool(string $toolSlug): bool
     {
-        // Not authenticated
+        $tool = app(ToolRegistry::class)->find($toolSlug);
+
+        // Tools available on the Free plan don't require signup.
         if (! auth()->check()) {
-            return false;
+            return $tool->requiredPlan() === \App\Enums\PlanTier::Free;
         }
 
-        $tool = app(ToolRegistry::class)->find($toolSlug);
         $plan = app(SubscriptionService::class)->planFor(auth()->user());
 
         // Plan doesn't include access
@@ -39,8 +40,14 @@ trait WithToolAccess
      */
     protected function requireAuth(string $toolSlug): void
     {
+        $tool = app(ToolRegistry::class)->find($toolSlug);
+
         if (! auth()->check()) {
-            $tool = app(ToolRegistry::class)->find($toolSlug);
+            // Free-tier tools don't require signup at all.
+            if ($tool->requiredPlan() === \App\Enums\PlanTier::Free) {
+                return;
+            }
+
             $this->authModalToolName = $tool->name();
             $this->showAuthModal = true;
             $this->dispatch('openAuthModal', toolName: $tool->name());
@@ -48,7 +55,6 @@ trait WithToolAccess
         }
 
         // User is authenticated, check plan access
-        $tool = app(ToolRegistry::class)->find($toolSlug);
         $plan = app(SubscriptionService::class)->planFor(auth()->user());
 
         if (! $plan->includes($tool->requiredPlan())) {
