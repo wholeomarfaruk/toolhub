@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Tool;
+use App\Services\ToolRegistry;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Response;
 
@@ -32,12 +32,12 @@ class SitemapController extends Controller
                 0.8
             );
 
-            // Add all tool pages
-            $tools = Tool::all();
+            // Add all registered tool pages
+            $tools = app(ToolRegistry::class)->all();
             foreach ($tools as $tool) {
                 $urls[] = $this->createSitemapUrl(
                     route('tools.' . $tool->slug()),
-                    $tool->updated_at,
+                    now()->subDays(1),
                     'monthly',
                     0.7
                 );
@@ -63,7 +63,6 @@ class SitemapController extends Controller
         $sitemapIndex = Cache::remember('sitemap-index.xml', 86400, function () {
             $sitemaps = [
                 ['loc' => route('sitemap.index'), 'lastmod' => now()->toAtomString()],
-                ['loc' => route('sitemap.tools'), 'lastmod' => now()->toAtomString()],
             ];
 
             return $this->generateSitemapIndexXml($sitemaps);

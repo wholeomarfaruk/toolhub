@@ -11,6 +11,9 @@
     <meta name="robots" content="index, follow">
     <meta name="language" content="English">
     <meta name="theme-color" content="#4f46e5">
+    @if(config('seo.google_site_verification'))
+        <meta name="google-site-verification" content="{{ config('seo.google_site_verification') }}">
+    @endif
 
     {{-- Open Graph / Social Media --}}
     <meta property="og:type" content="{{ $og_type ?? 'website' }}">
