@@ -3,6 +3,7 @@
 namespace App\Livewire\Admin\Seo;
 
 use App\Jobs\GenerateSeoKeywordsJob;
+use App\Models\AiProvider;
 use App\Models\SeoKeyword;
 use App\Models\SeoKeywordGroup;
 use App\Services\ToolRegistry;
@@ -21,6 +22,8 @@ class KeywordList extends Component
     public string $aiSeedTopic = '';
     public int $aiCount = 15;
     public ?int $aiGroupId = null;
+    public string $aiProviderSlug = '';
+    public string $aiModel = '';
 
     public function updatedFilterTool()
     {
@@ -60,6 +63,7 @@ class KeywordList extends Component
         $this->validate([
             'aiSeedTopic' => 'required|string|max:255',
             'aiCount' => 'required|integer|min:1|max:50',
+            'aiProviderSlug' => 'required|string',
         ]);
 
         GenerateSeoKeywordsJob::dispatch(
@@ -67,7 +71,9 @@ class KeywordList extends Component
             $this->aiGroupId,
             $this->aiSeedTopic,
             $this->aiCount,
-            auth()->id()
+            auth()->id(),
+            $this->aiProviderSlug,
+            $this->aiModel ?: null
         );
 
         $this->dispatch('toast', message: 'Keyword generation queued — refresh shortly.');
@@ -88,6 +94,7 @@ class KeywordList extends Component
             'keywords' => $keywords,
             'tools' => app(ToolRegistry::class)->all(),
             'groups' => SeoKeywordGroup::orderBy('name')->get(),
+            'activeProviders' => AiProvider::active()->get(),
         ])->layout('layouts.admin.admin');
     }
 }

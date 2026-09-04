@@ -4,11 +4,11 @@ namespace App\Services\AI;
 
 class KeywordGenerator
 {
-    public function __construct(private readonly OpenRouterService $openRouter)
+    public function __construct(private readonly AiProviderService $aiProvider)
     {
     }
 
-    public function generate(string $toolSlug, string $toolName, string $seedTopic, int $count = 15): array
+    public function generate(string $providerSlug, string $toolSlug, string $toolName, string $seedTopic, int $count = 15, ?string $model = null): array
     {
         $system = <<<PROMPT
         You are an SEO keyword researcher. Given a tool and a seed topic, propose {$count}
@@ -19,6 +19,6 @@ class KeywordGenerator
 
         $user = "Tool: {$toolName} ({$toolSlug})\nSeed topic: {$seedTopic}\nCount: {$count}";
 
-        return $this->openRouter->chatJson($system, $user);
+        return $this->aiProvider->chatJson($providerSlug, $system, $user, $model);
     }
 }

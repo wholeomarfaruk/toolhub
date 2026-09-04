@@ -237,6 +237,35 @@
                     </div>
                 </div>
 
+                @if($seoPage)
+                    {{-- AI Generation Controls --}}
+                    <div class="pt-4 border-t border-gray-200">
+                        @if($activeProviders->isEmpty())
+                            <p class="text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2">
+                                No AI providers configured — set one up in <a href="{{ route('admin.seo.ai-settings') }}" class="font-semibold underline">AI Settings</a>.
+                            </p>
+                        @else
+                            <div class="grid gap-3 md:grid-cols-3 items-end">
+                                <div>
+                                    <label class="block text-xs font-semibold text-gray-600 mb-1">AI Provider</label>
+                                    <select wire:model="aiProviderSlug" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm">
+                                        <option value="">Select provider…</option>
+                                        @foreach($activeProviders as $provider)
+                                            <option value="{{ $provider->slug }}">{{ $provider->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="md:col-span-2">
+                                    <label class="block text-xs font-semibold text-gray-600 mb-1">Model (optional)</label>
+                                    <input type="text" wire:model="aiModel"
+                                           class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                                           placeholder="Leave blank for provider default">
+                                </div>
+                            </div>
+                        @endif
+                    </div>
+                @endif
+
                 {{-- Form Actions --}}
                 <div class="flex flex-wrap gap-3 pt-4 border-t border-gray-200">
                     <a href="{{ route('admin.seo.pages.list') }}"

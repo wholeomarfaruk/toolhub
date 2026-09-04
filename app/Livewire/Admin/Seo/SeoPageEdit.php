@@ -3,6 +3,7 @@
 namespace App\Livewire\Admin\Seo;
 
 use App\Jobs\GenerateSeoPageContentJob;
+use App\Models\AiProvider;
 use App\Models\SeoKeyword;
 use App\Models\SeoKeywordGroup;
 use App\Models\SeoPage;
@@ -33,6 +34,9 @@ class SeoPageEdit extends Component
     public array $variableRows = [['key' => '', 'value' => '']];
     public array $faqRows = [['question' => '', 'answer' => '']];
     public array $exampleRows = [['label' => '', 'input' => '', 'output' => '']];
+
+    public string $aiProviderSlug = '';
+    public string $aiModel = '';
 
     public function mount(?SeoPage $seoPage = null)
     {
@@ -220,7 +224,12 @@ class SeoPageEdit extends Component
             return;
         }
 
-        GenerateSeoPageContentJob::dispatch($this->seoPage->id, auth()->id());
+        if (!$this->aiProviderSlug) {
+            $this->dispatch('toast', type: 'error', message: 'Select an AI provider before generating content.');
+            return;
+        }
+
+        GenerateSeoPageContentJob::dispatch($this->seoPage->id, auth()->id(), $this->aiProviderSlug, $this->aiModel ?: null);
         $this->dispatch('toast', message: 'AI content generation queued.');
     }
 
@@ -234,6 +243,7 @@ class SeoPageEdit extends Component
             'groups' => $this->toolSlug
                 ? SeoKeywordGroup::where('tool_slug', $this->toolSlug)->orderBy('name')->get()
                 : SeoKeywordGroup::orderBy('name')->get(),
+            'activeProviders' => AiProvider::active()->get(),
         ])->layout('layouts.admin.admin');
     }
 }

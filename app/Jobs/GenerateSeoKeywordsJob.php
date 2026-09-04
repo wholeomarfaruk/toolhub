@@ -24,6 +24,8 @@ class GenerateSeoKeywordsJob implements ShouldQueue
         public readonly string $seedTopic,
         public readonly int $count,
         public readonly ?int $triggeredByUserId,
+        public readonly string $providerSlug,
+        public readonly ?string $model = null,
     ) {
     }
 
@@ -37,14 +39,14 @@ class GenerateSeoKeywordsJob implements ShouldQueue
         $log = AiGenerationLog::create([
             'type' => 'keyword_generation',
             'seo_keyword_group_id' => $this->seoKeywordGroupId,
-            'provider' => 'openrouter',
-            'model' => config('services.openrouter.default_model'),
+            'provider' => $this->providerSlug,
+            'model' => $this->model ?? 'default',
             'status' => 'pending',
             'triggered_by' => $this->triggeredByUserId,
         ]);
 
         try {
-            $result = $generator->generate($this->toolSlug, $tool->name(), $this->seedTopic, $this->count);
+            $result = $generator->generate($this->providerSlug, $this->toolSlug, $tool->name(), $this->seedTopic, $this->count, $this->model);
 
             foreach ($result['content']['keywords'] ?? [] as $row) {
                 $normalized = SeoKeyword::normalize($row['keyword'] ?? '');

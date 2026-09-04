@@ -48,3 +48,6 @@ Route::get('/seo/pages/{seoPage}/edit', App\Livewire\Admin\Seo\SeoPageEdit::clas
 
 // SEO — AI Settings
 Route::get('/seo/ai-settings', App\Livewire\Admin\Seo\AiSettings::class)->name('seo.ai-settings');
+
+// SEO — AI Generation Logs
+Route::get('/seo/ai-logs', App\Livewire\Admin\Seo\AiGenerationLogList::class)->name('seo.ai-logs.list');

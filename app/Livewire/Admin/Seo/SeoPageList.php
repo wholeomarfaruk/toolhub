@@ -3,6 +3,7 @@
 namespace App\Livewire\Admin\Seo;
 
 use App\Jobs\GenerateSeoPageContentJob;
+use App\Models\AiProvider;
 use App\Models\SeoPage;
 use App\Services\ToolRegistry;
 use Illuminate\Support\Facades\Cache;
@@ -44,8 +45,14 @@ class SeoPageList extends Component
             return;
         }
 
-        GenerateSeoPageContentJob::dispatch($page->id, auth()->id());
-        $this->dispatch('toast', message: 'AI content generation queued.');
+        $provider = AiProvider::active()->first();
+        if (!$provider) {
+            $this->dispatch('toast', type: 'error', message: 'No AI providers configured — set one up in AI Settings.');
+            return;
+        }
+
+        GenerateSeoPageContentJob::dispatch($page->id, auth()->id(), $provider->slug, null);
+        $this->dispatch('toast', message: 'AI content generation queued using ' . $provider->name . '.');
     }
 
     public function delete(int $id)

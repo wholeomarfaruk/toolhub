@@ -71,27 +71,51 @@
             <h3 class="text-sm font-bold text-gray-900 mb-2 flex items-center gap-1.5">
                 <i class="bx bx-bulb text-indigo-600"></i> Generate Keywords with AI
             </h3>
-            <div class="grid gap-3 md:grid-cols-4 items-end">
-                <div class="md:col-span-2">
-                    <label class="block text-xs font-semibold text-gray-600 mb-1">Seed Topic</label>
-                    <input type="text" wire:model="aiSeedTopic"
-                           class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
-                           placeholder="e.g., car loan EMI">
-                    @error('aiSeedTopic') <span class="text-red-600 text-xs mt-0.5 block">{{ $message }}</span> @enderror
+            @if($activeProviders->isEmpty())
+                <p class="text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2">
+                    No AI providers configured — set one up in <a href="{{ route('admin.seo.ai-settings') }}" class="font-semibold underline">AI Settings</a>.
+                </p>
+            @else
+                <div class="grid gap-3 md:grid-cols-4 items-end">
+                    <div class="md:col-span-2">
+                        <label class="block text-xs font-semibold text-gray-600 mb-1">Seed Topic</label>
+                        <input type="text" wire:model="aiSeedTopic"
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                               placeholder="e.g., car loan EMI">
+                        @error('aiSeedTopic') <span class="text-red-600 text-xs mt-0.5 block">{{ $message }}</span> @enderror
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-600 mb-1">Count</label>
+                        <input type="number" wire:model="aiCount" min="1" max="50"
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm">
+                        @error('aiCount') <span class="text-red-600 text-xs mt-0.5 block">{{ $message }}</span> @enderror
+                    </div>
+                    <div>
+                        <button wire:click="generateWithAi" wire:loading.attr="disabled"
+                                class="w-full px-4 py-2 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-60 text-white text-sm font-semibold rounded-lg transition-colors">
+                            Generate
+                        </button>
+                    </div>
                 </div>
-                <div>
-                    <label class="block text-xs font-semibold text-gray-600 mb-1">Count</label>
-                    <input type="number" wire:model="aiCount" min="1" max="50"
-                           class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm">
-                    @error('aiCount') <span class="text-red-600 text-xs mt-0.5 block">{{ $message }}</span> @enderror
+                <div class="grid gap-3 md:grid-cols-4 items-end mt-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-600 mb-1">AI Provider</label>
+                        <select wire:model="aiProviderSlug" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm">
+                            <option value="">Select provider…</option>
+                            @foreach($activeProviders as $provider)
+                                <option value="{{ $provider->slug }}">{{ $provider->name }}</option>
+                            @endforeach
+                        </select>
+                        @error('aiProviderSlug') <span class="text-red-600 text-xs mt-0.5 block">{{ $message }}</span> @enderror
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-xs font-semibold text-gray-600 mb-1">Model (optional)</label>
+                        <input type="text" wire:model="aiModel"
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                               placeholder="Leave blank for provider default">
+                    </div>
                 </div>
-                <div>
-                    <button wire:click="generateWithAi" wire:loading.attr="disabled"
-                            class="w-full px-4 py-2 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-60 text-white text-sm font-semibold rounded-lg transition-colors">
-                        Generate
-                    </button>
-                </div>
-            </div>
+            @endif
             <p class="text-xs text-gray-500 mt-2">Uses the tool selected in the filter above (defaults to EMI Calculator). Runs in the background — refresh this list shortly after.</p>
         </div>
 

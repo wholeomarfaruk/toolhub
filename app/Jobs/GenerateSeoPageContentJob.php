@@ -21,6 +21,8 @@ class GenerateSeoPageContentJob implements ShouldQueue
     public function __construct(
         public readonly int $seoPageId,
         public readonly ?int $triggeredByUserId,
+        public readonly string $providerSlug,
+        public readonly ?string $model = null,
     ) {
     }
 
@@ -39,19 +41,21 @@ class GenerateSeoPageContentJob implements ShouldQueue
         $log = AiGenerationLog::create([
             'type' => 'page_content_generation',
             'seo_page_id' => $page->id,
-            'provider' => 'openrouter',
-            'model' => config('services.openrouter.default_model'),
+            'provider' => $this->providerSlug,
+            'model' => $this->model ?? 'default',
             'status' => 'pending',
             'triggered_by' => $this->triggeredByUserId,
         ]);
 
         try {
             $result = $generator->generate(
+                $this->providerSlug,
                 $page->keyword ?? $page->slug,
                 $tool->name(),
                 $page->tool_slug,
                 $page->variables ?? [],
-                $page->tool_preset ?? []
+                $page->tool_preset ?? [],
+                $this->model
             );
 
             $content = $result['content'] ?? [];
