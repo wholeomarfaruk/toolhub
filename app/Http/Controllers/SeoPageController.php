@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\SeoPage;
 use App\Services\ToolRegistry;
+use Illuminate\Support\HtmlString;
 
 class SeoPageController extends Controller
 {
@@ -24,15 +25,17 @@ class SeoPageController extends Controller
             ->limit(6)
             ->get();
 
+        $content = view('seo-pages.show', [
+            'page' => $page,
+            'tool' => $tool,
+            'related' => $related,
+        ])->render();
+
         return view('layouts.website.website', [
             'title' => $page->meta_title ?: $tool->name(),
             'description' => $page->meta_description ?: $tool->description(),
             'canonical_url' => $page->url(),
-            'slot' => view('seo-pages.show', [
-                'page' => $page,
-                'tool' => $tool,
-                'related' => $related,
-            ]),
+            'slot' => new HtmlString($content),
         ]);
     }
 }
