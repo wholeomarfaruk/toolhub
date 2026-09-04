@@ -369,7 +369,109 @@
                         Permissions</h1>
 
                 </a>
-  
+
+                <!-- Programmatic SEO -->
+                <div class="mt-4 mb-1">
+                    <h2 class="text-gray-500 text-md font-semibold" :class="{ 'hidden': !$store.sidebar.full }"
+                        x-transition>Programmatic SEO</h2>
+                </div>
+
+                <a href="{{ route('admin.seo.keyword-groups.list') }}" x-data="tooltip" x-on:mouseover="show = true"
+                    x-on:mouseleave="show = false"
+                    class="relative flex items-center hover:text-gray-200 hover:bg-gray-800 space-x-2 rounded-md p-2 cursor-pointer justify-start text-gray-400
+                    {{ str_starts_with(Route::currentRouteName(), 'admin.seo.keyword-groups') ? 'text-gray-200 bg-gray-800' : '' }}
+                    ">
+
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                        stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M9.568 3H5.25A2.25 2.25 0 0 0 3 5.25v4.318c0 .597.237 1.169.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 0 0 5.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 0 0 9.568 3Z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 6h.008v.008H6V6Z" />
+                    </svg>
+
+                    <h1 x-cloak
+                        x-bind:class="!$store.sidebar.full && show ? visibleClass : '' || !$store.sidebar.full ?
+                            'sm:hidden' : ''">
+                        Keyword Groups</h1>
+
+                </a>
+
+                <a href="{{ route('admin.seo.keywords.list') }}" x-data="tooltip" x-on:mouseover="show = true"
+                    x-on:mouseleave="show = false"
+                    class="relative flex items-center hover:text-gray-200 hover:bg-gray-800 space-x-2 rounded-md p-2 cursor-pointer justify-start text-gray-400
+                    {{ str_starts_with(Route::currentRouteName(), 'admin.seo.keywords') ? 'text-gray-200 bg-gray-800' : '' }}
+                    ">
+
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                        stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                    </svg>
+
+                    <h1 x-cloak
+                        x-bind:class="!$store.sidebar.full && show ? visibleClass : '' || !$store.sidebar.full ?
+                            'sm:hidden' : ''">
+                        Keywords</h1>
+
+                </a>
+
+                <a href="{{ route('admin.seo.pages.list') }}" x-data="tooltip" x-on:mouseover="show = true"
+                    x-on:mouseleave="show = false"
+                    class="relative flex items-center hover:text-gray-200 hover:bg-gray-800 space-x-2 rounded-md p-2 cursor-pointer justify-start text-gray-400
+                    {{ str_starts_with(Route::currentRouteName(), 'admin.seo.pages') ? 'text-gray-200 bg-gray-800' : '' }}
+                    ">
+
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                        stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+                    </svg>
+
+                    <h1 x-cloak
+                        x-bind:class="!$store.sidebar.full && show ? visibleClass : '' || !$store.sidebar.full ?
+                            'sm:hidden' : ''">
+                        SEO Pages</h1>
+
+                </a>
+
+                <a href="{{ route('admin.seo.ai-settings') }}" x-data="tooltip" x-on:mouseover="show = true"
+                    x-on:mouseleave="show = false"
+                    class="relative flex items-center hover:text-gray-200 hover:bg-gray-800 space-x-2 rounded-md p-2 cursor-pointer justify-start text-gray-400
+                    {{ Route::currentRouteName() == 'admin.seo.ai-settings' ? 'text-gray-200 bg-gray-800' : '' }}
+                    ">
+
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                        stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456Z" />
+                    </svg>
+
+                    <h1 x-cloak
+                        x-bind:class="!$store.sidebar.full && show ? visibleClass : '' || !$store.sidebar.full ?
+                            'sm:hidden' : ''">
+                        AI Settings</h1>
+
+                </a>
+
+                <a href="{{ route('admin.seo.ai-logs.list') }}" x-data="tooltip" x-on:mouseover="show = true"
+                    x-on:mouseleave="show = false"
+                    class="relative flex items-center hover:text-gray-200 hover:bg-gray-800 space-x-2 rounded-md p-2 cursor-pointer justify-start text-gray-400
+                    {{ Route::currentRouteName() == 'admin.seo.ai-logs.list' ? 'text-gray-200 bg-gray-800' : '' }}
+                    ">
+
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                        stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25" />
+                    </svg>
+
+                    <h1 x-cloak
+                        x-bind:class="!$store.sidebar.full && show ? visibleClass : '' || !$store.sidebar.full ?
+                            'sm:hidden' : ''">
+                        AI Generation Logs</h1>
+
+                </a>
+
                 <!-- Role and permissions -->
                 {{-- <a href="{{ route('admin.admin.profile') }}" x-data="tooltip"
                     x-on:mouseover="show = true" x-on:mouseleave="show = false"
