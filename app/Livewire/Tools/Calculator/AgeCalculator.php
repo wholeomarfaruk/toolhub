@@ -2,9 +2,11 @@
 
 namespace App\Livewire\Tools\Calculator;
 
+use App\Enums\Feature;
 use App\Livewire\Traits\WithToolAccess;
 use App\Livewire\Traits\WithToolRateLimit;
 use App\Livewire\Traits\WithUsageTracking;
+use App\Services\SubscriptionService;
 use App\Tools\Calculator\AgeCalculator\AgeCalculatorTool;
 use Livewire\Component;
 
@@ -19,20 +21,27 @@ class AgeCalculator extends Component
     // Input
     public string $dob = '';
 
+    // Optional pre-fill values, supplied by programmatic SEO landing pages
+    public array $toolPreset = [];
+
     // Output
     public ?array $result = null;
 
-    public function mount(): void
+    public function mount(array $toolPreset = []): void
     {
-        // Page loads without auth check (SEO friendly)
-        // Auth check will happen when user clicks Calculate
+        $this->toolPreset = $toolPreset;
+
+        if (array_key_exists('dob', $toolPreset)) {
+            $this->dob = (string) $toolPreset['dob'];
+        }
     }
 
     public function calculate(): void
     {
         // Check authentication before allowing tool use
-        if (!$this->canAccessTool($this->toolSlug)) {
+        if (! $this->canAccessTool($this->toolSlug)) {
             $this->requireAuth($this->toolSlug);
+
             return;
         }
 
@@ -61,8 +70,9 @@ class AgeCalculator extends Component
 
     public function exportAgeImage()
     {
-        if (!$this->result || !$this->dob) {
+        if (! $this->result || ! $this->dob) {
             $this->addError('export', 'Please calculate your age first before exporting.');
+
             return;
         }
 
@@ -77,8 +87,9 @@ class AgeCalculator extends Component
             // Redirect to controller that handles the image download
             return redirect()->route('age-card-image.download');
         } catch (\Exception $e) {
-            \Log::error('Age card export failed: ' . $e->getMessage());
+            \Log::error('Age card export failed: '.$e->getMessage());
             $this->addError('export', 'Failed to generate image. Please try again.');
+
             return;
         }
     }
@@ -86,25 +97,28 @@ class AgeCalculator extends Component
     public function exportPdf()
     {
         // Check authentication first
-        if (!$this->canAccessTool($this->toolSlug)) {
+        if (! $this->canAccessTool($this->toolSlug)) {
             $this->requireAuth($this->toolSlug);
+
             return;
         }
 
-        if (!$this->result || !$this->dob) {
+        if (! $this->result || ! $this->dob) {
             $this->addError('export', 'Please calculate your age first before exporting.');
+
             return;
         }
 
         // Check if user has export feature
         $user = auth()->user();
-        $hasExportFeature = app(\App\Services\SubscriptionService::class)->hasFeature(
+        $hasExportFeature = app(SubscriptionService::class)->hasFeature(
             $user,
-            \App\Enums\Feature::AgeCalculatorExport
+            Feature::AgeCalculatorExport
         );
 
-        if (!$hasExportFeature) {
+        if (! $hasExportFeature) {
             $this->addError('export', 'PDF export is only available on Pro and Enterprise plans.');
+
             return;
         }
 
@@ -120,7 +134,8 @@ class AgeCalculator extends Component
             // Flash and redirect
             return redirect()->route('age-calculator.pdf');
         } catch (\Exception $e) {
-            $this->addError('export', 'Failed to generate PDF: ' . $e->getMessage());
+            $this->addError('export', 'Failed to generate PDF: '.$e->getMessage());
+
             return;
         }
     }
@@ -130,9 +145,9 @@ class AgeCalculator extends Component
         // Get export feature only if user is authenticated
         if (auth()->check()) {
             $user = auth()->user();
-            $hasExportFeature = app(\App\Services\SubscriptionService::class)->hasFeature(
+            $hasExportFeature = app(SubscriptionService::class)->hasFeature(
                 $user,
-                \App\Enums\Feature::AgeCalculatorExport
+                Feature::AgeCalculatorExport
             );
         } else {
             // Default: unauthenticated users can't export
