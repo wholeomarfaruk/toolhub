@@ -24,13 +24,15 @@ class SeoPageController extends Controller
             ->limit(6)
             ->get();
 
-        return view('seo-pages.show', [
-            'page' => $page,
-            'tool' => $tool,
-            'related' => $related,
-        ])->layout('layouts.website.website', [
+        return view('layouts.website.website', [
             'title' => $page->meta_title ?: $tool->name(),
             'description' => $page->meta_description ?: $tool->description(),
+            'canonical_url' => $page->url(),
+            'slot' => view('seo-pages.show', [
+                'page' => $page,
+                'tool' => $tool,
+                'related' => $related,
+            ]),
         ]);
     }
 }
