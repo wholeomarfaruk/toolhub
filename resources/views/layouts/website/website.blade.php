@@ -106,7 +106,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 {{-- verifications codes  --}}
 <meta name="yandex-verification" content="e369b4344e834b81" />
-<meta name="naver-site-verification" content="" />
+<meta name="naver-site-verification" content="debb97b9784fc9af69a4a14e5a92350d14352153" />
 </head>
 <body class="font-sans antialiased bg-gray-50 text-gray-900">
     <!-- Google Tag Manager (noscript) -->
