@@ -1,9 +1,17 @@
 <?php
 
+use App\Http\Controllers\RobotsController;
+use App\Http\Controllers\SitemapController;
+use App\Http\Middleware\CheckFeature;
+use App\Http\Middleware\CheckPlan;
+use App\Http\Middleware\PanelMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Support\Facades\Route;
+use Spatie\Permission\Middleware\PermissionMiddleware;
+use Spatie\Permission\Middleware\RoleMiddleware;
+
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         web: __DIR__.'/../routes/web.php',
@@ -13,11 +21,11 @@ return Application::configure(basePath: dirname(__DIR__))
         then: function (): void {
             // 0. SEO routes — no `web` middleware group, so no session,
             //    CSRF, or cookies are attached to these responses.
-            Route::get('/sitemap.xml', [\App\Http\Controllers\SitemapController::class, 'index'])
+            Route::get('/sitemap.xml', [SitemapController::class, 'index'])
                 ->name('sitemap.index');
-            Route::get('/sitemap-index.xml', [\App\Http\Controllers\SitemapController::class, 'sitemapIndex'])
+            Route::get('/sitemap-index.xml', [SitemapController::class, 'sitemapIndex'])
                 ->name('sitemap.sitemap');
-            Route::get('/robots.txt', [\App\Http\Controllers\RobotsController::class, 'index'])
+            Route::get('/robots.txt', [RobotsController::class, 'index'])
                 ->name('robots.txt');
 
             // 1. User Dashboard — all authenticated verified users
@@ -38,19 +46,20 @@ return Application::configure(basePath: dirname(__DIR__))
                 ->name('tools.')
                 ->group(base_path('routes/tools.php'));
 
-            // 4. Programmatic SEO landing pages — public, no prefix (URLs are /{tool_slug}/{seo_page_slug})
+            // 4. Programmatic SEO landing pages — nested under /tools/{tool_slug}/{seo_page_slug}
             Route::middleware(['web'])
-                ->name('seo-pages.')
+                ->prefix('tools')
+                ->name('tools.seo-pages.')
                 ->group(base_path('routes/seo-pages.php'));
         }
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
-            'panel'      => \App\Http\Middleware\PanelMiddleware::class,
-            'role'       => \Spatie\Permission\Middleware\RoleMiddleware::class,
-            'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
-            'plan'       => \App\Http\Middleware\CheckPlan::class,
-            'feature'    => \App\Http\Middleware\CheckFeature::class,
+            'panel' => PanelMiddleware::class,
+            'role' => RoleMiddleware::class,
+            'permission' => PermissionMiddleware::class,
+            'plan' => CheckPlan::class,
+            'feature' => CheckFeature::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

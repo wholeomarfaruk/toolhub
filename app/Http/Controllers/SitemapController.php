@@ -37,7 +37,7 @@ class SitemapController extends Controller
             $tools = app(ToolRegistry::class)->all();
             foreach ($tools as $tool) {
                 $urls[] = $this->createSitemapUrl(
-                    route('tools.' . $tool->slug()),
+                    route('tools.'.$tool->slug()),
                     now()->subDays(1),
                     'monthly',
                     0.7
@@ -51,7 +51,7 @@ class SitemapController extends Controller
 
             foreach ($seoPages as $page) {
                 $urls[] = $this->createSitemapUrl(
-                    route('seo-pages.show', ['tool_slug' => $page->tool_slug, 'seo_page_slug' => $page->slug]),
+                    route('tools.seo-pages.show', ['tool_slug' => $page->tool_slug, 'seo_page_slug' => $page->slug]),
                     $page->updated_at ?? now()->subDays(1),
                     'monthly',
                     0.6
@@ -107,15 +107,15 @@ class SitemapController extends Controller
      */
     private function generateSitemapXml($urls)
     {
-        $xml = '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
-        $xml .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
+        $xml = '<?xml version="1.0" encoding="UTF-8"?>'."\n";
+        $xml .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'."\n";
 
         foreach ($urls as $url) {
             $xml .= "  <url>\n";
-            $xml .= "    <loc>" . htmlspecialchars($url['loc'], ENT_XML1) . "</loc>\n";
-            $xml .= "    <lastmod>" . htmlspecialchars($url['lastmod']) . "</lastmod>\n";
-            $xml .= "    <changefreq>" . htmlspecialchars($url['changefreq']) . "</changefreq>\n";
-            $xml .= "    <priority>" . $url['priority'] . "</priority>\n";
+            $xml .= '    <loc>'.htmlspecialchars($url['loc'], ENT_XML1)."</loc>\n";
+            $xml .= '    <lastmod>'.htmlspecialchars($url['lastmod'])."</lastmod>\n";
+            $xml .= '    <changefreq>'.htmlspecialchars($url['changefreq'])."</changefreq>\n";
+            $xml .= '    <priority>'.$url['priority']."</priority>\n";
             $xml .= "  </url>\n";
         }
 
@@ -129,13 +129,13 @@ class SitemapController extends Controller
      */
     private function generateSitemapIndexXml($sitemaps)
     {
-        $xml = '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
-        $xml .= '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
+        $xml = '<?xml version="1.0" encoding="UTF-8"?>'."\n";
+        $xml .= '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'."\n";
 
         foreach ($sitemaps as $sitemap) {
             $xml .= "  <sitemap>\n";
-            $xml .= "    <loc>" . htmlspecialchars($sitemap['loc'], ENT_XML1) . "</loc>\n";
-            $xml .= "    <lastmod>" . htmlspecialchars($sitemap['lastmod']) . "</lastmod>\n";
+            $xml .= '    <loc>'.htmlspecialchars($sitemap['loc'], ENT_XML1)."</loc>\n";
+            $xml .= '    <lastmod>'.htmlspecialchars($sitemap['lastmod'])."</lastmod>\n";
             $xml .= "  </sitemap>\n";
         }
 

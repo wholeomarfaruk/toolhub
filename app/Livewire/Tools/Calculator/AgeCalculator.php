@@ -6,6 +6,7 @@ use App\Enums\Feature;
 use App\Livewire\Traits\WithToolAccess;
 use App\Livewire\Traits\WithToolRateLimit;
 use App\Livewire\Traits\WithUsageTracking;
+use App\Models\SeoPage;
 use App\Services\SubscriptionService;
 use App\Tools\Calculator\AgeCalculator\AgeCalculatorTool;
 use Livewire\Component;
@@ -154,8 +155,24 @@ class AgeCalculator extends Component
             $hasExportFeature = false;
         }
 
+        $landingPage = SeoPage::where('tool_slug', $this->toolSlug)
+            ->where('slug', 'overview')
+            ->where('status', 'published')
+            ->where('is_indexable', true)
+            ->first();
+
         return view('livewire.tools.calculator.age-calculator', [
             'hasExportFeature' => $hasExportFeature,
-        ])->layout('layouts.website.website', ['title' => 'Age Calculator']);
+            'landingPage' => $landingPage,
+        ])->layout('layouts.website.website', [
+            'title' => $landingPage?->meta_title ?: 'Age Calculator',
+            'description' => $landingPage?->meta_description ?: $this->defaultDescription(),
+            'canonical_url' => $landingPage ? $landingPage->url() : route('tools.age-calculator'),
+        ]);
+    }
+
+    private function defaultDescription(): string
+    {
+        return 'Free online age calculator. Calculate your exact age in years, months, days, hours, and seconds. Find your next birthday and discover your zodiac sign instantly.';
     }
 }

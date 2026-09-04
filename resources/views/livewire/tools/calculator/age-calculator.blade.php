@@ -1,18 +1,4 @@
 <div>
-    @php
-        // SEO Configuration for Age Calculator
-        if (empty($this->title)) {
-            $this->title = 'Age Calculator | Calculate Your Age in Years, Months & Days';
-            $this->description = 'Free online age calculator. Calculate your exact age in years, months, days, hours, and seconds. Find your next birthday and discover your zodiac sign instantly.';
-            $this->keywords = 'age calculator, calculate age, age in days, birthday calculator, how old am I, age calculator online, zodiac sign calculator';
-            $this->og_title = 'Age Calculator | Instant Age Calculation';
-            $this->og_description = 'Calculate your exact age in years, months, and days. Discover days lived, next birthday countdown, and more.';
-            $this->og_url = route('tools.age-calculator');
-            $this->og_image = asset('images/og-age-calculator.jpg');
-            $this->canonical_url = route('tools.age-calculator');
-        }
-    @endphp
-
     {{-- Auth Modal Component --}}
     <livewire:components.auth-modal :is-open="$showAuthModal" :tool-name="$authModalToolName" />
 
@@ -23,12 +9,18 @@
             <x-breadcrumb :items="[
                 ['name' => 'Home', 'url' => route('home'), 'icon' => 'bx bx-home-alt'],
                 ['name' => 'Tools', 'url' => route('tools.index')],
-                ['name' => 'Age Calculator', 'url' => null],
+                ['name' => $landingPage?->h1 ?: 'Age Calculator', 'url' => null],
             ]" :schema="true" />
-            <h1 class="text-3xl font-bold mb-2">Age Calculator</h1>
-            <p class="text-rose-200">
-                Calculate your precise age, days lived, next birthday, and more with just your date of birth.
-            </p>
+            <h1 class="text-3xl font-bold mb-2">{{ $landingPage?->h1 ?: 'Age Calculator' }}</h1>
+            @if($landingPage?->intro)
+                <p class="text-rose-200">
+                    {{ $landingPage->intro }}
+                </p>
+            @else
+                <p class="text-rose-200">
+                    Calculate your precise age, days lived, next birthday, and more with just your date of birth.
+                </p>
+            @endif
         </div>
     </div>
 
@@ -405,5 +397,57 @@
             @endif
 
         </div>
+
+        {{-- Dynamic Body Content from Landing SEO Page --}}
+        @if($landingPage?->content)
+            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mt-6">
+                <div class="prose prose-sm max-w-none text-gray-700">
+                    {!! $landingPage->content !!}
+                </div>
+            </div>
+        @endif
+
+        {{-- Dynamic FAQs from Landing SEO Page --}}
+        @if(!empty($landingPage?->faqs))
+            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mt-6">
+                <h2 class="text-lg font-semibold text-gray-900 mb-4">Frequently Asked Questions</h2>
+                <div class="space-y-4">
+                    @foreach($landingPage->faqs as $faq)
+                        <div class="border-b border-gray-50 pb-4 last:border-b-0 last:pb-0">
+                            <h3 class="text-sm font-semibold text-gray-900 mb-1">{{ $faq['question'] ?? '' }}</h3>
+                            <p class="text-sm text-gray-600">{{ $faq['answer'] ?? '' }}</p>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        @endif
+
+        {{-- Dynamic Examples from Landing SEO Page --}}
+        @if(!empty($landingPage?->examples))
+            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mt-6">
+                <h2 class="text-lg font-semibold text-gray-900 mb-4">Examples</h2>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr class="bg-gray-50 text-gray-500 text-xs uppercase tracking-wide">
+                                <th class="px-4 py-2 text-left font-medium">Label</th>
+                                <th class="px-4 py-2 text-left font-medium">Input</th>
+                                <th class="px-4 py-2 text-left font-medium">Output</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-50">
+                            @foreach($landingPage->examples as $example)
+                                <tr>
+                                    <td class="px-4 py-2 font-medium text-gray-900">{{ $example['label'] ?? '' }}</td>
+                                    <td class="px-4 py-2 text-gray-600">{{ $example['input'] ?? '' }}</td>
+                                    <td class="px-4 py-2 text-gray-600">{{ $example['output'] ?? '' }}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        @endif
+
     </div>
 </div>
