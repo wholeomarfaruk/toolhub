@@ -21,12 +21,26 @@ class EmiCalculator extends Component
     public string $annual_rate   = '';
     public string $tenure_months = '';
 
+    // Optional pre-fill values, supplied by programmatic SEO landing pages
+    public array $toolPreset = [];
+
     // Output
     public ?array $result = null;
 
-    public function mount(): void
+    public function mount(array $toolPreset = []): void
     {
         // Page loads without auth check (SEO friendly)
+        $this->toolPreset = $toolPreset;
+
+        if (array_key_exists('principal', $toolPreset)) {
+            $this->principal = (string) $toolPreset['principal'];
+        }
+        if (array_key_exists('annual_rate', $toolPreset)) {
+            $this->annual_rate = (string) $toolPreset['annual_rate'];
+        }
+        if (array_key_exists('tenure_months', $toolPreset)) {
+            $this->tenure_months = (string) $toolPreset['tenure_months'];
+        }
     }
 
     public function calculate(): void

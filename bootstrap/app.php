@@ -37,6 +37,11 @@ return Application::configure(basePath: dirname(__DIR__))
                 ->prefix('tools')
                 ->name('tools.')
                 ->group(base_path('routes/tools.php'));
+
+            // 4. Programmatic SEO landing pages — public, no prefix (URLs are /{tool_slug}/{seo_page_slug})
+            Route::middleware(['web'])
+                ->name('seo-pages.')
+                ->group(base_path('routes/seo-pages.php'));
         }
     )
     ->withMiddleware(function (Middleware $middleware): void {

@@ -30,3 +30,21 @@ Route::get('/permissions/role/edit/{id}', App\Livewire\Admin\Permissions\RoleEdi
 Route::get('/uploads', App\Livewire\Admin\File\Uploads::class)->name('uploads');
 Route::post('/upload', [FileUploadController::class, 'storeAdmin']);
 Route::delete('/upload/revert', [FileUploadController::class, 'revertAdmin']);
+
+// SEO — Keyword Groups
+Route::get('/seo/keyword-groups', App\Livewire\Admin\Seo\KeywordGroupList::class)->name('seo.keyword-groups.list');
+Route::get('/seo/keyword-groups/create', App\Livewire\Admin\Seo\KeywordGroupEdit::class)->name('seo.keyword-groups.create');
+Route::get('/seo/keyword-groups/{keywordGroup}/edit', App\Livewire\Admin\Seo\KeywordGroupEdit::class)->name('seo.keyword-groups.edit');
+
+// SEO — Keywords
+Route::get('/seo/keywords', App\Livewire\Admin\Seo\KeywordList::class)->name('seo.keywords.list');
+Route::get('/seo/keywords/create', App\Livewire\Admin\Seo\KeywordEdit::class)->name('seo.keywords.create');
+Route::get('/seo/keywords/{keyword}/edit', App\Livewire\Admin\Seo\KeywordEdit::class)->name('seo.keywords.edit');
+
+// SEO — Pages
+Route::get('/seo/pages', App\Livewire\Admin\Seo\SeoPageList::class)->name('seo.pages.list');
+Route::get('/seo/pages/create', App\Livewire\Admin\Seo\SeoPageEdit::class)->name('seo.pages.create');
+Route::get('/seo/pages/{seoPage}/edit', App\Livewire\Admin\Seo\SeoPageEdit::class)->name('seo.pages.edit');
+
+// SEO — AI Settings
+Route::get('/seo/ai-settings', App\Livewire\Admin\Seo\AiSettings::class)->name('seo.ai-settings');

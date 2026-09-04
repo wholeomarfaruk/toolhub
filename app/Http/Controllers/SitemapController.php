@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\SeoPage;
 use App\Services\ToolRegistry;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Response;
@@ -40,6 +41,20 @@ class SitemapController extends Controller
                     now()->subDays(1),
                     'monthly',
                     0.7
+                );
+            }
+
+            // Add published, indexable programmatic SEO pages
+            $seoPages = SeoPage::where('status', 'published')
+                ->where('is_indexable', true)
+                ->get(['tool_slug', 'slug', 'updated_at']);
+
+            foreach ($seoPages as $page) {
+                $urls[] = $this->createSitemapUrl(
+                    route('seo-pages.show', ['tool_slug' => $page->tool_slug, 'seo_page_slug' => $page->slug]),
+                    $page->updated_at ?? now()->subDays(1),
+                    'monthly',
+                    0.6
                 );
             }
 

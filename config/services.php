@@ -46,4 +46,12 @@ return [
         'redirect' => env('GOOGLE_REDIRECT_URI'),
     ],
 
+    'openrouter' => [
+        'api_key' => env('OPENROUTER_API_KEY'),
+        'base_url' => env('OPENROUTER_BASE_URL', 'https://openrouter.ai/api/v1'),
+        'default_model' => env('OPENROUTER_DEFAULT_MODEL', 'openai/gpt-4o-mini'),
+        'max_tokens' => (int) env('OPENROUTER_MAX_TOKENS', 2000),
+        'timeout' => (int) env('OPENROUTER_TIMEOUT', 60),
+    ],
+
 ];
