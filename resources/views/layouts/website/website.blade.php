@@ -102,6 +102,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 })(window,document,'script','dataLayer','GTM-PHR8Q8DR');</script>
 <!-- End Google Tag Manager -->
+
+
+{{-- verifications codes  --}}
+<meta name="yandex-verification" content="e369b4344e834b81" />
 </head>
 <body class="font-sans antialiased bg-gray-50 text-gray-900">
     <!-- Google Tag Manager (noscript) -->
@@ -154,7 +158,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                             Pricing
                         </a>
                     </div>
-                    
+
                 </div>
                 {{-- Right Side (Auth & CTA) --}}
                 <div class="flex items-center gap-3">
