@@ -42,11 +42,20 @@ class AgeCalculator extends Component
             abort_unless($page, 404);
 
             $this->seoPage = $page;
-            $this->toolPreset = $page->tool_preset ?? [];
+        } else {
+            // No slug in the URL (plain /tools/age-calculator) — use the
+            // primary page if one is published. Null is fine: falls back
+            // to the hardcoded tool defaults exactly as before.
+            $this->seoPage = SeoPage::where('tool_slug', $this->toolSlug)
+                ->where('is_primary', true)
+                ->where('status', 'published')
+                ->first();
+        }
 
-            if (array_key_exists('dob', $this->toolPreset)) {
-                $this->dob = (string) $this->toolPreset['dob'];
-            }
+        $this->toolPreset = $this->seoPage?->tool_preset ?? [];
+
+        if (array_key_exists('dob', $this->toolPreset)) {
+            $this->dob = (string) $this->toolPreset['dob'];
         }
     }
 

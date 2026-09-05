@@ -11,6 +11,7 @@ use App\Rules\ValidToolSlug;
 use App\Services\ToolRegistry;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use Livewire\Component;
 
 class SeoPageEdit extends Component
@@ -30,6 +31,7 @@ class SeoPageEdit extends Component
     public ?int $seoKeywordGroupId = null;
     public string $status = 'draft';
     public bool $isIndexable = false;
+    public bool $isPrimary = false;
 
     public array $variableRows = [['key' => '', 'value' => '']];
     public array $faqRows = [['question' => '', 'answer' => '']];
@@ -56,10 +58,27 @@ class SeoPageEdit extends Component
             $this->seoKeywordGroupId = $seoPage->seo_keyword_group_id;
             $this->status = $seoPage->status;
             $this->isIndexable = $seoPage->is_indexable;
+            $this->isPrimary = $seoPage->is_primary;
 
             $this->variableRows = $this->arrayToRows($seoPage->variables ?? [], ['key', 'value'], 'key', 'value');
             $this->faqRows = $this->arrayToRows($seoPage->faqs ?? [], ['question', 'answer']);
             $this->exampleRows = $this->arrayToRows($seoPage->examples ?? [], ['label', 'input', 'output']);
+        }
+    }
+
+    public function updatedSeoKeywordId($value)
+    {
+        if (!$this->isCreating) {
+            return;
+        }
+
+        if (!$value) {
+            return;
+        }
+
+        $keyword = SeoKeyword::find($value);
+        if ($keyword) {
+            $this->slug = Str::slug($keyword->keyword);
         }
     }
 
@@ -128,7 +147,7 @@ class SeoPageEdit extends Component
     {
         $this->validate([
             'toolSlug' => ['required', new ValidToolSlug()],
-            'slug' => 'required|alpha_dash|unique:seo_pages,slug,' . ($this->seoPage?->id ?? 'NULL') . ',id,tool_slug,' . $this->toolSlug,
+            'slug' => 'required|alpha_dash|unique:seo_pages,slug,' . ($this->seoPage?->id ?? 'NULL'),
             'metaTitle' => 'nullable|string|max:255',
             'metaDescription' => 'nullable|string',
             'h1' => 'nullable|string|max:255',
@@ -188,6 +207,7 @@ class SeoPageEdit extends Component
                 'examples' => $examples ?: null,
                 'status' => $this->status,
                 'is_indexable' => $this->isIndexable,
+                'is_primary' => $this->isPrimary,
             ]
         );
 

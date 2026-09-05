@@ -6,6 +6,7 @@ use App\Enums\Feature;
 use App\Livewire\Traits\WithToolAccess;
 use App\Livewire\Traits\WithToolRateLimit;
 use App\Livewire\Traits\WithUsageTracking;
+use App\Models\SeoPage;
 use App\Services\SubscriptionService;
 use App\Tools\Generator\SlugGenerator\SlugGeneratorTool;
 use Livewire\Component;
@@ -26,12 +27,38 @@ class SlugGenerator extends Component
     public string $bulkText = '';
     public bool $bulkMode = false;
 
+    // Optional pre-fill values, supplied by programmatic SEO landing pages
+    public array $toolPreset = [];
+
+    // The SEO page driving this render (null for the main tool page)
+    public ?SeoPage $seoPage = null;
+
     // Output
     public ?array $result = null;
 
-    public function mount(): void
+    public function mount(?string $seoPageSlug = null): void
     {
         // Page loads without auth check (SEO friendly)
+        if ($seoPageSlug !== null) {
+            $page = SeoPage::where('tool_slug', $this->toolSlug)
+                ->where('slug', $seoPageSlug)
+                ->where('status', 'published')
+                ->first();
+
+            abort_unless($page, 404);
+
+            $this->seoPage = $page;
+        } else {
+            // No slug in the URL (plain /tools/slug-generator) — use the
+            // primary page if one is published. Null is fine: falls back
+            // to the hardcoded tool defaults exactly as before.
+            $this->seoPage = SeoPage::where('tool_slug', $this->toolSlug)
+                ->where('is_primary', true)
+                ->where('status', 'published')
+                ->first();
+        }
+
+        $this->toolPreset = $this->seoPage?->tool_preset ?? [];
     }
 
     public function generate(): void
@@ -141,7 +168,17 @@ class SlugGenerator extends Component
             ];
         }
 
-        return view('livewire.tools.generator.slug-generator', $features)
-            ->layout('layouts.website.website', ['title' => 'Slug Generator']);
+        return view('livewire.tools.generator.slug-generator', array_merge($features, [
+            'seoPage' => $this->seoPage,
+        ]))->layout('layouts.website.website', [
+            'title' => $this->seoPage?->meta_title ?: 'Slug Generator',
+            'description' => $this->seoPage?->meta_description ?: $this->defaultDescription(),
+            'canonical_url' => $this->seoPage ? $this->seoPage->url() : route('tools.slug-generator'),
+        ]);
+    }
+
+    private function defaultDescription(): string
+    {
+        return 'Free online slug generator. Convert text to SEO-friendly URL slugs instantly. Support for separators, stop words removal, and Unicode characters.';
     }
 }

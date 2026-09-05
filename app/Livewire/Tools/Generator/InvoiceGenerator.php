@@ -6,6 +6,7 @@ use App\Enums\InvoiceTemplate;
 use App\Livewire\Traits\WithToolAccess;
 use App\Livewire\Traits\WithToolRateLimit;
 use App\Livewire\Traits\WithUsageTracking;
+use App\Models\SeoPage;
 use App\Services\PdfExportService;
 use App\Services\SubscriptionService;
 use App\Tools\Generator\InvoiceGenerator\InvoiceGeneratorTool;
@@ -93,14 +94,44 @@ class InvoiceGenerator extends Component
     public ?int $pdfExportsRemaining = null;
     public ?int $pdfExportsLimit     = null;
 
+    // ── Programmatic SEO ─────────────────────────────────────────────────
+    // Optional pre-fill values, supplied by programmatic SEO landing pages.
+
+    public array $toolPreset = [];
+
+    // The SEO page driving this render (null for the main tool page)
+    public ?SeoPage $seoPage = null;
+
     // ════════════════════════════════════════════════════════════════════
     // Lifecycle
     // ════════════════════════════════════════════════════════════════════
 
-    public function mount(): void
+    public function mount(?string $seoPageSlug = null): void
     {
         // Page loads without auth check (SEO friendly)
         $this->setDefaults();
+
+        if ($seoPageSlug !== null) {
+            $page = SeoPage::where('tool_slug', $this->toolSlug)
+                ->where('slug', $seoPageSlug)
+                ->where('status', 'published')
+                ->first();
+
+            abort_unless($page, 404);
+
+            $this->seoPage = $page;
+        } else {
+            // No slug in the URL (plain /tools/invoice-generator) — use the
+            // primary page if one is published. Null is fine: falls back
+            // to the hardcoded tool defaults exactly as before.
+            $this->seoPage = SeoPage::where('tool_slug', $this->toolSlug)
+                ->where('is_primary', true)
+                ->where('status', 'published')
+                ->first();
+        }
+
+        $this->toolPreset = $this->seoPage?->tool_preset ?? [];
+
         // Only load PDF quota if authenticated
         if (auth()->check()) {
             $this->loadPdfQuota();
@@ -330,8 +361,18 @@ class InvoiceGenerator extends Component
 
     public function render()
     {
-        return view('livewire.tools.generator.invoice-generator')
-            ->layout('layouts.website.website', ['title' => 'Invoice Generator']);
+        return view('livewire.tools.generator.invoice-generator', [
+            'seoPage' => $this->seoPage,
+        ])->layout('layouts.website.website', [
+            'title' => $this->seoPage?->meta_title ?: 'Invoice Generator',
+            'description' => $this->seoPage?->meta_description ?: $this->defaultDescription(),
+            'canonical_url' => $this->seoPage ? $this->seoPage->url() : route('tools.invoice-generator'),
+        ]);
+    }
+
+    private function defaultDescription(): string
+    {
+        return 'Free online invoice generator. Create professional invoices with multiple templates, customization options, and instant PDF export.';
     }
 
     // ════════════════════════════════════════════════════════════════════

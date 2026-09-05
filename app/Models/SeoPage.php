@@ -28,6 +28,7 @@ class SeoPage extends Model
         'examples',
         'status',
         'is_indexable',
+        'is_primary',
         'published_at',
         'reviewed_by',
         'reviewed_at',
@@ -41,9 +42,22 @@ class SeoPage extends Model
             'faqs' => 'array',
             'examples' => 'array',
             'is_indexable' => 'boolean',
+            'is_primary' => 'boolean',
             'published_at' => 'datetime',
             'reviewed_at' => 'datetime',
         ];
+    }
+
+    protected static function booted(): void
+    {
+        static::saving(function (self $model) {
+            if ($model->is_primary) {
+                static::where('tool_slug', $model->tool_slug)
+                    ->when($model->id, fn ($query) => $query->where('id', '!=', $model->id))
+                    ->where('is_primary', true)
+                    ->update(['is_primary' => false]);
+            }
+        });
     }
 
     public function keyword(): BelongsTo
@@ -68,6 +82,6 @@ class SeoPage extends Model
 
     public function url(): string
     {
-        return route('tools.'.$this->tool_slug.'.seo', ['seo_page_slug' => $this->slug]);
+        return route('tools.'.$this->tool_slug.'.seo', ['seoPageSlug' => $this->slug]);
     }
 }

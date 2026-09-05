@@ -5,6 +5,7 @@ namespace App\Livewire\Tools\Analyzer;
 use App\Livewire\Traits\WithToolAccess;
 use App\Livewire\Traits\WithToolRateLimit;
 use App\Livewire\Traits\WithUsageTracking;
+use App\Models\SeoPage;
 use App\Tools\Analyzer\CharacterCounter\CharacterCounterTool;
 use Livewire\Component;
 
@@ -19,9 +20,35 @@ class CharacterCounter extends Component
     public string $text = '';
     public ?array $result = null;
 
-    public function mount(): void
+    // Optional pre-fill values, supplied by programmatic SEO landing pages
+    public array $toolPreset = [];
+
+    // The SEO page driving this render (null for the main tool page)
+    public ?SeoPage $seoPage = null;
+
+    public function mount(?string $seoPageSlug = null): void
     {
         // Page loads without auth check (SEO friendly)
+        if ($seoPageSlug !== null) {
+            $page = SeoPage::where('tool_slug', $this->toolSlug)
+                ->where('slug', $seoPageSlug)
+                ->where('status', 'published')
+                ->first();
+
+            abort_unless($page, 404);
+
+            $this->seoPage = $page;
+        } else {
+            // No slug in the URL (plain /tools/character-counter) — use the
+            // primary page if one is published. Null is fine: falls back
+            // to the hardcoded tool defaults exactly as before.
+            $this->seoPage = SeoPage::where('tool_slug', $this->toolSlug)
+                ->where('is_primary', true)
+                ->where('status', 'published')
+                ->first();
+        }
+
+        $this->toolPreset = $this->seoPage?->tool_preset ?? [];
     }
 
     public function analyze(): void
@@ -107,7 +134,17 @@ class CharacterCounter extends Component
 
         return view('livewire.tools.analyzer.character-counter', [
             'hasExportFeature' => $hasExportFeature,
+            'seoPage' => $this->seoPage,
         ])
-            ->layout('layouts.website.website', ['title' => 'Character Counter']);
+            ->layout('layouts.website.website', [
+                'title' => $this->seoPage?->meta_title ?: 'Character Counter',
+                'description' => $this->seoPage?->meta_description ?: $this->defaultDescription(),
+                'canonical_url' => $this->seoPage ? $this->seoPage->url() : route('tools.character-counter'),
+            ]);
+    }
+
+    private function defaultDescription(): string
+    {
+        return 'Free online character counter. Count characters, characters without spaces, words, sentences, and paragraphs instantly.';
     }
 }

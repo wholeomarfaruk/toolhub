@@ -75,7 +75,12 @@
                 <tbody class="divide-y divide-gray-100">
                     @forelse($pages as $page)
                         <tr class="hover:bg-gray-50 transition-colors">
-                            <td class="px-4 py-3 font-mono text-xs text-gray-700">/{{ $page->tool_slug }}/{{ $page->slug }}</td>
+                            <td class="px-4 py-3 font-mono text-xs text-gray-700">
+                                /{{ $page->tool_slug }}/{{ $page->slug }}
+                                @if($page->is_primary)
+                                    <span class="ml-1 inline-block px-1.5 py-0.5 text-[10px] font-semibold bg-amber-100 text-amber-700 rounded-full align-middle">Primary</span>
+                                @endif
+                            </td>
                             <td class="px-4 py-3 text-gray-600">{{ $page->tool_slug }}</td>
                             <td class="px-4 py-3">
                                 <span @class([

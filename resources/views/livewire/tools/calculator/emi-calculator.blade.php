@@ -20,15 +20,22 @@
     <div class="bg-gradient-to-br from-indigo-600 to-purple-700 text-white py-12">
         <div class="max-w-4xl mx-auto px-4">
             {{-- Breadcrumb with Schema --}}
-            <x-breadcrumb :items="[
+            <x-breadcrumb :items="array_filter([
                 ['name' => 'Home', 'url' => route('home'), 'icon' => 'bx bx-home-alt'],
                 ['name' => 'Tools', 'url' => route('tools.index')],
-                ['name' => 'EMI Calculator', 'url' => null],
-            ]" :schema="true" />
-            <h1 class="text-3xl font-bold mb-2">EMI Calculator</h1>
-            <p class="text-indigo-200">
-                Calculate your monthly loan installment, total interest, and full repayment breakdown instantly.
-            </p>
+                ['name' => 'EMI Calculator', 'url' => route('tools.emi-calculator')],
+                $seoPage ? ['name' => $seoPage->h1 ?: $seoPage->slug, 'url' => null] : null,
+            ])" :schema="true" />
+            <h1 class="text-3xl font-bold mb-2">{{ $seoPage?->h1 ?: 'EMI Calculator' }}</h1>
+            @if($seoPage?->intro)
+                <p class="text-indigo-200">
+                    {{ $seoPage->intro }}
+                </p>
+            @else
+                <p class="text-indigo-200">
+                    Calculate your monthly loan installment, total interest, and full repayment breakdown instantly.
+                </p>
+            @endif
         </div>
     </div>
 
@@ -221,6 +228,57 @@
                                     <td class="px-6 py-3 text-right text-indigo-600">${{ number_format($row['principal'], 2) }}</td>
                                     <td class="px-6 py-3 text-right text-red-500">${{ number_format($row['interest'], 2) }}</td>
                                     <td class="px-6 py-3 text-right text-gray-700">${{ number_format($row['balance'], 2) }}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        @endif
+
+        {{-- Dynamic Body Content from SEO Page --}}
+        @if($seoPage?->content)
+            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mt-6">
+                <div class="prose prose-sm max-w-none text-gray-700">
+                    {!! $seoPage->content !!}
+                </div>
+            </div>
+        @endif
+
+        {{-- Dynamic FAQs from SEO Page --}}
+        @if(!empty($seoPage?->faqs))
+            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mt-6">
+                <h2 class="text-lg font-semibold text-gray-900 mb-4">Frequently Asked Questions</h2>
+                <div class="space-y-4">
+                    @foreach($seoPage->faqs as $faq)
+                        <div class="border-b border-gray-50 pb-4 last:border-b-0 last:pb-0">
+                            <h3 class="text-sm font-semibold text-gray-900 mb-1">{{ $faq['question'] ?? '' }}</h3>
+                            <p class="text-sm text-gray-600">{{ $faq['answer'] ?? '' }}</p>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        @endif
+
+        {{-- Dynamic Examples from SEO Page --}}
+        @if(!empty($seoPage?->examples))
+            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mt-6">
+                <h2 class="text-lg font-semibold text-gray-900 mb-4">Examples</h2>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr class="bg-gray-50 text-gray-500 text-xs uppercase tracking-wide">
+                                <th class="px-4 py-2 text-left font-medium">Label</th>
+                                <th class="px-4 py-2 text-left font-medium">Input</th>
+                                <th class="px-4 py-2 text-left font-medium">Output</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-50">
+                            @foreach($seoPage->examples as $example)
+                                <tr>
+                                    <td class="px-4 py-2 font-medium text-gray-900">{{ $example['label'] ?? '' }}</td>
+                                    <td class="px-4 py-2 text-gray-600">{{ $example['input'] ?? '' }}</td>
+                                    <td class="px-4 py-2 text-gray-600">{{ $example['output'] ?? '' }}</td>
                                 </tr>
                             @endforeach
                         </tbody>

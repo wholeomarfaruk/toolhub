@@ -66,7 +66,17 @@ Route::middleware('auth')->group(function () {
 //    SeoPage from the DB; if the slug is missing the component renders its
 //    built-in defaults.
 foreach (app(ToolRegistry::class)->all() as $tool) {
-    Route::get('/'.$tool->slug().'/{seo_page_slug}', $tool->livewireComponent())
+    Route::get('/'.$tool->slug().'/{seoPageSlug}', $tool->livewireComponent())
         ->name($tool->slug().'.seo')
-        ->where('seo_page_slug', '[a-z0-9-]+');
+        ->where('seoPageSlug', '[a-z0-9-]+');
 }
+
+// ── Flat SEO landing pages ──────────────────────────────────────
+//    /tools/{slug} — resolves which tool a given SEO page slug belongs
+//    to (slug is now globally unique across all tools) and dispatches
+//    directly to that tool's own Livewire component + Blade view,
+//    passing the slug through the same {seoPageSlug} mount() contract
+//    every tool component already implements.
+Route::get('/{slug}', \App\Http\Controllers\SeoFlatSlugController::class)
+    ->name('seo-flat')
+    ->where('slug', '[a-z0-9-]+');

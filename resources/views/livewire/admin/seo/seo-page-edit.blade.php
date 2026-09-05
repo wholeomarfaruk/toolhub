@@ -71,13 +71,16 @@
                     <div class="grid gap-4 md:grid-cols-2 mt-4">
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-1">Keyword</label>
-                            <select wire:model="seoKeywordId"
+                            <select wire:model.live="seoKeywordId"
                                     class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-sm">
                                 <option value="">None</option>
                                 @foreach($keywords as $kw)
                                     <option value="{{ $kw->id }}">{{ $kw->keyword }}</option>
                                 @endforeach
                             </select>
+                            @if($isCreating)
+                                <p class="text-xs text-gray-400 mt-1">Selecting a keyword auto-fills the slug below.</p>
+                            @endif
                         </div>
 
                         <div>
@@ -105,6 +108,16 @@
                                    class="w-4 h-4 text-indigo-600 rounded focus:ring-2 focus:ring-indigo-500">
                             <label for="isIndexable" class="ml-2 text-sm font-medium text-gray-700">
                                 Indexable (included in sitemap)
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        <div class="flex items-center p-2 border border-gray-200 rounded-lg">
+                            <input type="checkbox" wire:model="isPrimary" id="isPrimary"
+                                   class="w-4 h-4 text-indigo-600 rounded focus:ring-2 focus:ring-indigo-500">
+                            <label for="isPrimary" class="ml-2 text-sm font-medium text-gray-700">
+                                Primary page for this tool (used as the default SEO content on <code class="font-mono text-xs">/tools/{tool}</code>)
                             </label>
                         </div>
                     </div>
