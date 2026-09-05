@@ -84,56 +84,6 @@ class SeoPageSeeder extends Seeder
             'is_indexable' => true,
             'published_at' => now(),
         ]);
-
-        $this->upsertPage([
-            'tool_slug' => 'age-calculator',
-            'slug' => 'overview',
-            'meta_title' => 'Age Calculator | Calculate Your Age in Years, Months & Days',
-            'meta_description' => 'Free online age calculator. Calculate your exact age in years, months, days, hours, and seconds. Find your next birthday and discover your zodiac sign instantly.',
-            'h1' => 'Age Calculator',
-            'variables' => [
-                'purpose' => 'general',
-                'features' => ['years', 'months', 'days', 'hours', 'seconds', 'next_birthday', 'zodiac'],
-            ],
-            'tool_preset' => ['dob' => '2000-01-01'],
-            'intro' => 'Calculate your precise age, days lived, next birthday, and more with just your date of birth. Our free online age calculator gives you instant, accurate results.',
-            'content' => '<p>Welcome to the most accurate free online age calculator. Enter your date of birth and get an instant breakdown of your exact age in years, months, days, hours, minutes, and seconds.</p>'.
-                '<p>Our calculator also tells you how many total days you\'ve lived, when your next birthday is, and how many days are left until then. It\'s perfect for personal curiosity, legal reference, or just satisfying your curiosity about the exact number of days you\'ve been alive.</p>'.
-                '<h2 id="features">What You Get</h2>'.
-                '<ul><li><strong>Precise age:</strong> Years, months, and days with leap-year accuracy</li>'.
-                '<li><strong>Total days lived:</strong> The exact number of days since your birth</li>'.
-                '<li><strong>Next birthday countdown:</strong> Know exactly how many days until your next birthday</li>'.
-                '<li><strong>Birthday weekday:</strong> Find out what day of the week you were born on</li></ul>',
-            'faqs' => [
-                [
-                    'question' => 'How accurate is this age calculator?',
-                    'answer' => 'Our calculator uses exact calendar arithmetic, accounting for leap years and varying month lengths. It provides the precise number of years, months, and days between two dates.',
-                ],
-                [
-                    'question' => 'Can I use this for legal purposes?',
-                    'answer' => 'While our calculator is mathematically accurate, for official legal documentation you should always cross-reference with certified records. See our dedicated legal age calculator page for more details.',
-                ],
-                [
-                    'question' => 'Does it account for leap years?',
-                    'answer' => 'Yes, all leap days are correctly included in the total day count.',
-                ],
-            ],
-            'examples' => [
-                [
-                    'label' => 'Young Adult',
-                    'input' => 'DOB: 2005-06-15',
-                    'output' => '20 years, 2 months, 18 days old',
-                ],
-                [
-                    'label' => 'Middle Age',
-                    'input' => 'DOB: 1990-01-01',
-                    'output' => '35 years, 7 months, 1 day old',
-                ],
-            ],
-            'status' => 'published',
-            'is_indexable' => true,
-            'published_at' => now(),
-        ]);
     }
 
     private function upsertPage(array $data): void

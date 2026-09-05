@@ -6,15 +6,16 @@
     <div class="bg-gradient-to-br from-rose-600 to-orange-700 text-white py-12">
         <div class="max-w-4xl mx-auto px-4">
             {{-- Breadcrumb with Schema --}}
-            <x-breadcrumb :items="[
+            <x-breadcrumb :items="array_filter([
                 ['name' => 'Home', 'url' => route('home'), 'icon' => 'bx bx-home-alt'],
                 ['name' => 'Tools', 'url' => route('tools.index')],
-                ['name' => $landingPage?->h1 ?: 'Age Calculator', 'url' => null],
-            ]" :schema="true" />
-            <h1 class="text-3xl font-bold mb-2">{{ $landingPage?->h1 ?: 'Age Calculator' }}</h1>
-            @if($landingPage?->intro)
+                ['name' => 'Age Calculator', 'url' => route('tools.age-calculator')],
+                $seoPage ? ['name' => $seoPage->h1 ?: $seoPage->slug, 'url' => null] : null,
+            ])" :schema="true" />
+            <h1 class="text-3xl font-bold mb-2">{{ $seoPage?->h1 ?: 'Age Calculator' }}</h1>
+            @if($seoPage?->intro)
                 <p class="text-rose-200">
-                    {{ $landingPage->intro }}
+                    {{ $seoPage->intro }}
                 </p>
             @else
                 <p class="text-rose-200">
@@ -398,21 +399,21 @@
 
         </div>
 
-        {{-- Dynamic Body Content from Landing SEO Page --}}
-        @if($landingPage?->content)
+        {{-- Dynamic Body Content from SEO Page --}}
+        @if($seoPage?->content)
             <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mt-6">
                 <div class="prose prose-sm max-w-none text-gray-700">
-                    {!! $landingPage->content !!}
+                    {!! $seoPage->content !!}
                 </div>
             </div>
         @endif
 
-        {{-- Dynamic FAQs from Landing SEO Page --}}
-        @if(!empty($landingPage?->faqs))
+        {{-- Dynamic FAQs from SEO Page --}}
+        @if(!empty($seoPage?->faqs))
             <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mt-6">
                 <h2 class="text-lg font-semibold text-gray-900 mb-4">Frequently Asked Questions</h2>
                 <div class="space-y-4">
-                    @foreach($landingPage->faqs as $faq)
+                    @foreach($seoPage->faqs as $faq)
                         <div class="border-b border-gray-50 pb-4 last:border-b-0 last:pb-0">
                             <h3 class="text-sm font-semibold text-gray-900 mb-1">{{ $faq['question'] ?? '' }}</h3>
                             <p class="text-sm text-gray-600">{{ $faq['answer'] ?? '' }}</p>
@@ -422,8 +423,8 @@
             </div>
         @endif
 
-        {{-- Dynamic Examples from Landing SEO Page --}}
-        @if(!empty($landingPage?->examples))
+        {{-- Dynamic Examples from SEO Page --}}
+        @if(!empty($seoPage?->examples))
             <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mt-6">
                 <h2 class="text-lg font-semibold text-gray-900 mb-4">Examples</h2>
                 <div class="overflow-x-auto">
@@ -436,7 +437,7 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-50">
-                            @foreach($landingPage->examples as $example)
+                            @foreach($seoPage->examples as $example)
                                 <tr>
                                     <td class="px-4 py-2 font-medium text-gray-900">{{ $example['label'] ?? '' }}</td>
                                     <td class="px-4 py-2 text-gray-600">{{ $example['input'] ?? '' }}</td>

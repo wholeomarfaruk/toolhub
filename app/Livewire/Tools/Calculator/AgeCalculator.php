@@ -25,15 +25,28 @@ class AgeCalculator extends Component
     // Optional pre-fill values, supplied by programmatic SEO landing pages
     public array $toolPreset = [];
 
+    // The SEO page driving this render (null for the main tool page)
+    public ?SeoPage $seoPage = null;
+
     // Output
     public ?array $result = null;
 
-    public function mount(array $toolPreset = []): void
+    public function mount(?string $seoPageSlug = null): void
     {
-        $this->toolPreset = $toolPreset;
+        if ($seoPageSlug !== null) {
+            $page = SeoPage::where('tool_slug', $this->toolSlug)
+                ->where('slug', $seoPageSlug)
+                ->where('status', 'published')
+                ->first();
 
-        if (array_key_exists('dob', $toolPreset)) {
-            $this->dob = (string) $toolPreset['dob'];
+            abort_unless($page, 404);
+
+            $this->seoPage = $page;
+            $this->toolPreset = $page->tool_preset ?? [];
+
+            if (array_key_exists('dob', $this->toolPreset)) {
+                $this->dob = (string) $this->toolPreset['dob'];
+            }
         }
     }
 
@@ -155,19 +168,13 @@ class AgeCalculator extends Component
             $hasExportFeature = false;
         }
 
-        $landingPage = SeoPage::where('tool_slug', $this->toolSlug)
-            ->where('slug', 'overview')
-            ->where('status', 'published')
-            ->where('is_indexable', true)
-            ->first();
-
         return view('livewire.tools.calculator.age-calculator', [
             'hasExportFeature' => $hasExportFeature,
-            'landingPage' => $landingPage,
+            'seoPage' => $this->seoPage,
         ])->layout('layouts.website.website', [
-            'title' => $landingPage?->meta_title ?: 'Age Calculator',
-            'description' => $landingPage?->meta_description ?: $this->defaultDescription(),
-            'canonical_url' => $landingPage ? $landingPage->url() : route('tools.age-calculator'),
+            'title' => $this->seoPage?->meta_title ?: 'Age Calculator',
+            'description' => $this->seoPage?->meta_description ?: $this->defaultDescription(),
+            'canonical_url' => $this->seoPage ? $this->seoPage->url() : route('tools.age-calculator'),
         ]);
     }
 

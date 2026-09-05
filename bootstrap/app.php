@@ -41,16 +41,11 @@ return Application::configure(basePath: dirname(__DIR__))
                 ->group(base_path('routes/admin.php'));
 
             // 3. Tools — all routes are public (auth check deferred to component actions via modal)
+            //    Each tool gets a main page and SEO landing pages via the same Livewire component.
             Route::middleware(['web'])
                 ->prefix('tools')
                 ->name('tools.')
                 ->group(base_path('routes/tools.php'));
-
-            // 4. Programmatic SEO landing pages — nested under /tools/{tool_slug}/{seo_page_slug}
-            Route::middleware(['web'])
-                ->prefix('tools')
-                ->name('tools.seo-pages.')
-                ->group(base_path('routes/seo-pages.php'));
         }
     )
     ->withMiddleware(function (Middleware $middleware): void {

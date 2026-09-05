@@ -68,6 +68,6 @@ class SeoPage extends Model
 
     public function url(): string
     {
-        return route('tools.seo-pages.show', ['tool_slug' => $this->tool_slug, 'seo_page_slug' => $this->slug]);
+        return route('tools.'.$this->tool_slug.'.seo', ['seo_page_slug' => $this->slug]);
     }
 }
