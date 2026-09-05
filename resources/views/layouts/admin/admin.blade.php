@@ -472,6 +472,25 @@
 
                 </a>
 
+                <a href="{{ route('admin.seo.queue-monitor') }}" x-data="tooltip" x-on:mouseover="show = true"
+                    x-on:mouseleave="show = false"
+                    class="relative flex items-center hover:text-gray-200 hover:bg-gray-800 space-x-2 rounded-md p-2 cursor-pointer justify-start text-gray-400
+                    {{ Route::currentRouteName() == 'admin.seo.queue-monitor' ? 'text-gray-200 bg-gray-800' : '' }}
+                    ">
+
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                        stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                    </svg>
+
+                    <h1 x-cloak
+                        x-bind:class="!$store.sidebar.full && show ? visibleClass : '' || !$store.sidebar.full ?
+                            'sm:hidden' : ''">
+                        Queue Monitor</h1>
+
+                </a>
+
                 <!-- Role and permissions -->
                 {{-- <a href="{{ route('admin.admin.profile') }}" x-data="tooltip"
                     x-on:mouseover="show = true" x-on:mouseleave="show = false"
