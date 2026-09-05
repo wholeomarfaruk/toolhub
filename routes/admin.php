@@ -54,3 +54,4 @@ Route::get('/seo/ai-logs', App\Livewire\Admin\Seo\AiGenerationLogList::class)->n
 
 // SEO — Queue Monitor
 Route::get('/seo/queue-monitor', App\Livewire\Admin\Seo\QueueMonitor::class)->name('seo.queue-monitor');
+Route::get('/seo/queue-setup', App\Livewire\Admin\Seo\QueueSetupGuide::class)->name('seo.queue-setup');
