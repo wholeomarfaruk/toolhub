@@ -31,22 +31,12 @@
     "src": "node_modules/boxicons/fonts/boxicons.woff2"
   },
   "resources/css/admin.css": {
-    "file": "assets/admin-CFwviFbU.css",
-    "src": "resources/css/admin.css",
-    "isEntry": true,
-    "name": "admin",
-    "names": [
-      "admin.css"
-    ]
+    "file": "assets/admin-CMaplzQI.css",
+    "src": "resources/css/admin.css"
   },
   "resources/css/app.css": {
-    "file": "assets/app-DEpELUOD.css",
-    "src": "resources/css/app.css",
-    "isEntry": true,
-    "name": "app",
-    "names": [
-      "app.css"
-    ]
+    "file": "assets/app-DPsuhFF8.css",
+    "src": "resources/css/app.css"
   },
   "resources/js/admin.js": {
     "file": "assets/admin--7PbDNIg.js",
@@ -68,10 +58,20 @@
   },
   "resources/sass/admin.scss": {
     "file": "assets/admin-tn0RQdqM.css",
-    "src": "resources/sass/admin.scss"
+    "src": "resources/sass/admin.scss",
+    "isEntry": true,
+    "name": "admin",
+    "names": [
+      "admin.css"
+    ]
   },
   "resources/sass/app.scss": {
     "file": "assets/app-PPsI0JRQ.css",
-    "src": "resources/sass/app.scss"
+    "src": "resources/sass/app.scss",
+    "isEntry": true,
+    "name": "app",
+    "names": [
+      "app.css"
+    ]
   }
 }

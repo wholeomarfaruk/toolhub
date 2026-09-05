@@ -82,6 +82,6 @@ class SeoPage extends Model
 
     public function url(): string
     {
-        return route('tools.'.$this->tool_slug.'.seo', ['seoPageSlug' => $this->slug]);
+        return route('tools.seo-flat', ['slug' => $this->slug]);
     }
 }

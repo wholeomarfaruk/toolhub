@@ -23,7 +23,8 @@
       "Bash(git commit -m ' *)",
       "Bash(php -l app/Livewire/Admin/Seo/QueueSetupGuide.php)",
       "Bash(git reset *)",
-      "Bash(git commit *)"
+      "Bash(git commit *)",
+      "Bash(php -l app/Http/Controllers/SitemapController.php)"
     ]
   }
 }

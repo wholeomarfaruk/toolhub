@@ -51,7 +51,7 @@ class SitemapController extends Controller
 
             foreach ($seoPages as $page) {
                 $urls[] = $this->createSitemapUrl(
-                    route('tools.'.$page->tool_slug.'.seo', ['seoPageSlug' => $page->slug]),
+                    route('tools.seo-flat', ['slug' => $page->slug]),
                     $page->updated_at ?? now()->subDays(1),
                     'monthly',
                     0.6
