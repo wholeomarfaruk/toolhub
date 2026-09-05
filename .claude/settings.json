@@ -13,7 +13,17 @@
       "Bash(php /f/projects/toolhub/artisan route:list --path=tools)",
       "Bash(php /f/projects/toolhub/artisan route:list --path=dashboard)",
       "Bash(php /f/projects/toolhub/artisan route:list)",
-      "Bash(php /f/projects/toolhub/artisan db:seed --class=PanelSeeder)"
+      "Bash(php /f/projects/toolhub/artisan db:seed --class=PanelSeeder)",
+      "Bash(git push *)",
+      "WebFetch(domain:www.hostinger.com)",
+      "WebFetch(domain:docs.hostinger.com)",
+      "WebFetch(domain:support.hostinger.com)",
+      "WebFetch(domain:medium.com)",
+      "Bash(php -l routes/console.php)",
+      "Bash(git commit -m ' *)",
+      "Bash(php -l app/Livewire/Admin/Seo/QueueSetupGuide.php)",
+      "Bash(git reset *)",
+      "Bash(git commit *)"
     ]
   }
 }
