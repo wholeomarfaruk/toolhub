@@ -39,59 +39,64 @@
     <div class="flex-1 w-full bg-white rounded-lg min-h-[80vh]">
         {{-- ======================== Content Start From Here ======================== --}}
 
-        <div class="px-4 py-4">
+        <div class="p-6">
+            <div class="mb-6">
+                <h2 class="text-xl font-bold text-gray-900">{{ $isCreating ? 'Create Keyword Group' : 'Edit Keyword Group' }}</h2>
+                <p class="text-sm text-gray-500 mt-0.5">Define how keywords are grouped and linked to a tool.</p>
+            </div>
+
             <form wire:submit="save" class="space-y-6 max-w-2xl">
 
-                <div>
-                    <h3 class="text-base font-bold text-gray-900 mb-4 pb-2 border-b border-gray-200">Group Details</h3>
+                <div class="bg-white rounded-xl border border-gray-100 p-6">
+                    <h3 class="text-base font-bold text-gray-900 mb-4 pb-2 border-b border-gray-100">Group Details</h3>
 
                     <div class="grid gap-4 md:grid-cols-2">
                         <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-1">Tool *</label>
+                            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Tool *</label>
                             <select wire:model="toolSlug"
-                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-sm">
+                                    class="w-full px-3.5 py-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-shadow">
                                 <option value="">Select a tool...</option>
                                 @foreach($tools as $tool)
                                     <option value="{{ $tool->slug() }}">{{ $tool->name() }}</option>
                                 @endforeach
                             </select>
-                            @error('toolSlug') <span class="text-red-600 text-xs mt-0.5 block">{{ $message }}</span> @enderror
+                            @error('toolSlug') <span class="text-red-600 text-xs mt-1 block">{{ $message }}</span> @enderror
                         </div>
 
                         <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-1">Name *</label>
+                            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Name *</label>
                             <input type="text" wire:model="name" wire:change="updatedName"
-                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-sm"
+                                   class="w-full px-3.5 py-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-shadow placeholder:text-gray-400"
                                    placeholder="e.g., Car Loan Keywords">
-                            @error('name') <span class="text-red-600 text-xs mt-0.5 block">{{ $message }}</span> @enderror
+                            @error('name') <span class="text-red-600 text-xs mt-1 block">{{ $message }}</span> @enderror
                         </div>
                     </div>
 
                     <div class="mt-4">
-                        <label class="block text-sm font-semibold text-gray-700 mb-1">Slug (URL) *</label>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1.5">Slug (URL) *</label>
                         <input type="text" wire:model="slug"
-                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent font-mono text-xs"
+                               class="w-full px-3.5 py-2.5 border border-gray-200 rounded-lg font-mono text-xs focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-shadow placeholder:text-gray-400"
                                placeholder="e.g., car-loan-keywords">
-                        @error('slug') <span class="text-red-600 text-xs mt-0.5 block">{{ $message }}</span> @enderror
+                        @error('slug') <span class="text-red-600 text-xs mt-1 block">{{ $message }}</span> @enderror
                     </div>
 
                     <div class="mt-4">
-                        <label class="block text-sm font-semibold text-gray-700 mb-1">Description</label>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1.5">Description</label>
                         <textarea wire:model="description" rows="3"
-                                  class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-sm"
+                                  class="w-full px-3.5 py-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-shadow placeholder:text-gray-400"
                                   placeholder="Brief description..."></textarea>
                     </div>
                 </div>
 
                 {{-- Form Actions --}}
-                <div class="flex gap-3 pt-4 border-t border-gray-200">
+                <div class="flex gap-3 pt-2">
                     <a href="{{ route('admin.seo.keyword-groups.list') }}"
-                       class="flex-1 px-4 py-2 border border-gray-300 text-gray-700 font-semibold rounded text-center hover:bg-gray-50 transition-colors text-sm">
+                       class="flex-1 px-4 py-2.5 border border-gray-200 text-gray-700 font-semibold rounded-lg text-center hover:bg-gray-50 transition-colors text-sm">
                         Cancel
                     </a>
                     <button type="submit"
                             wire:loading.attr="disabled"
-                            class="flex-1 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold rounded transition-colors flex items-center justify-center gap-2 text-sm">
+                            class="flex-1 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold rounded-lg shadow-sm transition-colors flex items-center justify-center gap-2 text-sm">
                         <i class="bx text-sm" :class="$wire.loading ? 'bx-loader-alt animate-spin' : 'bx-save'"></i>
                         <span wire:loading.remove>
                             {{ $isCreating ? 'Create Group' : 'Save Changes' }}

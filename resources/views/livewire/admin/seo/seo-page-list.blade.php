@@ -28,112 +28,128 @@
     <div class="flex-1 w-full bg-white rounded-lg min-h-[80vh]">
         {{-- ======================== Content Start From Here ======================== --}}
 
-        {{-- Top Controls --}}
-        <div class="grid grid-cols-2 gap-4 px-4 py-4">
-            <div>
-                <h2 class="text-lg font-bold text-gray-900">Manage SEO Pages</h2>
-            </div>
-            <div class="flex justify-end items-end">
+        <div class="space-y-6">
+            {{-- Top Controls --}}
+            <div class="flex flex-wrap items-center justify-between gap-4 p-6 border-b border-gray-100">
+                <div>
+                    <h2 class="text-xl font-bold text-gray-900">SEO Pages</h2>
+                    <p class="text-sm text-gray-500 mt-0.5">Manage programmatic landing pages per tool.</p>
+                </div>
                 <a href="{{ route('admin.seo.pages.create') }}"
-                   class="flex items-center gap-2 pb-1 text-gray-700 transition-colors hover:border-gray-400 hover:text-gray-900 cursor-pointer rounded border border-gray-300 px-4 py-2">
-                    <i class="bx bx-plus"></i>
-                    <span class="text-sm font-medium">Create Page</span>
+                   class="inline-flex items-center gap-2 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-lg shadow-sm transition-colors">
+                    <i class="bx bx-plus text-lg"></i>
+                    Create Page
                 </a>
             </div>
-        </div>
 
-        {{-- Filters --}}
-        <div class="px-4 pb-4 grid gap-3 md:grid-cols-3">
-            <select wire:model.live="filterTool" class="px-3 py-2 border border-gray-300 rounded-lg text-sm">
-                <option value="">All Tools</option>
-                @foreach($tools as $tool)
-                    <option value="{{ $tool->slug() }}">{{ $tool->name() }}</option>
-                @endforeach
-            </select>
+            {{-- Filters --}}
+            <div class="mx-6 px-6 py-4 bg-gray-50/50 border border-gray-100 rounded-xl flex flex-wrap gap-3">
+                <select wire:model.live="filterTool" class="px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-shadow">
+                    <option value="">All Tools</option>
+                    @foreach($tools as $tool)
+                        <option value="{{ $tool->slug() }}">{{ $tool->name() }}</option>
+                    @endforeach
+                </select>
 
-            <select wire:model.live="filterStatus" class="px-3 py-2 border border-gray-300 rounded-lg text-sm">
-                <option value="">All Statuses</option>
-                <option value="draft">Draft</option>
-                <option value="ai_generated">AI Generated</option>
-                <option value="published">Published</option>
-            </select>
-        </div>
+                <select wire:model.live="filterStatus" class="px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-shadow">
+                    <option value="">All Statuses</option>
+                    <option value="draft">Draft</option>
+                    <option value="ai_generated">AI Generated</option>
+                    <option value="published">Published</option>
+                </select>
+            </div>
 
-        {{-- Table --}}
-        <div class="px-4 pb-4 overflow-x-auto">
-            <table class="w-full text-sm">
-                <thead>
-                    <tr class="bg-gray-50 text-gray-500 text-xs uppercase tracking-wide">
-                        <th class="px-4 py-3 text-left font-medium">Slug</th>
-                        <th class="px-4 py-3 text-left font-medium">Tool</th>
-                        <th class="px-4 py-3 text-left font-medium">Status</th>
-                        <th class="px-4 py-3 text-center font-medium">Indexable</th>
-                        <th class="px-4 py-3 text-left font-medium">Published</th>
-                        <th class="px-4 py-3 text-right font-medium">Actions</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-gray-100">
-                    @forelse($pages as $page)
-                        <tr class="hover:bg-gray-50 transition-colors">
-                            <td class="px-4 py-3 font-mono text-xs text-gray-700">
-                                /{{ $page->tool_slug }}/{{ $page->slug }}
-                                @if($page->is_primary)
-                                    <span class="ml-1 inline-block px-1.5 py-0.5 text-[10px] font-semibold bg-amber-100 text-amber-700 rounded-full align-middle">Primary</span>
-                                @endif
-                            </td>
-                            <td class="px-4 py-3 text-gray-600">{{ $page->tool_slug }}</td>
-                            <td class="px-4 py-3">
-                                <span @class([
-                                    'inline-block px-2 py-0.5 text-xs font-semibold rounded-full',
-                                    'bg-gray-200 text-gray-700' => $page->status === 'draft',
-                                    'bg-indigo-100 text-indigo-700' => $page->status === 'ai_generated',
-                                    'bg-emerald-100 text-emerald-700' => $page->status === 'published',
-                                ])>
-                                    {{ ucwords(str_replace('_', ' ', $page->status)) }}
-                                </span>
-                            </td>
-                            <td class="px-4 py-3 text-center">
-                                <button wire:click="toggleIndexable({{ $page->id }})"
-                                        class="px-2 py-1 text-xs font-semibold rounded transition-colors {{ $page->is_indexable ? 'bg-emerald-100 text-emerald-700 hover:bg-emerald-200' : 'bg-gray-200 text-gray-700 hover:bg-gray-300' }}">
-                                    {{ $page->is_indexable ? 'Yes' : 'No' }}
-                                </button>
-                            </td>
-                            <td class="px-4 py-3 text-gray-500 text-xs">
-                                {{ $page->published_at?->format('Y-m-d H:i') ?? '—' }}
-                            </td>
-                            <td class="px-4 py-3">
-                                <div class="flex justify-end gap-1 flex-wrap">
-                                    @if($page->status === 'draft')
-                                        <button wire:click="generateContent({{ $page->id }})"
-                                                class="px-2 py-1 text-xs font-semibold bg-purple-100 hover:bg-purple-200 text-purple-700 rounded transition-colors">
-                                            Generate AI Content
+            {{-- Table --}}
+            <div class="px-6 pb-6">
+                <div class="overflow-x-auto rounded-xl border border-gray-100">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr class="bg-gray-50 text-gray-500 text-xs font-semibold uppercase tracking-wider">
+                                <th class="px-4 py-3.5 text-left">Slug</th>
+                                <th class="px-4 py-3.5 text-left">Tool</th>
+                                <th class="px-4 py-3.5 text-left">Status</th>
+                                <th class="px-4 py-3.5 text-center">Indexable</th>
+                                <th class="px-4 py-3.5 text-left">Published</th>
+                                <th class="px-4 py-3.5 text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100">
+                            @forelse($pages as $page)
+                                <tr class="hover:bg-gray-50 transition-colors">
+                                    <td class="px-4 py-3.5 font-mono text-xs text-gray-700">
+                                        /{{ $page->tool_slug }}/{{ $page->slug }}
+                                        @if($page->is_primary)
+                                            <span class="ml-1 inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-semibold rounded-full bg-amber-100 text-amber-700 align-middle">
+                                                <span class="w-1 h-1 rounded-full bg-current"></span>
+                                                Primary
+                                            </span>
+                                        @endif
+                                    </td>
+                                    <td class="px-4 py-3.5 text-gray-600">{{ $page->tool_slug }}</td>
+                                    <td class="px-4 py-3.5">
+                                        <span @class([
+                                            'inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold rounded-full',
+                                            'bg-gray-200 text-gray-700' => $page->status === 'draft',
+                                            'bg-indigo-100 text-indigo-700' => $page->status === 'ai_generated',
+                                            'bg-emerald-100 text-emerald-700' => $page->status === 'published',
+                                        ])>
+                                            <span class="w-1.5 h-1.5 rounded-full bg-current"></span>
+                                            {{ ucwords(str_replace('_', ' ', $page->status)) }}
+                                        </span>
+                                    </td>
+                                    <td class="px-4 py-3.5 text-center">
+                                        <button wire:click="toggleIndexable({{ $page->id }})"
+                                                class="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-semibold rounded-lg transition-colors {{ $page->is_indexable ? 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }}">
+                                            {{ $page->is_indexable ? 'Yes' : 'No' }}
                                         </button>
-                                    @endif
-                                    <a href="{{ route('admin.seo.pages.edit', $page) }}"
-                                       class="px-2 py-1 text-xs font-semibold bg-indigo-100 hover:bg-indigo-200 text-indigo-700 rounded transition-colors">
-                                        Edit
-                                    </a>
-                                    <button wire:click="delete({{ $page->id }})"
-                                            wire:confirm="Delete this page?"
-                                            class="px-2 py-1 text-xs font-semibold bg-red-100 hover:bg-red-200 text-red-700 rounded transition-colors">
-                                        Delete
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="6" class="px-4 py-8 text-center text-gray-400">
-                                <i class="bx bx-inbox text-3xl mb-2 block"></i>
-                                No SEO pages found.
-                            </td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
+                                    </td>
+                                    <td class="px-4 py-3.5 text-gray-500 text-xs">
+                                        {{ $page->published_at?->format('Y-m-d H:i') ?? '—' }}
+                                    </td>
+                                    <td class="px-4 py-3.5">
+                                        <div class="flex justify-end gap-1.5 flex-wrap">
+                                            @if($page->status === 'draft')
+                                                <button wire:click="generateContent({{ $page->id }})"
+                                                        class="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-semibold bg-purple-50 hover:bg-purple-100 text-purple-700 rounded-lg transition-colors">
+                                                    <i class="bx bx-bulb"></i> Generate AI Content
+                                                </button>
+                                            @endif
+                                            <a href="{{ route('admin.seo.pages.edit', $page) }}"
+                                               class="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-semibold bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-lg transition-colors">
+                                                <i class="bx bx-edit-alt"></i> Edit
+                                            </a>
+                                            <button wire:click="delete({{ $page->id }})"
+                                                    wire:confirm="Delete this page?"
+                                                    class="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-semibold bg-red-50 hover:bg-red-100 text-red-700 rounded-lg transition-colors">
+                                                <i class="bx bx-trash"></i> Delete
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="6">
+                                        <div class="flex flex-col items-center justify-center py-16 px-6 text-center">
+                                            <div class="w-16 h-16 rounded-full bg-gray-50 flex items-center justify-center mb-4">
+                                                <i class="bx bx-inbox text-3xl text-gray-300"></i>
+                                            </div>
+                                            <p class="text-gray-600 font-semibold mb-1">No SEO pages yet</p>
+                                            <p class="text-sm text-gray-400 mb-4">Create a page to start building programmatic SEO landing pages.</p>
+                                            <a href="{{ route('admin.seo.pages.create') }}"
+                                               class="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-lg transition-colors">
+                                                <i class="bx bx-plus"></i> Create your first page
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
 
-            <div class="mt-4">
-                {{ $pages->links() }}
+                <div class="mt-4">
+                    {{ $pages->links() }}
+                </div>
             </div>
         </div>
 

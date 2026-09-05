@@ -28,74 +28,86 @@
     <div class="flex-1 w-full bg-white rounded-lg min-h-[80vh]">
         {{-- ======================== Content Start From Here ======================== --}}
 
-        {{-- Top Controls: Title and Create Button --}}
-        <div class="grid grid-cols-2 gap-4 px-4 py-4">
-            <div>
-                <h2 class="text-lg font-bold text-gray-900">Manage Keyword Groups</h2>
-            </div>
-            <div class="flex justify-end items-end">
+        <div class="space-y-6">
+            {{-- Top Controls: Title and Create Button --}}
+            <div class="flex flex-wrap items-center justify-between gap-4 p-6 border-b border-gray-100">
+                <div>
+                    <h2 class="text-xl font-bold text-gray-900">Keyword Groups</h2>
+                    <p class="text-sm text-gray-500 mt-0.5">Organize keywords into groups for each tool.</p>
+                </div>
                 <a href="{{ route('admin.seo.keyword-groups.create') }}"
-                   class="flex items-center gap-2 pb-1 text-gray-700 transition-colors hover:border-gray-400 hover:text-gray-900 cursor-pointer rounded border border-gray-300 px-4 py-2">
-                    <i class="bx bx-plus"></i>
-                    <span class="text-sm font-medium">Create Group</span>
+                   class="inline-flex items-center gap-2 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-lg shadow-sm transition-colors">
+                    <i class="bx bx-plus text-lg"></i>
+                    Create Group
                 </a>
             </div>
-        </div>
 
-        <div class="px-4 pb-4 overflow-x-auto">
-            <table class="w-full text-sm">
-                <thead>
-                    <tr class="bg-gray-50 text-gray-500 text-xs uppercase tracking-wide">
-                        <th class="px-4 py-3 text-left font-medium">Name</th>
-                        <th class="px-4 py-3 text-left font-medium">Tool</th>
-                        <th class="px-4 py-3 text-left font-medium">Slug</th>
-                        <th class="px-4 py-3 text-right font-medium">Keywords</th>
-                        <th class="px-4 py-3 text-right font-medium">Pages</th>
-                        <th class="px-4 py-3 text-right font-medium">Actions</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-gray-100">
-                    @forelse($groups as $group)
-                        <tr class="hover:bg-gray-50 transition-colors">
-                            <td class="px-4 py-3 font-semibold text-gray-900">{{ $group->name }}</td>
-                            <td class="px-4 py-3 text-gray-600">{{ $group->tool_slug }}</td>
-                            <td class="px-4 py-3 font-mono text-xs text-gray-500">{{ $group->slug }}</td>
-                            <td class="px-4 py-3 text-right text-gray-700">{{ $group->keywords_count }}</td>
-                            <td class="px-4 py-3 text-right text-gray-700">{{ $group->pages_count }}</td>
-                            <td class="px-4 py-3">
-                                <div class="flex justify-end gap-1">
-                                    <a href="{{ route('admin.seo.keyword-groups.edit', $group) }}"
-                                       class="px-2 py-1 text-xs font-semibold bg-indigo-100 hover:bg-indigo-200 text-indigo-700 rounded transition-colors">
-                                        Edit
-                                    </a>
-                                    @if($confirmDeleteId === $group->id)
-                                        <button wire:click="delete({{ $group->id }})"
-                                                class="px-2 py-1 text-xs font-semibold bg-red-600 hover:bg-red-700 text-white rounded transition-colors">
-                                            Confirm
-                                        </button>
-                                        <button wire:click="$set('confirmDeleteId', null)"
-                                                class="px-2 py-1 text-xs font-semibold bg-gray-300 hover:bg-gray-400 text-gray-800 rounded transition-colors">
-                                            Cancel
-                                        </button>
-                                    @else
-                                        <button wire:click="confirmDelete({{ $group->id }})"
-                                                class="px-2 py-1 text-xs font-semibold bg-red-100 hover:bg-red-200 text-red-700 rounded transition-colors">
-                                            Delete
-                                        </button>
-                                    @endif
-                                </div>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="6" class="px-4 py-8 text-center text-gray-400">
-                                <i class="bx bx-inbox text-3xl mb-2 block"></i>
-                                No keyword groups found.
-                            </td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
+            <div class="px-6 pb-6 overflow-x-auto">
+                <div class="overflow-x-auto rounded-xl border border-gray-100">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr class="bg-gray-50 text-gray-500 text-xs font-semibold uppercase tracking-wider">
+                                <th class="px-4 py-3.5 text-left">Name</th>
+                                <th class="px-4 py-3.5 text-left">Tool</th>
+                                <th class="px-4 py-3.5 text-left">Slug</th>
+                                <th class="px-4 py-3.5 text-right">Keywords</th>
+                                <th class="px-4 py-3.5 text-right">Pages</th>
+                                <th class="px-4 py-3.5 text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100">
+                            @forelse($groups as $group)
+                                <tr class="hover:bg-gray-50 transition-colors">
+                                    <td class="px-4 py-3.5 font-semibold text-gray-900">{{ $group->name }}</td>
+                                    <td class="px-4 py-3.5 text-gray-600">{{ $group->tool_slug }}</td>
+                                    <td class="px-4 py-3.5 font-mono text-xs text-gray-500">{{ $group->slug }}</td>
+                                    <td class="px-4 py-3.5 text-right text-gray-700">{{ $group->keywords_count }}</td>
+                                    <td class="px-4 py-3.5 text-right text-gray-700">{{ $group->pages_count }}</td>
+                                    <td class="px-4 py-3.5">
+                                        <div class="flex justify-end gap-1.5">
+                                            <a href="{{ route('admin.seo.keyword-groups.edit', $group) }}"
+                                               class="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-semibold bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-lg transition-colors">
+                                                <i class="bx bx-edit-alt"></i> Edit
+                                            </a>
+                                            @if($confirmDeleteId === $group->id)
+                                                <button wire:click="delete({{ $group->id }})"
+                                                        class="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-semibold bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors">
+                                                    Confirm
+                                                </button>
+                                                <button wire:click="$set('confirmDeleteId', null)"
+                                                        class="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-semibold bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors">
+                                                    Cancel
+                                                </button>
+                                            @else
+                                                <button wire:click="confirmDelete({{ $group->id }})"
+                                                        class="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-semibold bg-red-50 hover:bg-red-100 text-red-700 rounded-lg transition-colors">
+                                                    <i class="bx bx-trash"></i> Delete
+                                                </button>
+                                            @endif
+                                        </div>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="6">
+                                        <div class="flex flex-col items-center justify-center py-16 px-6 text-center">
+                                            <div class="w-16 h-16 rounded-full bg-gray-50 flex items-center justify-center mb-4">
+                                                <i class="bx bx-inbox text-3xl text-gray-300"></i>
+                                            </div>
+                                            <p class="text-gray-600 font-semibold mb-1">No keyword groups yet</p>
+                                            <p class="text-sm text-gray-400 mb-4">Create a group to start organizing keywords for a tool.</p>
+                                            <a href="{{ route('admin.seo.keyword-groups.create') }}"
+                                               class="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-lg transition-colors">
+                                                <i class="bx bx-plus"></i> Create your first group
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
 
         {{-- ======================== Content End Here ======================== --}}
