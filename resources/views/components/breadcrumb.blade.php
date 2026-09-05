@@ -16,17 +16,17 @@
 @endphp
 
 {{-- Breadcrumb Navigation --}}
-<nav aria-label="Breadcrumb" class="flex items-center gap-2 text-sm text-gray-600 mb-6">
+<nav aria-label="Breadcrumb" class="flex items-center gap-2 flex-wrap text-sm text-white/80 mb-6">
     @foreach($items as $index => $item)
         @if($item['url'])
-            <a href="{{ $item['url'] }}" class="hover:text-indigo-600 transition-colors flex items-center gap-1.5">
+            <a href="{{ $item['url'] }}" class="hover:text-white transition-colors flex items-center gap-1.5">
                 @if(isset($item['icon']))
                     <i class="{{ $item['icon'] }} text-base"></i>
                 @endif
                 <span>{{ $item['name'] }}</span>
             </a>
         @else
-            <span class="text-gray-500 flex items-center gap-1.5">
+            <span class="text-white flex items-center gap-1.5 font-medium">
                 @if(isset($item['icon']))
                     <i class="{{ $item['icon'] }} text-base"></i>
                 @endif
@@ -35,7 +35,7 @@
         @endif
 
         @if($index < count($items) - 1)
-            <i class="bx bx-chevron-right text-gray-400"></i>
+            <i class="bx bx-chevron-right text-white/50"></i>
         @endif
     @endforeach
 </nav>
